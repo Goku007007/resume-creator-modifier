@@ -9,7 +9,8 @@ import PreviewToolbar from '@/components/PreviewToolbar/PreviewToolbar';
 import FullscreenPreviewModal from '@/components/FullscreenPreviewModal/FullscreenPreviewModal';
 import { ResumeJSON, DEFAULT_RESUME } from '@/types/resume';
 import { applyResumePatch } from '@/lib/patch';
-import { lintResume, getScore, LintResult } from '@/lib/linter';
+
+import { lintResume, LintResult } from '@/lib/linter';
 
 interface Profile {
   id: string;
@@ -24,7 +25,7 @@ export default function Home() {
   const [isJsonModalOpen, setIsJsonModalOpen] = useState(false);
   const [patchError, setPatchError] = useState<string | null>(null);
   const [lintResults, setLintResults] = useState<LintResult[]>([]);
-  const [score, setScore] = useState(100);
+  // Score removed per user request
   const [isLoading, setIsLoading] = useState(true);
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved' | 'error'>('saved');
   const [isExporting, setIsExporting] = useState(false);
@@ -61,19 +62,12 @@ export default function Home() {
   useEffect(() => {
     const results = lintResume(resumeData);
     setLintResults(results);
-    setScore(getScore(results));
   }, [resumeData]);
 
-  // Auto-save when resume data changes
+  // Auto-save REMOVED. Only set unsaved status.
   useEffect(() => {
     if (!currentProfileId || isLoading) return;
-
     setSaveStatus('unsaved');
-    const timeout = setTimeout(() => {
-      saveProfile(currentProfileId, resumeData);
-    }, 1000);
-
-    return () => clearTimeout(timeout);
   }, [resumeData, currentProfileId, isLoading]);
 
   const loadProfiles = async () => {
@@ -136,6 +130,36 @@ export default function Home() {
       await loadProfile(data.id);
     } catch (error) {
       console.error('Failed to create profile:', error);
+    }
+  };
+
+  const handleProfileSaveAs = async (name: string) => {
+    try {
+      // Create new profile
+      const createRes = await fetch('/api/profiles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'create', name }),
+      });
+      const newData = await createRes.json();
+
+      // Save current content to the new profile
+      await fetch('/api/profiles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'update', id: newData.id, data: resumeData }),
+      });
+
+      await loadProfiles();
+      await loadProfile(newData.id);
+    } catch (error) {
+      console.error('Failed to save as profile:', error);
+    }
+  };
+
+  const handleReset = () => {
+    if (currentProfileId) {
+      loadProfile(currentProfileId);
     }
   };
 
@@ -296,15 +320,17 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Score indicator */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-400">Score:</span>
-            <span className={`text-sm font-bold ${score >= 80 ? 'text-green-400' :
-              score >= 60 ? 'text-yellow-400' : 'text-red-400'
-              }`}>
-              {score}
-            </span>
-          </div>
+          {/* Reset Button */}
+          <button
+            onClick={handleReset}
+            className="flex items-center gap-2 bg-gray-800 hover:bg-red-900/30 border border-gray-600 hover:border-red-500/50 rounded-lg px-3 py-1.5 text-sm text-gray-300 hover:text-red-400 transition-all font-medium"
+            title="Reset to original saved state"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Reset
+          </button>
 
           {/* Font selector */}
           <div className="flex items-center gap-2">
@@ -381,6 +407,7 @@ export default function Home() {
             currentProfileId={currentProfileId}
             onSwitch={handleProfileSwitch}
             onCreate={handleProfileCreate}
+            onSaveAs={handleProfileSaveAs}
             onDuplicate={handleProfileDuplicate}
             onRename={handleProfileRename}
             onDelete={handleProfileDelete}

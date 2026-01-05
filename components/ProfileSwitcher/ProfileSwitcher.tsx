@@ -8,6 +8,7 @@ interface ProfileSwitcherProps {
     currentProfileId: string;
     onSwitch: (id: string) => void;
     onCreate: () => void;
+    onSaveAs: (name: string) => void;
     onDuplicate: () => void;
     onRename: (name: string) => void;
     onDelete: () => void;
@@ -18,13 +19,16 @@ export default function ProfileSwitcher({
     currentProfileId,
     onSwitch,
     onCreate,
+    onSaveAs,
     onDuplicate,
     onRename,
     onDelete,
 }: ProfileSwitcherProps) {
     const [showMenu, setShowMenu] = React.useState(false);
     const [isRenaming, setIsRenaming] = React.useState(false);
+    const [isSavingAs, setIsSavingAs] = React.useState(false);
     const [newName, setNewName] = React.useState('');
+    const [saveAsName, setSaveAsName] = React.useState('');
     const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
 
     const currentProfile = profiles.find((p) => p.id === currentProfileId);
@@ -34,6 +38,15 @@ export default function ProfileSwitcher({
             onRename(newName.trim());
             setIsRenaming(false);
             setNewName('');
+        }
+    };
+
+    const handleSaveAs = () => {
+        if (saveAsName.trim()) {
+            onSaveAs(saveAsName.trim());
+            setIsSavingAs(false);
+            setSaveAsName('');
+            setShowMenu(false);
         }
     };
 
@@ -105,6 +118,54 @@ export default function ProfileSwitcher({
                                     )}
                                 </button>
                             ))}
+                        </div>
+
+                        {/* Save As Section - NEW */}
+                        <div className="py-2 border-b border-gray-700">
+                            {!isSavingAs ? (
+                                <button
+                                    onClick={() => {
+                                        setIsSavingAs(true);
+                                        setSaveAsName((currentProfile?.name || '') + ' (Copy)');
+                                    }}
+                                    className="w-full text-left px-4 py-2.5 text-sm text-white hover:bg-gray-700 flex items-center gap-2 transition-colors"
+                                >
+                                    <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                                    </svg>
+                                    Save as New Profile
+                                </button>
+                            ) : (
+                                <div className="px-3 py-2">
+                                    <div className="text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">Save As</div>
+                                    <input
+                                        type="text"
+                                        value={saveAsName}
+                                        onChange={(e) => setSaveAsName(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') handleSaveAs();
+                                            if (e.key === 'Escape') setIsSavingAs(false);
+                                        }}
+                                        placeholder="New profile name..."
+                                        autoFocus
+                                        className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-1.5 text-sm text-white focus:border-blue-500 focus:outline-none mb-2"
+                                    />
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={handleSaveAs}
+                                            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded-md font-medium transition-colors"
+                                        >
+                                            Save
+                                        </button>
+                                        <button
+                                            onClick={() => setIsSavingAs(false)}
+                                            className="flex-1 bg-gray-700 hover:bg-gray-600 text-white text-xs py-1.5 rounded-md transition-colors"
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         {/* Management Actions */}
@@ -198,13 +259,14 @@ export default function ProfileSwitcher({
                         )}
                     </div>
                 )}
-            </div>
+            </div >
 
             {/* Delete Confirmation Dialog */}
-            <ConfirmDialog
+            < ConfirmDialog
                 isOpen={showDeleteConfirm}
                 title="Delete Profile"
-                message={`Are you sure you want to delete "${currentProfile?.name}"? This action cannot be undone.`}
+                message={`Are you sure you want to delete "${currentProfile?.name}"? This action cannot be undone.`
+                }
                 confirmLabel="Delete"
                 cancelLabel="Cancel"
                 variant="destructive"
