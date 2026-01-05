@@ -1,0 +1,83 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { chromium } from 'playwright';
+import { ResumeJSON } from '@/types/resume';
+import { generateResumeCSS, getFontFamilyCSS, GOOGLE_FONTS_LINK } from '@/lib/resumeCSS';
+import { generateResumeHTML } from '@/lib/resumeHTML';
+
+export async function POST(request: NextRequest) {
+  try {
+    const { data, format = 'pdf' } = await request.json() as { data: ResumeJSON; format?: string };
+
+    if (!data) {
+      return NextResponse.json({ error: 'Missing resume data' }, { status: 400 });
+    }
+
+    // Generate HTML for the resume using shared modules
+    const html = generateFullHTML(data);
+
+    // Launch browser
+    const browser = await chromium.launch();
+    const page = await browser.newPage();
+
+    // Set viewport to letter size
+    await page.setViewportSize({ width: 816, height: 1056 });
+
+    // Load the HTML
+    await page.setContent(html, { waitUntil: 'networkidle' });
+
+    let output: Buffer;
+    let contentType: string;
+    let filename: string;
+
+    if (format === 'pdf') {
+      output = await page.pdf({
+        format: 'Letter',
+        printBackground: true,
+        margin: { top: 0, right: 0, bottom: 0, left: 0 },
+      });
+      contentType = 'application/pdf';
+      filename = `${data.profileMeta.resumeName || 'resume'}.pdf`;
+    } else {
+      // Return screenshot for preview
+      output = await page.screenshot({ type: 'png' });
+      contentType = 'image/png';
+      filename = 'preview.png';
+    }
+
+    await browser.close();
+
+    return new NextResponse(new Uint8Array(output), {
+      headers: {
+        'Content-Type': contentType,
+        'Content-Disposition': `attachment; filename="${filename}"`,
+      },
+    });
+  } catch (error) {
+    console.error('Export error:', error);
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
+  }
+}
+
+function generateFullHTML(data: ResumeJSON): string {
+  const { rendering } = data;
+  const css = generateResumeCSS(rendering);
+  const bodyHtml = generateResumeHTML(data);
+
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="${GOOGLE_FONTS_LINK}" rel="stylesheet">
+  <style>
+    ${css}
+  </style>
+</head>
+<body>
+  ${bodyHtml}
+</body>
+</html>
+  `;
+}
