@@ -41,17 +41,17 @@ const FLUFF_WORDS = [
 // First-person pronouns
 const FIRST_PERSON = ['\\bi\\b', '\\bme\\b', '\\bmy\\b', '\\bmine\\b', '\\bmyself\\b', '\\bwe\\b', '\\bour\\b', '\\bus\\b'];
 
-// Action verbs that should start bullets
 const ACTION_VERBS = [
-    'achieved', 'administered', 'analyzed', 'architected', 'automated',
-    'built', 'collaborated', 'configured', 'created', 'decreased', 'delivered',
-    'deployed', 'designed', 'developed', 'drove', 'eliminated', 'enabled',
-    'engineered', 'established', 'executed', 'expanded', 'generated',
-    'identified', 'implemented', 'improved', 'increased', 'initiated',
-    'integrated', 'launched', 'led', 'maintained', 'managed', 'migrated',
-    'modeled', 'optimized', 'orchestrated', 'owned', 'partnered', 'pioneered',
-    'planned', 'processed', 'programmed', 'reduced', 'refactored', 'resolved',
-    'scaled', 'spearheaded', 'streamlined', 'transformed', 'unified', 'upgraded',
+    'accelerated', 'achieved', 'administered', 'aligned', 'analyzed', 'architected', 'automated',
+    'boosted', 'built', 'collaborated', 'conducted', 'configured', 'created', 'decreased', 'delivered',
+    'deployed', 'designed', 'developed', 'documented', 'drove', 'eliminated', 'enabled',
+    'enforced', 'engineered', 'established', 'executed', 'expanded', 'flagged', 'gathered', 'generated',
+    'identified', 'implemented', 'improved', 'increased', 'ingested', 'initiated',
+    'integrated', 'launched', 'led', 'maintained', 'managed', 'migrated', 'modeled',
+    'optimized', 'orchestrated', 'owned', 'partnered', 'pioneered', 'planned', 'processed',
+    'programmed', 'provisioned', 'reclaimed', 'reduced', 'refactored', 'resolved',
+    'scaled', 'spearheaded', 'standardized', 'streamlined', 'transformed', 'translated', 'unified',
+    'upgraded', 'visualized',
 ];
 
 // Hard rules

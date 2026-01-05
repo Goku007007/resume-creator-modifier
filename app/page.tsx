@@ -31,6 +31,7 @@ export default function Home() {
   const [isExporting, setIsExporting] = useState(false);
   const [previewZoom, setPreviewZoom] = useState(0.85);
   const [isFullscreenOpen, setIsFullscreenOpen] = useState(false);
+  const [showSaveConfirm, setShowSaveConfirm] = useState(false);
   const [highlightedSection, setHighlightedSection] = useState<string | null>(null);
   const [scrollTarget, setScrollTarget] = useState<{ section: string; field?: string; index?: number; subIndex?: number; ts: number } | null>(null);
 
@@ -320,6 +321,22 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Save Button */}
+          <button
+            onClick={() => setShowSaveConfirm(true)}
+            disabled={saveStatus === 'saved' || saveStatus === 'saving'}
+            className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-all ${saveStatus === 'unsaved'
+              ? 'bg-green-600 hover:bg-green-700 text-white'
+              : 'bg-gray-800 text-gray-500 cursor-not-allowed'
+              }`}
+            title="Save changes to current profile"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            Save
+          </button>
+
           {/* Reset Button */}
           <button
             onClick={handleReset}
@@ -513,6 +530,39 @@ export default function Home() {
         onClose={() => setIsFullscreenOpen(false)}
         data={resumeData}
       />
+
+      {/* Save Confirmation Dialog */}
+      {showSaveConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-gray-800 rounded-xl p-6 max-w-md mx-4 shadow-2xl border border-gray-700">
+            <h3 className="text-lg font-semibold text-white mb-3">Save Changes?</h3>
+            <p className="text-gray-300 mb-4">
+              This will <span className="text-orange-400 font-medium">overwrite</span> the current profile
+              "<span className="text-white font-medium">{profiles.find(p => p.id === currentProfileId)?.name}</span>".
+            </p>
+            <p className="text-gray-400 text-sm mb-6">
+              💡 Use <strong>"Save As"</strong> in the profile menu to keep the original and create a new profile instead.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setShowSaveConfirm(false)}
+                className="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  setShowSaveConfirm(false);
+                  if (currentProfileId) saveProfile(currentProfileId, resumeData);
+                }}
+                className="px-4 py-2 text-sm bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
+              >
+                Yes, Overwrite
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

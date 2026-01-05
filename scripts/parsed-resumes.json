@@ -1,0 +1,1956 @@
+[
+  {
+    "profileMeta": {
+      "profileName": "Automation Engineer",
+      "resumeName": "Gokul_Nandakumar_Resume_AutomationEngineer",
+      "updatedAt": "2026-01-05T04:32:58.598Z"
+    },
+    "basics": {
+      "name": "Gokul Nandakumar",
+      "email": "goku.careers@gmail.com",
+      "phone": "+1 (773) 930 2964",
+      "links": [
+        {
+          "label": "Portfolio",
+          "url": "https://gokuldata.vercel.app/"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/Goku007007"
+        },
+        {
+          "label": "LinkedIn",
+          "url": "https://www.linkedin.com/in/gokul-nandakumar/"
+        }
+      ],
+      "locationLine": ""
+    },
+    "sections": {
+      "skills": {
+        "heading": "Skills",
+        "groups": [
+          {
+            "label": "Languages & Databases",
+            "items": [
+              "Python",
+              "SQL",
+              "Shell Scripting",
+              "JavaScript",
+              "PostgreSQL",
+              "MySQL",
+              "Cassandra",
+              "DynamoDB",
+              "Redis"
+            ]
+          },
+          {
+            "label": "Data Engineering & Cloud",
+            "items": [
+              "Airflow",
+              "dbt",
+              "Spark (PySpark)",
+              "Kafka",
+              "AWS (S3, Lambda, Glue)",
+              "ETL",
+              "Azure (ADLS, Synapse)",
+              "Snowflake"
+            ]
+          },
+          {
+            "label": "Databricks Tools",
+            "items": [
+              "Tableau",
+              "PowerBI",
+              "Docker",
+              "Terraform"
+            ]
+          },
+          {
+            "label": "GitHub Actions Systems & Operations",
+            "items": [
+              "Linux administration",
+              "batch monitoring",
+              "CI/CD",
+              "Docker",
+              "Kubernetes",
+              "Grafana"
+            ]
+          },
+          {
+            "label": "Prometheus Certifications",
+            "items": [
+              "AWS Certified Solutions Architect –"
+            ]
+          },
+          {
+            "label": "Associate AI",
+            "items": [
+              "Cursor",
+              "Claude Code",
+              "ChatGPT-Cli-or-Codex",
+              "Cursor",
+              "Antigravity",
+              "LLM and Vid Gen APIs"
+            ]
+          }
+        ]
+      },
+      "experience": [
+        {
+          "title": "Automation Engineer",
+          "company": "ChiEAC",
+          "location": "Chicago, IL (Remote)",
+          "start": "Jun 2025",
+          "end": null,
+          "bullets": [
+            "Reduced weekly data(civic, student, wellness) preparation time by 66% (6h → 2h) by engineering automated ETL pipelines using Airflow and implementing automated data quality tests and model on dbt & Snowflake",
+            "Unified 5TB+ of disparate open data from BigQuery and Snowflake into a centralized lakehouse, enabling real time cross domain analytics for city wide transit systems",
+            "Standardized reporting for executive leadership by defining 12 core KPIs in Snowflake and visualizing them in Tableau,  reducing repetitive metric clarification and aligning reporting across teams",
+            "Improved data lineage and auditability by designing reproducible lakehouse pipelines using Delta Lake and Medallion Architecture on Azure to create reproducible civic and transit analytics workflows"
+          ],
+          "tech": []
+        },
+        {
+          "title": "Cloud Automation Engineer",
+          "company": "ISQL Global",
+          "location": "Remote",
+          "start": "Oct 2022",
+          "end": "Jul 2023",
+          "bullets": [
+            "Reduced CRM data latency by 87% (2h → 15m) for 10k+ users by developing PySpark pipelines orchestrated in Airflow",
+            "Architected existing REST APIs in Python (FastAPI) to optimize data retrieval, cutting redundant backend calls by 30% and resulting in 30% reduced loading time and faster data access in reporting feature",
+            "Improved query performance by 35% and reduced compute costs by 15% on Redshift/Databricks by optimizing SQL join logic and caching strategies",
+            "Ensured 99.9% data quality reliability by implementing version controlled dbt models with automated schema and freshness tests integrated into CI/CD"
+          ],
+          "tech": []
+        },
+        {
+          "title": "Data & Automation Engineer",
+          "company": "Out In Dreams",
+          "location": "Remote",
+          "start": "Sep 2021",
+          "end": "Oct 2022",
+          "bullets": [
+            "Reduced campaign reporting turnaround by 40% (5 days → 3 days) by modeling creator datasets in Snowflake and building automated Tableau dashboards",
+            "Created a unified view of ad spend and ROI by integrating Google Ads data (BigQuery) with other Snowflake datasets",
+            "Improved campaign ROI by 12% by analyzing $20k+/month in ad spend to identify and reallocate budget to top performing creators and ad campaigns",
+            "Automated Creators payment system by building an ETL pipeline to pay on daily basis for the referral based program reducing time for finance team over 20 hours/week and resolving inconsistent payment errors"
+          ],
+          "tech": []
+        }
+      ],
+      "projects": [
+        {
+          "name": "National EV Charging Infrastructure Analytics",
+          "bullets": [
+            "Ingested 83k+ EV charging station records into GCS and BigQuery, organizing raw and curated buckets for analysis",
+            "Standardized uptime metrics and port availability (L2 vs DC-Fast) using complex SQL transformations",
+            "Identified coverage gaps across 50 states by deploying an interactive Tableau dashboard visualizing network leaderboards and network coverage across the country"
+          ]
+        },
+        {
+          "name": "GPU Cluster Telemetry & Observability System",
+          "bullets": [
+            "Built an observability lakehouse (Parquet + DuckDB) to monitor GPU cluster performance via Medallion Architecture",
+            "Ingested 10M+ trace rows into a Bronze layer via Python, transforming them into Silver/Gold tables to enable granular daily utilization tracking and cost analysis",
+            "Flagged abnormal cluster behavior by implementing an IsolationForest model reducing false positive alerts by 15%"
+          ]
+        }
+      ],
+      "education": [
+        {
+          "school": "Illinois Institute of Technology",
+          "degree": "Master of Information Technology"
+        },
+        {
+          "school": "SREC",
+          "degree": "Bachelor of Computer Science and Engineering"
+        }
+      ]
+    },
+    "rendering": {
+      "fontFamily": "Calibri",
+      "fontSize": 11,
+      "lineHeight": 1.15,
+      "monoFontFamily": "Geist Mono, Andale Mono, monospace",
+      "pageSize": "LETTER",
+      "density": "COMPACT"
+    }
+  },
+  {
+    "profileMeta": {
+      "profileName": "BIEngineer",
+      "resumeName": "Gokul_Nandakumar_Resume_BIEngineer",
+      "updatedAt": "2026-01-05T04:32:58.608Z"
+    },
+    "basics": {
+      "name": "Gokul Nandakumar",
+      "email": "goku.careers@gmail.com",
+      "phone": "+1 (773) 930 2964",
+      "links": [
+        {
+          "label": "Portfolio",
+          "url": "https://gokuldata.vercel.app/"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/Goku007007"
+        },
+        {
+          "label": "LinkedIn",
+          "url": "https://www.linkedin.com/in/gokul-nandakumar/"
+        }
+      ],
+      "locationLine": ""
+    },
+    "sections": {
+      "skills": {
+        "heading": "Skills",
+        "groups": [
+          {
+            "label": "BI & Visualization",
+            "items": [
+              "Tableau",
+              "PowerBI",
+              "Looker",
+              "Dashboard Design",
+              "Data Storytelling",
+              "Stakeholder Management"
+            ]
+          },
+          {
+            "label": "Data Strategy",
+            "items": [
+              "KPI Definition",
+              "Data Governance",
+              "Agile/Scrum",
+              "Requirement Gathering"
+            ]
+          },
+          {
+            "label": "Technical Stack",
+            "items": [
+              "SQL",
+              "Snowflake",
+              "dbt",
+              "Python",
+              "R",
+              "AWS",
+              "Azure",
+              "Data Modeling"
+            ]
+          }
+        ]
+      },
+      "experience": [
+        {
+          "title": "Business Intelligence Engineer",
+          "company": "ChiEAC",
+          "location": "Chicago, IL (Remote)",
+          "start": "Jun 2025",
+          "end": null,
+          "bullets": [
+            "Developed standardized data models in Snowflake, unifying 5TB+ of disparate data to eliminate reporting discrepancies across 3 departments",
+            "Reclaimed $10k+/year in operational costs by standardizing 12 core KPIs in interactive Tableau dashboards, eliminating 4 hours/week of manual reconciliation",
+            "Designed and deployed 3+ executive dashboards for civic wellness tracking, enabling leadership to reallocate resources based on real time trends",
+            "Accelerated time to insight by 66% (6h → 2h) by automating manual data prep workflows using Airflow and dbt"
+          ],
+          "tech": []
+        },
+        {
+          "title": "BI Engineer",
+          "company": "ISQL Global",
+          "location": "Remote",
+          "start": "Oct 2022",
+          "end": "Jul 2023",
+          "bullets": [
+            "Aligned conflicting reporting definitions between Product and Sales teams, resulting in a 30% reduction in redundant API calls and faster dashboard loading",
+            "Enabled real time decision making for 10k+ users by optimizing SQL queries, reducing CRM report latency by 87%",
+            "Boosted Redshift query performance by 35% for high traffic executive reports by refactoring inefficient join logic and implementing aggressive caching strategies.",
+            "Conducted bi weekly Tableau workshops for 10+ non technical staff, increasing self service analytics adoption by 25%"
+          ],
+          "tech": []
+        },
+        {
+          "title": "BI and Data Engineer",
+          "company": "Out In Dreams",
+          "location": "Remote",
+          "start": "Sep 2021",
+          "end": "Oct 2022",
+          "bullets": [
+            "Generated $240k+ in estimated annualized value by optimizing ad spend allocation, identifying a 12% ROI improvement opportunity across top performing channels",
+            "Reduced manual reporting turnaround by 40% (5 days → 3 days) by building automated Tableau dashboards for the marketing leadership team",
+            "Established a unified view of marketing performance by integrating disparate Google Ads and internal sales data into a cohesive Star Schema model.",
+            "Partnered with Finance to audit complex payment pipelines, resolving critical data inconsistencies and saving 20+ hours/week in manual reconciliation."
+          ],
+          "tech": []
+        }
+      ],
+      "projects": [
+        {
+          "name": "National EV Charging Infrastructure Analytics",
+          "bullets": [
+            "Deployed an interactive Tableau dashboard to visualize EV network coverage gaps across 50 states, identifying key investment areas for stakeholders.",
+            "Designed an intuitive, user-friendly interface to track network leaderboards, empowering investors to benchmark performance metrics by provider.",
+            "Modeled 83k+ charging station records in BigQuery to calculate standardized uptime metrics and port availability."
+          ]
+        },
+        {
+          "name": "GPU Cluster Telemetry & Observability System",
+          "bullets": [
+            "Enabled granular cost analysis by processing 10M+ telemetry rows into an optimized Gold-layer data model, reducing query costs for BI reporting.",
+            "Visualized daily utilization trends and key cost drivers in Tableau, helping engineering leadership identify anomalies and reduce false positive alerts by 15%."
+          ]
+        }
+      ],
+      "education": [
+        {
+          "school": "Illinois Institute of Technology",
+          "degree": "Master of Information Technology"
+        },
+        {
+          "school": "SREC",
+          "degree": "Bachelor of Computer Science and Engineering"
+        }
+      ]
+    },
+    "rendering": {
+      "fontFamily": "Calibri",
+      "fontSize": 11,
+      "lineHeight": 1.15,
+      "monoFontFamily": "Geist Mono, Andale Mono, monospace",
+      "pageSize": "LETTER",
+      "density": "COMPACT"
+    }
+  },
+  {
+    "profileMeta": {
+      "profileName": "Business Analyst",
+      "resumeName": "Gokul_Nandakumar_Resume_BusinessAnalyst",
+      "updatedAt": "2026-01-05T04:32:58.614Z"
+    },
+    "basics": {
+      "name": "Gokul Nandakumar",
+      "email": "goku.careers@gmail.com",
+      "phone": "+1 (773) 930 2964",
+      "links": [
+        {
+          "label": "Portfolio",
+          "url": "https://gokuldata.vercel.app/"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/Goku007007"
+        },
+        {
+          "label": "LinkedIn",
+          "url": "https://www.linkedin.com/in/gokul-nandakumar/"
+        }
+      ],
+      "locationLine": ""
+    },
+    "sections": {
+      "skills": {
+        "heading": "Skills",
+        "groups": [
+          {
+            "label": "Business & Product",
+            "items": [
+              "Requirements Gathering",
+              "User Stories (BRD/FRD)",
+              "Process Mapping (BPMN)",
+              "Workflow Optimization",
+              "Root Cause Analysis",
+              "UAT Planning & Execution",
+              "Agile/Scrum",
+              "Jira",
+              "Confluence"
+            ]
+          },
+          {
+            "label": "Data Analysis & Visualization",
+            "items": [
+              "SQL",
+              "Tableau",
+              "PowerBI",
+              "Excel",
+              "Python (Pandas, NumPy)",
+              "A/B Testing"
+            ]
+          },
+          {
+            "label": "Data Warehousing & Cloud",
+            "items": [
+              "Snowflake",
+              "BigQuery",
+              "AWS (S3)",
+              "Azure",
+              "PostgreSQL"
+            ]
+          },
+          {
+            "label": "MySQLConcepts",
+            "items": [
+              "KPI Definition",
+              "Data Cleaning",
+              "ETL",
+              "Statistical Analysis",
+              "Business Intelligence",
+              "Data Modeling"
+            ]
+          }
+        ]
+      },
+      "experience": [
+        {
+          "title": "Business Data Analyst",
+          "company": "ChiEAC",
+          "location": "Chicago, IL (Remote)",
+          "start": "Jun 2025",
+          "end": null,
+          "bullets": [
+            "Led requirements workshops with leadership to define 12 standardized KPIs, creating a unified executive reporting framework adopted by 3 cross-functional teams in Tableau",
+            "Translated transit, civic, and wellness operational needs into analytics requirements and integrated 5TB+ of BigQuery & Snowflake datasets to support real-time decision workflows",
+            "Reduced analysis turnaround time by 66% (6h → 2h) by redesigning legacy reporting workflows, automating recurring SQL/Python processes, and documenting the future-state reporting flow",
+            "Increased dashboard trust and consistency by implementing automated data validation and QA checks, ensuring 100% metric accuracy for weekly executive reviews"
+          ],
+          "tech": []
+        },
+        {
+          "title": "Business Analyst",
+          "company": "ISQL Global",
+          "location": "Remote",
+          "start": "Oct 2022",
+          "end": "Jul 2023",
+          "bullets": [
+            "RedGathered reporting and performance requirements from CRM, product, and operations teams to optimize Redshift queries, reducing dashboard load times by 30% for 10k+ users.",
+            "Conducted root cause analysis on CRM latency issues and partnered with engineering to redesign upstream workflows, cutting reporting delays by 87% (2h → 15m).",
+            "Documented current state vs. future state API ingestion processes and identified redundant calls, enabling engineering to reduce unnecessary API requests by 30% and stabilize reporting feeds."
+          ],
+          "tech": []
+        },
+        {
+          "title": "Business Analyst - Marketing Analytics",
+          "company": "Out In Dreams",
+          "location": "Remote",
+          "start": "Sep 2021",
+          "end": "Oct 2022",
+          "bullets": [
+            "Analyzed paid media performance and partnered with marketing leads to reallocate budget, increasing campaign ROI by 12% on $20k+/month ad spend",
+            "Consolidated reporting needs across marketing, sales, and operations teams and built automated Tableau dashboards, reducing reporting turnaround from 5 days → 3 days (40%)",
+            "Designed a unified marketing attribution model by integrating Google Ads and internal order data, giving leadership full funnel ROI visibility across campaigns",
+            "Audited creator payment workflows and identified inconsistencies in payout mapping, eliminating recurring errors and saving finance 20+ hours/week"
+          ],
+          "tech": []
+        }
+      ],
+      "projects": [
+        {
+          "name": "National EV Charging Infrastructure Analytics",
+          "bullets": [
+            "Identified critical coverage gaps across 50 states by deploying an interactive Tableau dashboard to visualize availability",
+            "Standardized uptime metrics and port availability (L2 vs DC-Fast) using complex SQL transformations on 83k+ stations",
+            "Provided actionable insights on network reliability by analyzing failure rates across different charging providers."
+          ]
+        },
+        {
+          "name": "GPU Cluster Telemetry & Observability System",
+          "bullets": [
+            "Enabled granular cost analysis and daily utilization tracking by processing 10M+ telemetry data",
+            "Reduced false positive alerts by 15% by implementing statistical anomaly detection on CPU/GPU usage metrics"
+          ]
+        }
+      ],
+      "education": [
+        {
+          "school": "Illinois Institute of Technology",
+          "degree": "Master of Information Technology"
+        },
+        {
+          "school": "SREC",
+          "degree": "Bachelor of Computer Science and Engineering"
+        }
+      ]
+    },
+    "rendering": {
+      "fontFamily": "Calibri",
+      "fontSize": 11,
+      "lineHeight": 1.15,
+      "monoFontFamily": "Geist Mono, Andale Mono, monospace",
+      "pageSize": "LETTER",
+      "density": "COMPACT"
+    }
+  },
+  {
+    "profileMeta": {
+      "profileName": "Cloud Engineer",
+      "resumeName": "Gokul_Nandakumar_Resume_CloudEngineer",
+      "updatedAt": "2026-01-05T04:32:58.619Z"
+    },
+    "basics": {
+      "name": "Gokul Nandakumar",
+      "email": "goku.careers@gmail.com",
+      "phone": "+1 (773) 930 2964",
+      "links": [
+        {
+          "label": "Portfolio",
+          "url": "https://gokuldata.vercel.app/"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/Goku007007"
+        },
+        {
+          "label": "LinkedIn",
+          "url": "https://www.linkedin.com/in/gokul-nandakumar/"
+        }
+      ],
+      "locationLine": ""
+    },
+    "sections": {
+      "skills": {
+        "heading": "Skills",
+        "groups": [
+          {
+            "label": "Languages & Databases",
+            "items": [
+              "Python",
+              "SQL",
+              "Shell Scripting",
+              "JavaScript",
+              "PostgreSQL",
+              "MySQL",
+              "Cassandra",
+              "DynamoDB",
+              "Redis"
+            ]
+          },
+          {
+            "label": "Data Engineering",
+            "items": [
+              "Airflow",
+              "Spark (PySpark)",
+              "Kafka",
+              "dbt",
+              "Snowflake",
+              "Databricks",
+              "Delta Lake"
+            ]
+          },
+          {
+            "label": "DevOps & Backend",
+            "items": [
+              "CI/CD (GitHub Actions)",
+              "Python (FastAPI)",
+              "Shell Scripting",
+              "Git",
+              "SQL (PostgreSQL)"
+            ]
+          },
+          {
+            "label": "Certifications",
+            "items": [
+              "AWS Certified Solutions Architect – Associate"
+            ]
+          }
+        ]
+      },
+      "experience": [
+        {
+          "title": "Cloud Engineer",
+          "company": "ChiEAC",
+          "location": "Chicago, IL (Remote)",
+          "start": "Jun 2025",
+          "end": null,
+          "bullets": [
+            "Provisioned a serverless Lakehouse on Azure, managing storage accounts (ADLS Gen2) and networking rules (Private Links, VNET integration) via Terraform modules to ensure reproducible, secure infrastructure.",
+            "Optimized Airflow orchestration on Kubernetes (EKS), reducing data processing runtime by 66% (6h → 2h) through parallelized DAG execution using the KubernetesExecutor and pod mutation hooks.",
+            "Enforced Least Privilege Access (RBAC) by configuring granular IAM roles and Service Principals for Snowflake integration, ensuring compliance with SOC2 security standards for sensitive civic data.",
+            "Integrated dbt into the CI/CD pipeline using GitHub Actions, automating schema testing (dbt test), SQL linting, and preventing breaking changes in production via Slim CI workflows."
+          ],
+          "tech": []
+        },
+        {
+          "title": "Cloud & Data Engineer",
+          "company": "ISQL Global",
+          "location": "Remote",
+          "start": "Oct 2022",
+          "end": "Jul 2023",
+          "bullets": [
+            "Refactored legacy REST APIs using Python (FastAPI) and Redis for sidecar caching, cutting redundant backend calls by 30% and reducing P99 latency by 200ms.",
+            "Containerized microservices using Docker multi-stage builds, reducing image size by 40% and accelerating deployment",
+            "Orchestrated real-time PySpark pipelines in Airflow, reducing CRM data latency by 87% (2h → 15m) for high-throughput ingestion streams using Spark Structured Streaming.",
+            "Reduced compute costs by 15% on Databricks by implementing aggressive partition pruning, optimizing cluster auto scaling policies, and utilizing Spot Instances for non critical workloads."
+          ],
+          "tech": []
+        },
+        {
+          "title": "DevOps Engineer",
+          "company": "Out In Dreams",
+          "location": "Remote",
+          "start": "Sep 2021",
+          "end": "Oct 2022",
+          "bullets": [
+            "Deployed a fault tolerant Python ETL service on AWS Lambda with Dead Letter Queues (DLQ) for error handling, automating creator payments and saving Finance 20+ hours/week",
+            "Optimized S3 storage costs by implementing Lifecycle Policies to automatically transition rarely accessed raw data",
+            "Built a scalable ingestion pipeline using Snowflake and Python to load Google Ads data, handling daily batch loads with zero downtime.",
+            "Monitored pipeline health using CloudWatch alerts and custom metrics, reducing mean-time-to-resolution (MTTR) for ingestion failures."
+          ],
+          "tech": []
+        }
+      ],
+      "projects": [
+        {
+          "name": "GPU Cluster Telemetry & Observability System",
+          "bullets": [
+            "Built a custom Observability Exporter using Python to scrape real-time GPU metrics, ingesting 10M+ trace rows into a Parquet/DuckDB backend.",
+            "Standardized raw JSON data into structured tables using complex SQL transformations, enabling low-latency queries for network analysis."
+          ]
+        },
+        {
+          "name": "National EV Charging Infrastructure Analytics",
+          "bullets": [
+            "Architected an observability lakehouse using Parquet and DuckDB to monitor real-time GPU cluster performance",
+            "Ingested 10M+ trace rows via a Python ingestion framework, transforming raw logs into queryable Silver/Gold tables",
+            "Implemented an IsolationForest anomaly detection model to flag abnormal cluster behavior, reducing false positive alerts by 15%"
+          ]
+        }
+      ],
+      "education": [
+        {
+          "school": "Illinois Institute of Technology",
+          "degree": "Master of Information Technology"
+        },
+        {
+          "school": "SREC",
+          "degree": "Bachelor of Computer Science and Engineering"
+        }
+      ]
+    },
+    "rendering": {
+      "fontFamily": "Calibri",
+      "fontSize": 11,
+      "lineHeight": 1.15,
+      "monoFontFamily": "Geist Mono, Andale Mono, monospace",
+      "pageSize": "LETTER",
+      "density": "COMPACT"
+    }
+  },
+  {
+    "profileMeta": {
+      "profileName": "Data Analyst",
+      "resumeName": "Gokul_Nandakumar_Resume_DataAnalyst",
+      "updatedAt": "2026-01-05T04:32:58.627Z"
+    },
+    "basics": {
+      "name": "Gokul Nandakumar",
+      "email": "goku.careers@gmail.com",
+      "phone": "+1 (773) 930 2964",
+      "links": [
+        {
+          "label": "Portfolio",
+          "url": "https://gokuldata.vercel.app/"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/Goku007007"
+        },
+        {
+          "label": "LinkedIn",
+          "url": "https://www.linkedin.com/in/gokul-nandakumar/"
+        }
+      ],
+      "locationLine": ""
+    },
+    "sections": {
+      "skills": {
+        "heading": "Skills",
+        "groups": [
+          {
+            "label": "Data Analysis & Visualization",
+            "items": [
+              "SQL",
+              "Tableau",
+              "PowerBI",
+              "Excel",
+              "Python (Pandas, NumPy)",
+              "A/B Testing"
+            ]
+          },
+          {
+            "label": "Data Warehousing & Cloud",
+            "items": [
+              "Snowflake",
+              "BigQuery",
+              "AWS (S3)",
+              "Azure",
+              "PostgreSQL"
+            ]
+          },
+          {
+            "label": "MySQLConcepts",
+            "items": [
+              "KPI Definition",
+              "Data Cleaning",
+              "ETL",
+              "Statistical Analysis",
+              "Business Intelligence",
+              "Data Modeling"
+            ]
+          }
+        ]
+      },
+      "experience": [
+        {
+          "title": "Data Analyst",
+          "company": "ChiEAC",
+          "location": "Chicago, IL (Remote)",
+          "start": "Jun 2025",
+          "end": null,
+          "bullets": [
+            "Standardized executive reporting by defining 12 core KPIs in Snowflake and visualizing them in Tableau, aligning metrics across 3 cross-functional teams.",
+            "Enabled real time cross-domain analytics for city wide transit systems by unifying 5TB+ of disparate open data from BigQuery and Snowflake.",
+            "Accelerated insight generation by 66% (6h → 2h) by automating manual data preparation workflows using Python and SQL.",
+            "Improved data quality and trust by implementing automated testing frameworks, ensuring 100% accuracy for executive dashboards."
+          ],
+          "tech": []
+        },
+        {
+          "title": "Data Analyst",
+          "company": "ISQL Global",
+          "location": "Remote",
+          "start": "Oct 2022",
+          "end": "Jul 2023",
+          "bullets": [
+            "Reduced reporting load times by 30% and improved data access for 10k+ users by optimizing complex SQL queries and join logic on Redshift.",
+            "Identified and resolved data latency issues, reducing CRM reporting delays by 87% (2h → 15m) to support real-time decision making.",
+            "Collaborated with engineering teams to re-architect API data retrieval, cutting redundant calls by 30% to streamline reporting feeds."
+          ],
+          "tech": []
+        },
+        {
+          "title": "Data Analyst",
+          "company": "Out In Dreams",
+          "location": "Remote",
+          "start": "Sep 2021",
+          "end": "Oct 2022",
+          "bullets": [
+            "Improved campaign ROI by 12% by analyzing $20k+/month in ad spend and identifying opportunities to reallocate budget to top-performing creators.",
+            "Reduced campaign reporting turnaround by 40% (5 days → 3 days) by building automated Tableau dashboards on top of Snowflake data.",
+            "Created a unified view of marketing performance by integrating Google Ads and internal sales data, enabling holistic ROI analysis.",
+            "Resolved inconsistent payment errors for creators by auditing financial data pipelines, saving the finance team 20+ hours per week."
+          ],
+          "tech": []
+        }
+      ],
+      "projects": [
+        {
+          "name": "National EV Charging Infrastructure Analytics",
+          "bullets": [
+            "Identified critical coverage gaps across 50 states by deploying an interactive Tableau dashboard to visualize network availability.",
+            "Standardized uptime metrics and port availability (L2 vs DC-Fast) using complex SQL transformations on 83k+ station records.",
+            "Provided actionable insights on network reliability by analyzing failure rates across different charging providers."
+          ]
+        },
+        {
+          "name": "GPU Cluster Telemetry & Observability System",
+          "bullets": [
+            "Enabled granular cost analysis and daily utilization tracking by processing 10M+ telemetry rows into structured reporting tables.",
+            "Reduced false positive alerts by 15% by implementing statistical anomaly detection on CPU/GPU usage metrics"
+          ]
+        }
+      ],
+      "education": [
+        {
+          "school": "Illinois Institute of Technology",
+          "degree": "Master of Information Technology"
+        },
+        {
+          "school": "SREC",
+          "degree": "Bachelor of Computer Science and Engineering"
+        }
+      ]
+    },
+    "rendering": {
+      "fontFamily": "Calibri",
+      "fontSize": 11,
+      "lineHeight": 1.15,
+      "monoFontFamily": "Geist Mono, Andale Mono, monospace",
+      "pageSize": "LETTER",
+      "density": "COMPACT"
+    }
+  },
+  {
+    "profileMeta": {
+      "profileName": "Data Engineer",
+      "resumeName": "Gokul_Nandakumar_Resume_DataEngineer",
+      "updatedAt": "2026-01-05T04:32:58.633Z"
+    },
+    "basics": {
+      "name": "Gokul Nandakumar",
+      "email": "goku.careers@gmail.com",
+      "phone": "+1 (773) 930 2964",
+      "links": [
+        {
+          "label": "Portfolio",
+          "url": "https://gokuldata.vercel.app/"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/Goku007007"
+        },
+        {
+          "label": "LinkedIn",
+          "url": "https://www.linkedin.com/in/gokul-nandakumar/"
+        }
+      ],
+      "locationLine": ""
+    },
+    "sections": {
+      "skills": {
+        "heading": "Skills",
+        "groups": [
+          {
+            "label": "Languages & Databases",
+            "items": [
+              "Python",
+              "SQL",
+              "Shell Scripting",
+              "JavaScript",
+              "PostgreSQL",
+              "MySQL",
+              "Cassandra",
+              "DynamoDB",
+              "Redis"
+            ]
+          },
+          {
+            "label": "Data Engineering & Cloud",
+            "items": [
+              "Airflow",
+              "dbt",
+              "Spark (PySpark)",
+              "Kafka",
+              "AWS (S3, Lambda, Glue)",
+              "Azure (ADLS, Synapse)",
+              "Snowflake"
+            ]
+          },
+          {
+            "label": "Databricks Tools",
+            "items": [
+              "Tableau",
+              "PowerBI",
+              "Docker",
+              "Terraform"
+            ]
+          },
+          {
+            "label": "GitHub ActionsCertifications",
+            "items": [
+              "AWS Certified Solutions Architect – Associate"
+            ]
+          }
+        ]
+      },
+      "experience": [
+        {
+          "title": "Data Engineer",
+          "company": "ChiEAC",
+          "location": "Chicago, IL (Remote)",
+          "start": "Jun 2025",
+          "end": null,
+          "bullets": [
+            "Reduced weekly data(civic, student, wellness) preparation time by 66% (6h → 2h) by engineering automated ETL pipelines using Airflow and implementing automated data quality tests and model on dbt & Snowflake",
+            "Unified 5TB+ of disparate open data from BigQuery and Snowflake into a centralized lakehouse, enabling real time cross domain analytics for city wide transit systems",
+            "Standardized reporting for executive leadership by defining 12 core KPIs in Snowflake and visualizing them in Tableau,  reducing repetitive metric clarification and aligning reporting across teams",
+            "Improved data lineage and auditability by designing reproducible lakehouse pipelines using Delta Lake and Medallion Architecture on Azure to create reproducible civic and transit analytics workflows"
+          ],
+          "tech": []
+        },
+        {
+          "title": "Data & Cloud Engineer",
+          "company": "ISQL Global",
+          "location": "Remote",
+          "start": "Oct 2022",
+          "end": "Jul 2023",
+          "bullets": [
+            "Reduced CRM data latency by 87% (2h → 15m) for 10k+ users by developing PySpark pipelines orchestrated in Airflow",
+            "Re-architected existing REST APIs in Python (FastAPI) to optimize data retrieval, cutting redundant backend calls by 30% and resulting in 30% reduced loading time and faster data access in reporting feature",
+            "Improved query performance by 35% and reduced compute costs by 15% on Redshift/Databricks by optimizing SQL join logic and caching strategies",
+            "Ensured 99.9% data quality reliability by implementing version controlled dbt models with automated schema and freshness tests integrated into CI/CD"
+          ],
+          "tech": []
+        },
+        {
+          "title": "Data & Analytics Engineer",
+          "company": "Out In Dreams",
+          "location": "Remote",
+          "start": "Sep 2021",
+          "end": "Oct 2022",
+          "bullets": [
+            "Reduced campaign reporting turnaround by 40% (5 days → 3 days) by modeling creator datasets in Snowflake and building automated Tableau dashboards",
+            "Created a unified view of ad spend and ROI by integrating Google Ads data (BigQuery) with other Snowflake datasets",
+            "Improved campaign ROI by 12% by analyzing $20k+/month in ad spend to identify and reallocate budget to top performing creators and ad campaigns",
+            "Automated Creators payment system by building an ETL pipeline to pay on daily basis for the referral based program reducing time for finance team over 20 hours/week and resolving inconsistent payment errors"
+          ],
+          "tech": []
+        }
+      ],
+      "projects": [
+        {
+          "name": "National EV Charging Infrastructure Analytics",
+          "bullets": [
+            "Ingested 83k+ EV charging station records into GCS and BigQuery, organizing raw and curated buckets for analysis",
+            "Standardized uptime metrics and port availability (L2 vs DC-Fast) using complex SQL transformations",
+            "Identified coverage gaps across 50 states by deploying an interactive Tableau dashboard visualizing network leaderboards and network coverage across the country"
+          ]
+        },
+        {
+          "name": "GPU Cluster Telemetry & Observability System",
+          "bullets": [
+            "Built an observability lakehouse (Parquet + DuckDB) to monitor GPU cluster performance via Medallion Architecture",
+            "Ingested 10M+ trace rows into a Bronze layer via Python, transforming them into Silver/Gold tables to enable granular daily utilization tracking and cost analysis",
+            "Flagged abnormal cluster behavior by implementing an IsolationForest model reducing false positive alerts by 15%"
+          ]
+        }
+      ],
+      "education": [
+        {
+          "school": "Illinois Institute of Technology",
+          "degree": "Master of Information Technology"
+        },
+        {
+          "school": "SREC",
+          "degree": "Bachelor of Computer Science and Engineering"
+        }
+      ]
+    },
+    "rendering": {
+      "fontFamily": "Calibri",
+      "fontSize": 11,
+      "lineHeight": 1.15,
+      "monoFontFamily": "Geist Mono, Andale Mono, monospace",
+      "pageSize": "LETTER",
+      "density": "COMPACT"
+    }
+  },
+  {
+    "profileMeta": {
+      "profileName": "Full Stack",
+      "resumeName": "Gokul_Nandakumar_Resume_FullStack",
+      "updatedAt": "2026-01-05T04:32:58.638Z"
+    },
+    "basics": {
+      "name": "Gokul Nandakumar",
+      "email": "goku.careers@gmail.com",
+      "phone": "+1 (773) 930 2964",
+      "links": [
+        {
+          "label": "Portfolio",
+          "url": "https://gokuldata.vercel.app/"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/Goku007007"
+        },
+        {
+          "label": "LinkedIn",
+          "url": "https://www.linkedin.com/in/gokul-nandakumar/"
+        }
+      ],
+      "locationLine": ""
+    },
+    "sections": {
+      "skills": {
+        "heading": "Skills",
+        "groups": [
+          {
+            "label": "Languages",
+            "items": [
+              "Python",
+              "JavaScript",
+              "TypeScript",
+              "SQL",
+              "HTML5",
+              "CSS3"
+            ]
+          },
+          {
+            "label": "Frontend",
+            "items": [
+              "React",
+              "Next.js",
+              "Angular",
+              "Recharts",
+              "Chart.js"
+            ]
+          },
+          {
+            "label": "Tailwind CSS Backend",
+            "items": [
+              "Python (Django, FastAPI, Flask)",
+              "Node.js (Express)",
+              "RESTful APIs"
+            ]
+          },
+          {
+            "label": "Microservices Db",
+            "items": [
+              "PostgreSQL",
+              "Redis",
+              "MySQL",
+              "MongoDB",
+              "Query Optimization"
+            ]
+          },
+          {
+            "label": "Schema Design Cloud & DevOps",
+            "items": [
+              "Azure",
+              "AWS",
+              "Docker",
+              "CI/CD"
+            ]
+          },
+          {
+            "label": "GitHub Actions Tools",
+            "items": [
+              "Git",
+              "pytest",
+              "Jest",
+              "Selenium",
+              "Webhooks"
+            ]
+          },
+          {
+            "label": "OAuth Cert",
+            "items": [
+              "AWS Certified Solutions Architect - Associate"
+            ]
+          },
+          {
+            "label": "AI - Assisted Dev & API",
+            "items": [
+              "Cursor",
+              "Claude Code",
+              "ChatGPT-Cli-or-Codex",
+              "Cursor",
+              "Antigravity",
+              "LLM and Vid Gen APIs"
+            ]
+          }
+        ]
+      },
+      "experience": [
+        {
+          "title": "Software Engineer",
+          "company": "ChiEAC",
+          "location": "Chicago, IL (Remote)",
+          "start": "Jun 2025",
+          "end": null,
+          "bullets": [
+            "Built AI document processing features using React, Python (FastAPI), and Claude API, reducing manual data entry time by 66% (6h → 2h) by automating transit report classification and extraction for 3 city departments",
+            "Developed analytics dashboard with React and TypeScript displaying real-time KPIs from Azure Synapse and PostgreSQL to standardize 12 metrics used by executive leadership and reduce query times by 40%",
+            "Implemented RESTful API endpoints using FastAPI and deployed with Docker on Azure, eliminating weekly manual report generation for operations team while maintaining 99.5% uptime through error handling and retry logic",
+            "Designed ETL pipelines using Airflow and Delta Lake to process daily transit data feeds, working with senior engineer to establish CI/CD workflows via GitHub Actions that cut deployment time from 2 hours to 30 minutes"
+          ],
+          "tech": []
+        },
+        {
+          "title": "Software Engineer",
+          "company": "ISQL Global",
+          "location": "Remote",
+          "start": "Oct 2022",
+          "end": "Jul 2023",
+          "bullets": [
+            "Built CRM features for roofing contractors using Angular frontend and Django REST backend, reducing customer quote generation time by streamlining workflow forms and optimizing PostgreSQL queries for 2,000+ monthly quotes",
+            "Implemented automated testing and CI/CD pipelines using GitHub Actions and Docker, ensuring 99.9% data quality reliability and enabling rapid deployment of schema changes across microservices architecture",
+            "Integrated Google Maps Geocoding API for address validation, Stripe for payment processing, and Twilio for SMS notifications, reducing manual address corrections and payment follow ups by 15 hours/week",
+            "Optimized slow running database queries by adding indexes and implementing Redis caching for session data, improving page load times by 35% and reducing AWS RDS costs by 15% through connection pooling"
+          ],
+          "tech": []
+        },
+        {
+          "title": "Software Engineer",
+          "company": "Out In Dreams",
+          "location": "Remote",
+          "start": "Sep 2021",
+          "end": "Oct 2022",
+          "bullets": [
+            "Built payment automation system using Python and Stripe Connect API, eliminating manual spreadsheet based payments for influencers and reducing finance team workload by 20 hours/week through automated payout and it helps reducing payment errors for $87K+ annual payouts",
+            "Created analytics dashboard using Next.js and Chart.js that pulled data from Google Ads and Instagram APIs, giving marketing team unified view of campaign performance and reducing manual report",
+            "Optimized PostgreSQL queries and analyzed creator engagement data to identify retention opportunities, resulting in 18% improvement in quarter-over-quarter retention through data driven feature prioritization"
+          ],
+          "tech": []
+        }
+      ],
+      "projects": [
+        {
+          "name": "National EV Charging Infrastructure Analytics",
+          "bullets": [
+            "Developed a data ingestion and analytics platform for 83k+ EV charging station records, utilizing (GCS) and BigQuery",
+            "Deployed an interactive dashboard to visualize network coverage gaps, processing large scale geospatial data to identify underserved regions."
+          ]
+        },
+        {
+          "name": "GPU Cluster Telemetry & Observability System",
+          "bullets": [
+            "BuiltBuilt a scalable observability platform using Python and DuckDB to monitor GPU cluster performance, ingesting 10M+ trace rows for granular utilization tracking.",
+            "Implemented an IsolationForest machine learning model to detect abnormal cluster behavior, reducing false alerts"
+          ]
+        }
+      ],
+      "education": [
+        {
+          "school": "Illinois Institute of Technology",
+          "degree": "Master of Information Technology"
+        },
+        {
+          "school": "SREC",
+          "degree": "Bachelor of Computer Science and Engineering"
+        }
+      ]
+    },
+    "rendering": {
+      "fontFamily": "Calibri",
+      "fontSize": 11,
+      "lineHeight": 1.15,
+      "monoFontFamily": "Geist Mono, Andale Mono, monospace",
+      "pageSize": "LETTER",
+      "density": "COMPACT"
+    }
+  },
+  {
+    "profileMeta": {
+      "profileName": "Integration Engineer",
+      "resumeName": "Gokul_Nandakumar_Resume_IntegrationEngineer",
+      "updatedAt": "2026-01-05T04:32:58.644Z"
+    },
+    "basics": {
+      "name": "Gokul Nandakumar",
+      "email": "goku.careers@gmail.com",
+      "phone": "+1 (773) 930 2964",
+      "links": [
+        {
+          "label": "Portfolio",
+          "url": "https://gokuldata.vercel.app/"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/Goku007007"
+        },
+        {
+          "label": "LinkedIn",
+          "url": "https://www.linkedin.com/in/gokul-nandakumar/"
+        }
+      ],
+      "locationLine": ""
+    },
+    "sections": {
+      "skills": {
+        "heading": "Skills",
+        "groups": [
+          {
+            "label": "Languages & Databases",
+            "items": [
+              "Python",
+              "SQL",
+              "Shell Scripting",
+              "JavaScript",
+              "PostgreSQL",
+              "MySQL",
+              "Cassandra",
+              "DynamoDB",
+              "Redis"
+            ]
+          },
+          {
+            "label": "Data Engineering & Cloud",
+            "items": [
+              "API Integrations (REST, JSON, OAuth)",
+              "Airflow",
+              "dbt",
+              "Spark (PySpark)",
+              "Kafka",
+              "AWS (S3, Lambda, Glue)",
+              "ETL",
+              "Azure (ADLS, Synapse)",
+              "Snowflake",
+              "Databricks"
+            ]
+          },
+          {
+            "label": "Tools",
+            "items": [
+              "Tableau",
+              "PowerBI",
+              "Docker",
+              "Terraform",
+              "GitHub Actions",
+              "Kafka"
+            ]
+          },
+          {
+            "label": "Webhooks Certifications",
+            "items": [
+              "AWS Certified Solutions Architect –"
+            ]
+          },
+          {
+            "label": "Associate AI",
+            "items": [
+              "Cursor",
+              "Claude Code",
+              "ChatGPT-Cli-or-Codex",
+              "Cursor",
+              "Antigravity",
+              "LLM and Vid Gen APIs"
+            ]
+          }
+        ]
+      },
+      "experience": [
+        {
+          "title": "ChiEAC",
+          "company": "Integration & Automation Engineer",
+          "location": "Chicago, IL (Remote)",
+          "start": "Jun 2025",
+          "end": null,
+          "bullets": [
+            "Reduced weekly data(civic, student, wellness) preparation time by 66% (6h → 2h) by engineering automated ETL pipelines using Airflow and implementing automated data quality tests and model on dbt & Snowflake",
+            "Integrated 5TB+ of cross-platform data (BigQuery, Snowflake, APIs) into a centralized lakehouse, enabling seamless system to system data flows for analytics.",
+            "Integrated external APIs and internal systems into automated workflows, enabling consistent, reliable data movement across civic and transit applications.",
+            "Standardized reporting for executive leadership by defining 12 core KPIs in Snowflake and visualizing them in Tableau,  reducing repetitive metric clarification and aligning reporting across teams",
+            "Improved data lineage and auditability by designing reproducible lakehouse pipelines using Delta Lake and Medallion Architecture on Azure to create reproducible civic and transit analytics workflows"
+          ],
+          "tech": []
+        },
+        {
+          "title": "ISQL Global",
+          "company": "Cloud & Integration Engineer",
+          "location": "Remote",
+          "start": "Oct 2022",
+          "end": "Jul 2023",
+          "bullets": [
+            "Reduced CRM data latency by 87% (2h → 15m) by integrating real-time PySpark pipelines with multiple systems, improving data synchronization for 10k+ users",
+            "Re-architected REST API integrations using Python (FastAPI) to improve system interoperability, cutting redundant backend calls by 30%",
+            "Improved query performance by 35% and reduced compute costs by 15% on Redshift/Databricks by optimizing SQL join logic and caching strategies",
+            "Ensured 99.9% data quality reliability by implementing version controlled dbt models with automated schema and freshness tests integrated into CI/CD"
+          ],
+          "tech": []
+        },
+        {
+          "title": "Out In Dreams",
+          "company": "Data & Integration Engineer",
+          "location": "Remote",
+          "start": "Sep 2021",
+          "end": "Oct 2022",
+          "bullets": [
+            "Reduced campaign reporting turnaround by 40% (5 days → 3 days) by modeling creator datasets in Snowflake and building automated Tableau dashboards",
+            "Integrated Google Ads, Snowflake, and internal datasets into unified pipelines, enabling reliable multi-system data flow for ROI analytics.",
+            "Improved campaign ROI by 12% by analyzing $20k+/month in ad spend to identify and reallocate budget to top performing creators and ad campaigns",
+            "Automated Creators payment system by building an ETL pipeline to pay on daily basis for the referral based program reducing time for finance team over 20 hours/week and resolving inconsistent payment errors"
+          ],
+          "tech": []
+        }
+      ],
+      "projects": [
+        {
+          "name": "National EV Charging Infrastructure Analytics",
+          "bullets": [
+            "Ingested 83k+ EV charging station records into GCS and BigQuery, organizing raw and curated buckets for analysis",
+            "Standardized uptime metrics and port availability (L2 vs DC-Fast) using complex SQL transformations",
+            "Identified coverage gaps across 50 states by deploying an interactive Tableau dashboard visualizing network leaderboards and network coverage across the country"
+          ]
+        }
+      ],
+      "education": [
+        {
+          "school": "Illinois Institute of Technology",
+          "degree": "Master of Information Technology\t May 2025"
+        },
+        {
+          "school": "SREC",
+          "degree": "Bachelor of Computer Science and Engineering\t May 2023"
+        }
+      ]
+    },
+    "rendering": {
+      "fontFamily": "Calibri",
+      "fontSize": 11,
+      "lineHeight": 1.15,
+      "monoFontFamily": "Geist Mono, Andale Mono, monospace",
+      "pageSize": "LETTER",
+      "density": "COMPACT"
+    }
+  },
+  {
+    "profileMeta": {
+      "profileName": "Marketing Analyst",
+      "resumeName": "Gokul_Nandakumar_Resume_Marketing_Analyst",
+      "updatedAt": "2026-01-05T04:32:58.649Z"
+    },
+    "basics": {
+      "name": "Gokul Nandakumar",
+      "email": "goku.careers@gmail.com",
+      "phone": "+1 (773) 930 2964",
+      "links": [
+        {
+          "label": "Portfolio",
+          "url": "https://gokuldata.vercel.app/"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/Goku007007"
+        },
+        {
+          "label": "LinkedIn",
+          "url": "https://www.linkedin.com/in/gokul-nandakumar/"
+        }
+      ],
+      "locationLine": ""
+    },
+    "sections": {
+      "skills": {
+        "heading": "Skills",
+        "groups": [
+          {
+            "label": "Analysis & Visualization",
+            "items": [
+              "Tableau",
+              "PowerBI",
+              "Google Analytics (GA4)",
+              "Excel (Pivot Tables,"
+            ]
+          },
+          {
+            "label": "Funnel Analysis Technical",
+            "items": [
+              "SQL (Advanced)",
+              "Python (Pandas, NumPy)",
+              "R",
+              "Snowflake",
+              "BigQuery"
+            ]
+          },
+          {
+            "label": "Airflow Marketing Concepts",
+            "items": [
+              "R OI/R OAS Analysis",
+              "Customer Segmentation",
+              "Campaign Attribution",
+              "Market Gap Analysis",
+              "CRM (Salesforce/HubSpot)"
+            ]
+          },
+          {
+            "label": "Certifications",
+            "items": [
+              "AWS Certified Solutions Architect – Associate"
+            ]
+          }
+        ]
+      },
+      "experience": [
+        {
+          "title": "ChiEAC",
+          "company": "Marketing Data Analyst",
+          "location": "Chicago, IL (Remote)",
+          "start": "Jun 2025",
+          "end": null,
+          "bullets": [
+            "Enabled granular customer segmentation and targeting by unifying 5TB+ of disparate user data into a centralized analytics hub, directly supporting city wide engagement strategies.",
+            "Defined and tracked 12 key performance indicators (KPIs) including Churn Rate and Service Adoption, building automated Tableau dashboards to replace manual reporting for executive leadership.",
+            "Accelerated daily campaign decision making by 66% (6h → 2h) through the automation of data processing workflows, allowing for real time budget optimization.",
+            "Ensured 99.9% data integrity for public-facing reports by implementing rigorous quality checks, fostering stakeholder trust in critical engagement metrics."
+          ],
+          "tech": []
+        },
+        {
+          "title": "ISQL Global",
+          "company": "Data Analyst Intern",
+          "location": "Remote",
+          "start": "Oct 2022",
+          "end": "Jul 2023",
+          "bullets": [
+            "Unlocked real time campaign performance tracking by optimizing data retrieval pipelines, reducing report generation time by 30% and enabling faster reaction to market trends.",
+            "Facilitated precise Customer Segmentation by implementing automated data quality pipelines, ensuring 99.9% accuracy in user demographic data used for targeting.",
+            "Supported near real time decision making for 10k+ users by optimizing backend data flows, reducing data latency by 87% (2h → 15m).",
+            "Empowered the marketing team to rapidly explore large datasets for ad-hoc analysis by improving query performance by 35%, removing technical bottlenecks to insight."
+          ],
+          "tech": []
+        },
+        {
+          "title": "Out In Dreams",
+          "company": "Marketing Analyst Intern",
+          "location": "Remote",
+          "start": "Sep 2021",
+          "end": "Oct 2022",
+          "bullets": [
+            "Managed and optimized $20k/month marketing budget, analyzing ad spend data to identify underperforming channels and reallocating budget to drive a 12% increase in ROI.",
+            "Created a \"Single Customer View\" by unifying cross-channel marketing data (Google Ads, CRM) in Snow flake, enabling holistic Multi touch Attribution analysis.",
+            "Freed up 20+ hours/week for strategic analysis by automating weekly performance reporting, reducing turnaround time by 40% (5 days → 3 days). Conducted deep-dive analysis on partner performance, identifying top performing creators to optimize the referral program and improve Customer Acquisition Cost (CAC)."
+          ],
+          "tech": []
+        }
+      ],
+      "projects": [
+        {
+          "name": "Market Expansion & Competitive Analysis",
+          "bullets": [
+            "Conducted a market gap analysis for EV infrastructure by analyzing 83k+ location records, identifying high potential regions for market expansion.",
+            "Developed an interactive Tableau style dashboard to visualize network coverage and competitor density, providing actionable recommendations for strategic site selection.",
+            "Benchmarked key service metrics (uptime, availability) against industry standards using complex SQL analysis to inform competitive positioning strategies"
+          ]
+        }
+      ],
+      "education": [
+        {
+          "school": "Illinois Institute of Technology",
+          "degree": "Master of Information Technology\t May 2025"
+        },
+        {
+          "school": "SREC",
+          "degree": "Bachelor of Computer Science and Engineering\t May 2023"
+        }
+      ]
+    },
+    "rendering": {
+      "fontFamily": "Calibri",
+      "fontSize": 11,
+      "lineHeight": 1.15,
+      "monoFontFamily": "Geist Mono, Andale Mono, monospace",
+      "pageSize": "LETTER",
+      "density": "COMPACT"
+    }
+  },
+  {
+    "profileMeta": {
+      "profileName": "Software Engineer",
+      "resumeName": "Gokul_Nandakumar_Resume_SoftwareEngineer",
+      "updatedAt": "2026-01-05T04:32:58.654Z"
+    },
+    "basics": {
+      "name": "Gokul Nandakumar",
+      "email": "goku.careers@gmail.com",
+      "phone": "+1 (773) 930 2964",
+      "links": [
+        {
+          "label": "Portfolio",
+          "url": "https://gokuldata.vercel.app/"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/Goku007007"
+        },
+        {
+          "label": "LinkedIn",
+          "url": "https://www.linkedin.com/in/gokul-nandakumar/"
+        }
+      ],
+      "locationLine": ""
+    },
+    "sections": {
+      "skills": {
+        "heading": "Skills",
+        "groups": [
+          {
+            "label": "Languages",
+            "items": [
+              "Python",
+              "JavaScript",
+              "SQL",
+              "Shell Scripting"
+            ]
+          },
+          {
+            "label": "Java Frameworks & Tools",
+            "items": [
+              "PHP(Laravel)",
+              "REACT",
+              "TypeScript",
+              "NodeJS",
+              "FastAPI",
+              "Flask",
+              "Docker",
+              "Kubernetes",
+              "Terraform",
+              "AWS",
+              "Azure (ADLS, Synapse)",
+              "Git",
+              "GitHub Actions",
+              "Airflow"
+            ]
+          },
+          {
+            "label": "Spark Databases",
+            "items": [
+              "PostgreSQL",
+              "MySQL",
+              "DynamoDB",
+              "Redis"
+            ]
+          },
+          {
+            "label": "Cassandra Concepts",
+            "items": [
+              "REST API Design",
+              "Microservices Architecture",
+              "CI/CD",
+              "System Design",
+              "Distributed Systems",
+              "Agile/"
+            ]
+          },
+          {
+            "label": "Scrum Certifications",
+            "items": [
+              "AWS Certified Solutions Architect - Associate"
+            ]
+          },
+          {
+            "label": "AI - Assisted Dev & API",
+            "items": [
+              "Cursor",
+              "Claude Code",
+              "ChatGPT-Cli-or-Codex",
+              "Cursor",
+              "Antigravity",
+              "LLM and Vid Gen APIs"
+            ]
+          }
+        ]
+      },
+      "experience": [
+        {
+          "title": "Software Engineer",
+          "company": "ChiEAC",
+          "location": "Chicago, IL (Remote)",
+          "start": "Jun 2025",
+          "end": null,
+          "bullets": [
+            "Designed and implemented scalable backend services using Python and Airflow, reducing data processing time by 66% (6h → 2h) through concurrent task execution and optimized resource allocation",
+            "Architected distributed data systems on Azure, unifying 5TB+ of disparate data into a centralized lakehouse to enable real-time analytics for city wide transit systems.",
+            "Built automated reporting microservices using Python and SQL, eliminating manual report generation and standardizing 12 core KPIs for executive leadership.",
+            "Improved system reliability and auditability by designing reproducible pipelines using Delta Lake and Medallion Architecture, ensuring data consistency across civic and transit analytics workflows."
+          ],
+          "tech": []
+        },
+        {
+          "title": "Software Engineer",
+          "company": "ISQL Global",
+          "location": "Remote",
+          "start": "Oct 2022",
+          "end": "Jul 2023",
+          "bullets": [
+            "Re-architected legacy REST APIs using Python (FastAPI) to optimize data retrieval, cutting redundant backend calls by 30% and reducing payload size, resulting in a 30% faster load time for the reporting feature.",
+            "Implemented automated testing and CI/CD pipelines using GitHub Actions, ensuring 99.9% data quality reliability and enabling rapid deployment of schema changes.",
+            "Optimized backend data processing pipelines using PySpark and Airflow, reducing data latency by 87% (2h → 15m)",
+            "Enhanced database query performance by 35% and reduced compute costs by 15% on Redshift/Databricks by optimizing SQL join logic and implementing effective caching strategies."
+          ],
+          "tech": []
+        },
+        {
+          "title": "Software Engineer",
+          "company": "Out In Dreams",
+          "location": "Remote",
+          "start": "Sep 2021",
+          "end": "Oct 2022",
+          "bullets": [
+            "Developed an automated payment processing system using Python, reducing manual finance operations by 20+ hours/week and eliminating inconsistent payment errors for the referral-based program.",
+            "Integrated third party APIs (Google Ads) into internal data warehousing solutions, creating a unified view of ad spend and R OI for cross-functional teams.",
+            "Engineered data models in Snowflake to support campaign performance tracking, reducing reporting turnaround time by 40% (5 days → 3 days).",
+            "Analyzed $20k+/month in ad spend data to identify optimization opportunities, resulting in a 12% improvement in campaign ROI through algorithmic budget reallocation."
+          ],
+          "tech": []
+        }
+      ],
+      "projects": [
+        {
+          "name": "National EV Charging Infrastructure Analytics",
+          "bullets": [
+            "Developed a data ingestion and analytics platform for 83k+ EV charging station records, utilizing (GCS) and BigQuery",
+            "Deployed an interactive dashboard to visualize network coverage gaps, processing large scale geospatial data to identify underserved regions."
+          ]
+        },
+        {
+          "name": "GPU Cluster Telemetry & Observability System",
+          "bullets": [
+            "BuiltBuilt a scalable observability platform using Python and DuckDB to monitor GPU cluster performance, ingesting 10M+ trace rows for granular utilization tracking.",
+            "Implemented an IsolationForest machine learning model to detect abnormal cluster behavior, reducing false alerts"
+          ]
+        }
+      ],
+      "education": [
+        {
+          "school": "Illinois Institute of Technology",
+          "degree": "Master of Information Technology"
+        },
+        {
+          "school": "SREC",
+          "degree": "Bachelor of Computer Science and Engineering"
+        }
+      ]
+    },
+    "rendering": {
+      "fontFamily": "Calibri",
+      "fontSize": 11,
+      "lineHeight": 1.15,
+      "monoFontFamily": "Geist Mono, Andale Mono, monospace",
+      "pageSize": "LETTER",
+      "density": "COMPACT"
+    }
+  },
+  {
+    "profileMeta": {
+      "profileName": "Solutions Engineer",
+      "resumeName": "Gokul_Nandakumar_Resume_SolutionsEngineer",
+      "updatedAt": "2026-01-05T04:32:58.660Z"
+    },
+    "basics": {
+      "name": "Gokul Nandakumar",
+      "email": "goku.careers@gmail.com",
+      "phone": "+1 (773) 930 2964",
+      "links": [
+        {
+          "label": "Portfolio",
+          "url": "https://gokuldata.vercel.app/"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/Goku007007"
+        },
+        {
+          "label": "LinkedIn",
+          "url": "https://www.linkedin.com/in/gokul-nandakumar/"
+        }
+      ],
+      "locationLine": ""
+    },
+    "sections": {
+      "skills": {
+        "heading": "Skills",
+        "groups": [
+          {
+            "label": "Languages",
+            "items": [
+              "Python",
+              "JavaScript",
+              "SQL",
+              "Shell Scripting"
+            ]
+          },
+          {
+            "label": "Java Frameworks & Tools",
+            "items": [
+              "PHP(Laravel)",
+              "REACT",
+              "TypeScript",
+              "NodeJS",
+              "FastAPI",
+              "Flask",
+              "Docker",
+              "Kubernetes",
+              "Terraform",
+              "AWS",
+              "Azure (ADLS, Synapse)",
+              "Git",
+              "GitHub Actions",
+              "Airflow"
+            ]
+          },
+          {
+            "label": "Spark Databases",
+            "items": [
+              "PostgreSQL",
+              "MySQL",
+              "DynamoDB",
+              "Redis"
+            ]
+          },
+          {
+            "label": "Cassandra Concepts",
+            "items": [
+              "REST API Design",
+              "Microservices Architecture",
+              "CI/CD",
+              "System Design",
+              "Distributed Systems",
+              "Agile/"
+            ]
+          },
+          {
+            "label": "Scrum Certifications",
+            "items": [
+              "AWS Certified Solutions Architect - Associate"
+            ]
+          },
+          {
+            "label": "AI - Assisted Dev & API",
+            "items": [
+              "Cursor",
+              "Claude Code",
+              "ChatGPT-Cli-or-Codex",
+              "Cursor",
+              "Antigravity",
+              "LLM and Vid Gen APIs"
+            ]
+          }
+        ]
+      },
+      "experience": [
+        {
+          "title": "Software & Data Solutions Engineer",
+          "company": "ChiEAC",
+          "location": "Chicago, IL (Remote)",
+          "start": "Jun 2025",
+          "end": null,
+          "bullets": [
+            "Designed and implemented scalable backend services using Python and Airflow, reducing data processing time by 66% (6h → 2h) through concurrent task execution and optimized resource allocation",
+            "Architected distributed data systems on Azure, unifying 5TB+ of disparate data into a centralized lakehouse to enable real-time analytics for city wide transit systems.",
+            "Built automated reporting microservices using Python and SQL, eliminating manual report generation and standardizing 12 core KPIs for executive leadership.",
+            "Improved system reliability and auditability by designing reproducible pipelines using Delta Lake and Medallion Architecture, ensuring data consistency across civic and transit analytics workflows."
+          ],
+          "tech": []
+        },
+        {
+          "title": "Software Solutions Engineer",
+          "company": "ISQL Global",
+          "location": "Remote",
+          "start": "Oct 2022",
+          "end": "Jul 2023",
+          "bullets": [
+            "Re-architected legacy REST APIs using Python (FastAPI) to optimize data retrieval, cutting redundant backend calls by 30% and reducing payload size, resulting in a 30% faster load time for the reporting feature.",
+            "Implemented automated testing and CI/CD pipelines using GitHub Actions, ensuring 99.9% data quality reliability and enabling rapid deployment of schema changes.",
+            "Optimized backend data processing pipelines using PySpark and Airflow, reducing data latency by 87% (2h → 15m)",
+            "Enhanced database query performance by 35% and reduced compute costs by 15% on Redshift/Databricks by optimizing SQL join logic and implementing effective caching strategies."
+          ],
+          "tech": []
+        },
+        {
+          "title": "Analytics Solutions Engineer",
+          "company": "Out In Dreams",
+          "location": "Remote",
+          "start": "Sep 2021",
+          "end": "Oct 2022",
+          "bullets": [
+            "Developed an automated payment processing system using Python, reducing manual finance operations by 20+ hours/week and eliminating inconsistent payment errors for the referral-based program.",
+            "Integrated third party APIs (Google Ads) into internal data warehousing solutions, creating a unified view of ad spend and R OI for cross-functional teams.",
+            "Engineered data models in Snowflake to support campaign performance tracking, reducing reporting turnaround time by 40% (5 days → 3 days).",
+            "Analyzed $20k+/month in ad spend data to identify optimization opportunities, resulting in a 12% improvement in campaign ROI through algorithmic budget reallocation."
+          ],
+          "tech": []
+        }
+      ],
+      "projects": [
+        {
+          "name": "National EV Charging Infrastructure Analytics",
+          "bullets": [
+            "Developed a data ingestion and analytics platform for 83k+ EV charging station records, utilizing (GCS) and BigQuery",
+            "Deployed an interactive dashboard to visualize network coverage gaps, processing large scale geospatial data to identify underserved regions."
+          ]
+        },
+        {
+          "name": "GPU Cluster Telemetry & Observability System",
+          "bullets": [
+            "BuiltBuilt a scalable observability platform using Python and DuckDB to monitor GPU cluster performance, ingesting 10M+ trace rows for granular utilization tracking.",
+            "Implemented an IsolationForest machine learning model to detect abnormal cluster behavior, reducing false alerts"
+          ]
+        }
+      ],
+      "education": [
+        {
+          "school": "Illinois Institute of Technology",
+          "degree": "Master of Information Technology"
+        },
+        {
+          "school": "SREC",
+          "degree": "Bachelor of Computer Science and Engineering"
+        }
+      ]
+    },
+    "rendering": {
+      "fontFamily": "Calibri",
+      "fontSize": 11,
+      "lineHeight": 1.15,
+      "monoFontFamily": "Geist Mono, Andale Mono, monospace",
+      "pageSize": "LETTER",
+      "density": "COMPACT"
+    }
+  },
+  {
+    "profileMeta": {
+      "profileName": "Systems Engineer",
+      "resumeName": "Gokul_Nandakumar_Resume_SystemsEngineer",
+      "updatedAt": "2026-01-05T04:32:58.665Z"
+    },
+    "basics": {
+      "name": "Gokul Nandakumar",
+      "email": "goku.careers@gmail.com",
+      "phone": "+1 (773) 930 2964",
+      "links": [
+        {
+          "label": "Portfolio",
+          "url": "https://gokuldata.vercel.app/"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/Goku007007"
+        },
+        {
+          "label": "LinkedIn",
+          "url": "https://www.linkedin.com/in/gokul-nandakumar/"
+        }
+      ],
+      "locationLine": ""
+    },
+    "sections": {
+      "skills": {
+        "heading": "Skills",
+        "groups": [
+          {
+            "label": "Languages & Databases",
+            "items": [
+              "Python",
+              "SQL",
+              "Shell Scripting",
+              "JavaScript",
+              "PostgreSQL",
+              "MySQL",
+              "Cassandra",
+              "DynamoDB",
+              "Redis"
+            ]
+          },
+          {
+            "label": "Data Engineering & Cloud",
+            "items": [
+              "Airflow",
+              "dbt",
+              "Spark (PySpark)",
+              "Kafka",
+              "AWS (S3, Lambda, Glue)",
+              "ETL",
+              "Azure (ADLS, Synapse)",
+              "Snowflake"
+            ]
+          },
+          {
+            "label": "Databricks Tools",
+            "items": [
+              "Tableau",
+              "PowerBI",
+              "Docker",
+              "Terraform"
+            ]
+          },
+          {
+            "label": "GitHub Actions Systems & Operations",
+            "items": [
+              "Linux administration",
+              "batch monitoring",
+              "CI/CD",
+              "Docker",
+              "Kubernetes",
+              "Grafana"
+            ]
+          },
+          {
+            "label": "Prometheus Certifications",
+            "items": [
+              "AWS Certified Solutions Architect –"
+            ]
+          },
+          {
+            "label": "Associate AI",
+            "items": [
+              "Cursor",
+              "Claude Code",
+              "ChatGPT-Cli-or-Codex",
+              "Cursor",
+              "Antigravity",
+              "LLM and Vid Gen APIs"
+            ]
+          }
+        ]
+      },
+      "experience": [
+        {
+          "title": "Automation Engineer",
+          "company": "ChiEAC",
+          "location": "Chicago, IL (Remote)",
+          "start": "Jun 2025",
+          "end": null,
+          "bullets": [
+            "Reduced weekly data(civic, student, wellness) preparation time by 66% (6h → 2h) by engineering automated ETL pipelines using Airflow and implementing automated data quality tests and model on dbt & Snowflake",
+            "Unified 5TB+ of disparate open data from BigQuery and Snowflake into a centralized lakehouse, enabling real time cross domain analytics for city wide transit systems",
+            "Standardized reporting for executive leadership by defining 12 core KPIs in Snowflake and visualizing them in Tableau,  reducing repetitive metric clarification and aligning reporting across teams",
+            "Improved data lineage and auditability by designing reproducible lakehouse pipelines using Delta Lake and Medallion Architecture on Azure to create reproducible civic and transit analytics workflows"
+          ],
+          "tech": []
+        },
+        {
+          "title": "Cloud & Automation Engineer",
+          "company": "ISQL Global",
+          "location": "Remote",
+          "start": "Oct 2022",
+          "end": "Jul 2023",
+          "bullets": [
+            "Reduced CRM data latency by 87% (2h → 15m) for 10k+ users by developing PySpark pipelines orchestrated in Airflow",
+            "Architected existing REST APIs in Python (FastAPI) to optimize data retrieval, cutting redundant backend calls by 30% and resulting in 30% reduced loading time and faster data access in reporting feature",
+            "Improved query performance by 35% and reduced compute costs by 15% on Redshift/Databricks by optimizing SQL join logic and caching strategies",
+            "Ensured 99.9% data quality reliability by implementing version controlled dbt models with automated schema and freshness tests integrated into CI/CD"
+          ],
+          "tech": []
+        },
+        {
+          "title": "Data Engineer",
+          "company": "Out In Dreams",
+          "location": "Remote",
+          "start": "Sep 2021",
+          "end": "Oct 2022",
+          "bullets": [
+            "Reduced campaign reporting turnaround by 40% (5 days → 3 days) by modeling creator datasets in Snowflake and building automated Tableau dashboards",
+            "Created a unified view of ad spend and ROI by integrating Google Ads data (BigQuery) with other Snowflake datasets",
+            "Improved campaign ROI by 12% by analyzing $20k+/month in ad spend to identify and reallocate budget to top performing creators and ad campaigns",
+            "Automated Creators payment system by building an ETL pipeline to pay on daily basis for the referral based program reducing time for finance team over 20 hours/week and resolving inconsistent payment errors"
+          ],
+          "tech": []
+        }
+      ],
+      "projects": [
+        {
+          "name": "National EV Charging Infrastructure Analytics",
+          "bullets": [
+            "Ingested 83k+ EV charging station records into GCS and BigQuery, organizing raw and curated buckets for analysis",
+            "Standardized uptime metrics and port availability (L2 vs DC-Fast) using complex SQL transformations",
+            "Identified coverage gaps across 50 states by deploying an interactive Tableau dashboard visualizing network leaderboards and network coverage across the country"
+          ]
+        },
+        {
+          "name": "GPU Cluster Telemetry & Observability System",
+          "bullets": [
+            "Built an observability lakehouse (Parquet + DuckDB) to monitor GPU cluster performance via Medallion Architecture",
+            "Ingested 10M+ trace rows into a Bronze layer via Python, transforming them into Silver/Gold tables to enable granular daily utilization tracking and cost analysis",
+            "Flagged abnormal cluster behavior by implementing an IsolationForest model reducing false positive alerts by 15%"
+          ]
+        }
+      ],
+      "education": [
+        {
+          "school": "Illinois Institute of Technology",
+          "degree": "Master of Information Technology"
+        }
+      ]
+    },
+    "rendering": {
+      "fontFamily": "Calibri",
+      "fontSize": 11,
+      "lineHeight": 1.15,
+      "monoFontFamily": "Geist Mono, Andale Mono, monospace",
+      "pageSize": "LETTER",
+      "density": "COMPACT"
+    }
+  }
+]
