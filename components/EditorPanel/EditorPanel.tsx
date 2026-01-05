@@ -25,6 +25,37 @@ interface AccordionSectionProps {
     children: React.ReactNode;
 }
 
+// Professional SVG Icons
+const SectionIcons = {
+    contact: (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+    ),
+    skills: (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        </svg>
+    ),
+    experience: (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+    ),
+    projects: (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+        </svg>
+    ),
+    education: (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14l9-5-9-5-9 5 9 5z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+        </svg>
+    ),
+};
+
 function AccordionSection({
     id,
     title,
@@ -68,7 +99,7 @@ function AccordionSection({
 
                     {/* Icon + Title + Count */}
                     <div className="flex items-center gap-2">
-                        <span className="text-lg">{icon}</span>
+                        <span className={colors.header}>{SectionIcons[icon as keyof typeof SectionIcons] || icon}</span>
                         <h3 className={`font-semibold ${colors.header}`}>{title}</h3>
                         {count !== undefined && (
                             <span className="text-xs text-gray-500 bg-gray-700 px-1.5 py-0.5 rounded">{count}</span>
@@ -110,11 +141,11 @@ function AccordionSection({
 
 // Section IDs for navigation
 const SECTIONS = [
-    { id: 'basics', label: 'Contact', icon: '👤' },
-    { id: 'skills', label: 'Skills', icon: '⚡' },
-    { id: 'experience', label: 'Experience', icon: '💼' },
-    { id: 'projects', label: 'Projects', icon: '🚀' },
-    { id: 'education', label: 'Education', icon: '🎓' },
+    { id: 'basics', label: 'Contact', icon: 'contact' },
+    { id: 'skills', label: 'Skills', icon: 'skills' },
+    { id: 'experience', label: 'Experience', icon: 'experience' },
+    { id: 'projects', label: 'Projects', icon: 'projects' },
+    { id: 'education', label: 'Education', icon: 'education' },
 ];
 
 export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPanelProps) {
@@ -410,7 +441,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                     : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'
                                     }`}
                             >
-                                <span>{section.icon}</span>
+                                <span>{SectionIcons[section.icon as keyof typeof SectionIcons]}</span>
                                 <span>{section.label}</span>
                             </button>
                         ))}
@@ -423,7 +454,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                     <AccordionSection
                         id="basics"
                         title="Contact Info"
-                        icon="👤"
+                        icon="contact"
                         summary={summaries.basics}
                         color="blue"
                         isExpanded={expandedSections.basics}
@@ -489,7 +520,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                     <AccordionSection
                         id="skills"
                         title="Skills"
-                        icon="⚡"
+                        icon="skills"
                         count={data.sections.skills.groups.length}
                         summary={summaries.skills}
                         color="green"
@@ -537,7 +568,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                     <AccordionSection
                         id="experience"
                         title="Experience"
-                        icon="💼"
+                        icon="experience"
                         count={data.sections.experience.length}
                         summary={summaries.experience}
                         color="purple"
@@ -646,7 +677,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                     <AccordionSection
                         id="projects"
                         title="Projects"
-                        icon="🚀"
+                        icon="projects"
                         count={data.sections.projects.length}
                         summary={summaries.projects}
                         color="orange"
@@ -730,7 +761,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                     <AccordionSection
                         id="education"
                         title="Education"
-                        icon="🎓"
+                        icon="education"
                         count={data.sections.education.length}
                         summary={summaries.education}
                         color="cyan"
