@@ -288,3 +288,24 @@
   padding-left: 4px;
   padding-right: 4px;
 }
+
+/* Interactive Sections (Preview Link) */
+.resume-header,
+.resume-contact,
+.resume-section {
+  cursor: pointer;
+  transition: background-color 0.2s ease, outline-color 0.2s ease;
+  /* Add padding to ensure visual feedback doesn't clip */
+  padding: 4px;
+  margin: -4px;
+  /* Counteract padding to maintain layout */
+  border-radius: 4px;
+}
+
+.resume-header:hover,
+.resume-contact:hover,
+.resume-section:hover {
+  background-color: rgba(59, 130, 246, 0.08);
+  /* blue-500/8 */
+  outline: 1px dashed rgba(59, 130, 246, 0.3);
+}

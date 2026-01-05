@@ -31,6 +31,11 @@ export default function Home() {
   const [previewZoom, setPreviewZoom] = useState(0.85);
   const [isFullscreenOpen, setIsFullscreenOpen] = useState(false);
   const [highlightedSection, setHighlightedSection] = useState<string | null>(null);
+  const [scrollTarget, setScrollTarget] = useState<{ section: string; field?: string; index?: number; subIndex?: number; ts: number } | null>(null);
+
+  const handlePreviewSectionClick = (section: string, field?: string, index?: number, subIndex?: number) => {
+    setScrollTarget({ section, field, index, subIndex, ts: Date.now() });
+  };
   const previewContainerRef = useRef<HTMLDivElement>(null);
   const highlightTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -443,13 +448,23 @@ export default function Home() {
             onFullscreen={() => setIsFullscreenOpen(true)}
           />
           <div ref={previewContainerRef} className="flex-1 overflow-auto bg-gray-800">
-            <ResumePreview data={resumeData} scale={previewZoom} highlightedSection={highlightedSection} />
+            <ResumePreview
+              data={resumeData}
+              scale={previewZoom}
+              highlightedSection={highlightedSection}
+              onSectionClick={handlePreviewSectionClick}
+            />
           </div>
         </div>
 
         {/* Right Pane - Editor */}
         <div className="w-1/2 overflow-hidden">
-          <EditorPanel data={resumeData} onChange={handleResumeChange} onSectionFocus={handleSectionFocus} />
+          <EditorPanel
+            data={resumeData}
+            onChange={handleResumeChange}
+            onSectionFocus={handleSectionFocus}
+            scrollTarget={scrollTarget}
+          />
         </div>
       </main>
 

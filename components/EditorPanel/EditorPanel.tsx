@@ -8,6 +8,7 @@ interface EditorPanelProps {
     data: ResumeJSON;
     onChange: (data: ResumeJSON) => void;
     onSectionFocus?: (section: string) => void;
+    scrollTarget?: { section: string; field?: string; index?: number; subIndex?: number; ts: number } | null;
 }
 
 // Reusable Accordion Section Component
@@ -143,7 +144,7 @@ const SECTIONS = [
     { id: 'education', label: 'Education', icon: 'education' },
 ];
 
-export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPanelProps) {
+export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarget }: EditorPanelProps) {
     const [activeSection, setActiveSection] = React.useState('basics');
     const [deleteConfirm, setDeleteConfirm] = React.useState<{ type: string; index: number; name: string } | null>(null);
     const containerRef = React.useRef<HTMLDivElement>(null);
@@ -185,6 +186,30 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
         container.addEventListener('scroll', handleScroll);
         return () => container.removeEventListener('scroll', handleScroll);
     }, []);
+
+    // Handle scroll target changes from parent
+    React.useEffect(() => {
+        if (scrollTarget) {
+            scrollToSection(scrollTarget.section);
+
+            // Allow a small delay for section expansion animation before focusing field
+            if (scrollTarget.field) {
+                setTimeout(() => {
+                    const idParts = ['input', scrollTarget.section];
+                    if (typeof scrollTarget.index === 'number') idParts.push(scrollTarget.index.toString());
+                    idParts.push(scrollTarget.field);
+                    if (typeof scrollTarget.subIndex === 'number') idParts.push(scrollTarget.subIndex.toString());
+
+                    const elementId = idParts.join('-');
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        element.focus();
+                        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 300);
+            }
+        }
+    }, [scrollTarget]);
 
     const scrollToSection = (sectionId: string) => {
         const container = containerRef.current;
@@ -458,6 +483,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                             <div>
                                 <label className="block text-sm text-gray-400 mb-1">Name</label>
                                 <input
+                                    id="input-basics-name"
                                     type="text"
                                     value={data.basics.name}
                                     onChange={(e) => updateBasics('name', e.target.value)}
@@ -469,6 +495,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                 <div>
                                     <label className="block text-sm text-gray-400 mb-1">Email</label>
                                     <input
+                                        id="input-basics-email"
                                         type="email"
                                         value={data.basics.email}
                                         onChange={(e) => updateBasics('email', e.target.value)}
@@ -479,6 +506,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                 <div>
                                     <label className="block text-sm text-gray-400 mb-1">Phone</label>
                                     <input
+                                        id="input-basics-phone"
                                         type="text"
                                         value={data.basics.phone}
                                         onChange={(e) => updateBasics('phone', e.target.value)}
@@ -490,6 +518,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                             {data.basics.links.map((link, idx) => (
                                 <div key={idx} className="grid grid-cols-3 gap-2">
                                     <input
+                                        id={`input-basics-links-${idx}-label`}
                                         type="text"
                                         value={link.label}
                                         onChange={(e) => updateLink(idx, 'label', e.target.value)}
@@ -498,6 +527,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                         className="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
                                     />
                                     <input
+                                        id={`input-basics-links-${idx}-url`}
                                         type="url"
                                         value={link.url}
                                         onChange={(e) => updateLink(idx, 'url', e.target.value)}
@@ -526,6 +556,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                             <div key={idx} className="group/card bg-gray-700/50 rounded p-3 relative">
                                 <div className="flex items-center gap-2 mb-2">
                                     <input
+                                        id={`input-skills-${idx}-label`}
                                         type="text"
                                         value={group.label}
                                         onChange={(e) => updateSkillGroup(idx, 'label', e.target.value)}
@@ -543,6 +574,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                     </button>
                                 </div>
                                 <input
+                                    id={`input-skills-${idx}-items`}
                                     type="text"
                                     value={group.items.join(', ')}
                                     onChange={(e) => updateSkillGroup(idx, 'items', e.target.value)}
@@ -588,6 +620,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                 </div>
                                 <div className="grid grid-cols-2 gap-2 mb-2">
                                     <input
+                                        id={`input-experience-${expIdx}-title`}
                                         type="text"
                                         value={exp.title}
                                         onChange={(e) => updateExperience(expIdx, 'title', e.target.value)}
@@ -596,6 +629,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                         className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                     <input
+                                        id={`input-experience-${expIdx}-company`}
                                         type="text"
                                         value={exp.company}
                                         onChange={(e) => updateExperience(expIdx, 'company', e.target.value)}
@@ -606,6 +640,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                 </div>
                                 <div className="grid grid-cols-3 gap-3 mb-3">
                                     <input
+                                        id={`input-experience-${expIdx}-location`}
                                         type="text"
                                         value={exp.location}
                                         onChange={(e) => updateExperience(expIdx, 'location', e.target.value)}
@@ -613,6 +648,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                         className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                     <input
+                                        id={`input-experience-${expIdx}-start`}
                                         type="text"
                                         value={exp.start}
                                         onChange={(e) => updateExperience(expIdx, 'start', e.target.value)}
@@ -620,6 +656,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                         className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                     <input
+                                        id={`input-experience-${expIdx}-end`}
                                         type="text"
                                         value={exp.end || ''}
                                         onChange={(e) => updateExperience(expIdx, 'end', e.target.value || null)}
@@ -640,6 +677,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                     {exp.bullets.map((bullet, bulletIdx) => (
                                         <div key={bulletIdx} className="group/bullet flex gap-2">
                                             <textarea
+                                                id={`input-experience-${expIdx}-bullets-${bulletIdx}`}
                                                 value={bullet}
                                                 onChange={(e) => updateBullet(expIdx, bulletIdx, e.target.value)}
                                                 onFocus={() => onSectionFocus?.('experience')}
@@ -697,6 +735,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                 </div>
                                 <div className="grid grid-cols-2 gap-2 mb-2">
                                     <input
+                                        id={`input-projects-${projIdx}-name`}
                                         type="text"
                                         value={proj.name}
                                         onChange={(e) => updateProject(projIdx, 'name', e.target.value)}
@@ -705,6 +744,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                         className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                     <input
+                                        id={`input-projects-${projIdx}-link`}
                                         type="url"
                                         value={proj.link || ''}
                                         onChange={(e) => updateProject(projIdx, 'link', e.target.value)}
@@ -726,6 +766,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                     {proj.bullets.map((bullet, bulletIdx) => (
                                         <div key={bulletIdx} className="group/pbullet flex gap-2">
                                             <textarea
+                                                id={`input-projects-${projIdx}-bullets-${bulletIdx}`}
                                                 value={bullet}
                                                 onChange={(e) => updateProjectBullet(projIdx, bulletIdx, e.target.value)}
                                                 onFocus={() => onSectionFocus?.('projects')}
@@ -766,6 +807,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                             <div key={eduIdx} className="bg-gray-800/40 rounded-lg p-3 border border-gray-800">
                                 <div className="grid grid-cols-2 gap-2">
                                     <input
+                                        id={`input-education-${eduIdx}-school`}
                                         type="text"
                                         value={edu.school}
                                         onChange={(e) => updateEducation(eduIdx, 'school', e.target.value)}
@@ -774,6 +816,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                         className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                     <input
+                                        id={`input-education-${eduIdx}-degree`}
                                         type="text"
                                         value={edu.degree}
                                         onChange={(e) => updateEducation(eduIdx, 'degree', e.target.value)}
