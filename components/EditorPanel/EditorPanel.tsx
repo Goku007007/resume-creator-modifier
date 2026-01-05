@@ -9,6 +9,104 @@ interface EditorPanelProps {
     onChange: (data: ResumeJSON) => void;
 }
 
+// Reusable Accordion Section Component
+interface AccordionSectionProps {
+    id: string;
+    title: string;
+    icon: string;
+    count?: number;
+    summary: string;
+    color: string;
+    isExpanded: boolean;
+    onToggle: () => void;
+    onAdd?: () => void;
+    addLabel?: string;
+    children: React.ReactNode;
+}
+
+function AccordionSection({
+    id,
+    title,
+    icon,
+    count,
+    summary,
+    color,
+    isExpanded,
+    onToggle,
+    onAdd,
+    addLabel,
+    children,
+}: AccordionSectionProps) {
+    const colorClasses: Record<string, { header: string; button: string; border: string }> = {
+        blue: { header: 'text-blue-400', button: 'bg-blue-600 hover:bg-blue-700', border: 'border-blue-500/30' },
+        green: { header: 'text-green-400', button: 'bg-green-600 hover:bg-green-700', border: 'border-green-500/30' },
+        purple: { header: 'text-purple-400', button: 'bg-purple-600 hover:bg-purple-700', border: 'border-purple-500/30' },
+        orange: { header: 'text-orange-400', button: 'bg-orange-600 hover:bg-orange-700', border: 'border-orange-500/30' },
+        cyan: { header: 'text-cyan-400', button: 'bg-cyan-600 hover:bg-cyan-700', border: 'border-cyan-500/30' },
+    };
+
+    const colors = colorClasses[color] || colorClasses.blue;
+
+    return (
+        <section id={`section-${id}`} className={`bg-gray-800/50 rounded-lg border ${isExpanded ? colors.border : 'border-gray-700'} overflow-hidden transition-all`}>
+            {/* Accordion Header */}
+            <div
+                className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-gray-800/80 transition-colors"
+                onClick={onToggle}
+            >
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                    {/* Expand/Collapse Arrow */}
+                    <svg
+                        className={`w-4 h-4 text-gray-400 transition-transform ${isExpanded ? 'rotate-90' : ''}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+
+                    {/* Icon + Title + Count */}
+                    <div className="flex items-center gap-2">
+                        <span className="text-lg">{icon}</span>
+                        <h3 className={`font-semibold ${colors.header}`}>{title}</h3>
+                        {count !== undefined && (
+                            <span className="text-xs text-gray-500 bg-gray-700 px-1.5 py-0.5 rounded">{count}</span>
+                        )}
+                    </div>
+
+                    {/* Summary (when collapsed) */}
+                    {!isExpanded && (
+                        <span className="text-sm text-gray-500 truncate ml-2">{summary}</span>
+                    )}
+                </div>
+
+                {/* Add Button */}
+                {onAdd && addLabel && (
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onAdd();
+                        }}
+                        className={`text-xs ${colors.button} text-white px-2.5 py-1 rounded transition-colors flex items-center gap-1`}
+                    >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                        {addLabel}
+                    </button>
+                )}
+            </div>
+
+            {/* Accordion Content */}
+            <div className={`transition-all duration-200 ${isExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+                <div className="px-4 pb-4 space-y-3">
+                    {children}
+                </div>
+            </div>
+        </section>
+    );
+}
+
 // Section IDs for navigation
 const SECTIONS = [
     { id: 'basics', label: 'Contact', icon: '👤' },
@@ -22,6 +120,19 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
     const [activeSection, setActiveSection] = React.useState('basics');
     const [deleteConfirm, setDeleteConfirm] = React.useState<{ type: string; index: number; name: string } | null>(null);
     const containerRef = React.useRef<HTMLDivElement>(null);
+
+    // Track which sections are expanded (all expanded by default)
+    const [expandedSections, setExpandedSections] = React.useState<Record<string, boolean>>({
+        basics: true,
+        skills: true,
+        experience: true,
+        projects: true,
+        education: true,
+    });
+
+    const toggleSection = (sectionId: string) => {
+        setExpandedSections((prev) => ({ ...prev, [sectionId]: !prev[sectionId] }));
+    };
 
     // Update active section on scroll
     React.useEffect(() => {
@@ -52,6 +163,10 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
         const container = containerRef.current;
         const element = container?.querySelector(`#section-${sectionId}`);
         if (element && container) {
+            // Auto-expand if collapsed
+            if (!expandedSections[sectionId]) {
+                setExpandedSections((prev) => ({ ...prev, [sectionId]: true }));
+            }
             const offset = (element as HTMLElement).offsetTop - 60;
             container.scrollTo({ top: offset, behavior: 'smooth' });
             setActiveSection(sectionId);
@@ -97,6 +212,8 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
             sections: { ...data.sections, skills: { ...data.sections.skills, groups: newGroups } },
             profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
         });
+        // Auto-expand skills section
+        setExpandedSections((prev) => ({ ...prev, skills: true }));
     };
 
     const removeSkillGroup = (index: number) => {
@@ -168,6 +285,8 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
             sections: { ...data.sections, experience: [...data.sections.experience, newExp] },
             profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
         });
+        // Auto-expand experience section
+        setExpandedSections((prev) => ({ ...prev, experience: true }));
     };
 
     const removeExperience = (index: number) => {
@@ -231,6 +350,8 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
             sections: { ...data.sections, projects: [...data.sections.projects, newProject] },
             profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
         });
+        // Auto-expand projects section
+        setExpandedSections((prev) => ({ ...prev, projects: true }));
     };
 
     const removeProject = (index: number) => {
@@ -262,6 +383,17 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
         setDeleteConfirm(null);
     };
 
+    // Generate summaries for collapsed sections
+    const getSummaries = () => ({
+        basics: data.basics.name || 'No name set',
+        skills: data.sections.skills.groups.map((g) => g.label).join(', ') || 'No skills added',
+        experience: data.sections.experience.map((e) => `${e.title} @ ${e.company}`).slice(0, 2).join(', ') + (data.sections.experience.length > 2 ? '...' : '') || 'No experience added',
+        projects: data.sections.projects.map((p) => p.name).slice(0, 3).join(', ') + (data.sections.projects.length > 3 ? '...' : '') || 'No projects added',
+        education: data.sections.education.map((e) => e.school).join(', ') || 'No education added',
+    });
+
+    const summaries = getSummaries();
+
     return (
         <>
             <div className="h-full flex flex-col bg-gray-900 text-gray-100">
@@ -285,12 +417,17 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                 </div>
 
                 {/* Scrollable Content */}
-                <div ref={containerRef} className="flex-1 overflow-y-auto p-4">
+                <div ref={containerRef} className="flex-1 overflow-y-auto p-4 space-y-3">
                     {/* Contact Section */}
-                    <section id="section-basics" className="mb-6">
-                        <div className="flex items-center justify-between mb-3">
-                            <h3 className="text-lg font-semibold text-blue-400">Contact Info</h3>
-                        </div>
+                    <AccordionSection
+                        id="basics"
+                        title="Contact Info"
+                        icon="👤"
+                        summary={summaries.basics}
+                        color="blue"
+                        isExpanded={expandedSections.basics}
+                        onToggle={() => toggleSection('basics')}
+                    >
                         <div className="space-y-3">
                             <div>
                                 <label className="block text-sm text-gray-400 mb-1">Name</label>
@@ -340,268 +477,276 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                                 </div>
                             ))}
                         </div>
-                    </section>
+                    </AccordionSection>
 
-                    <hr className="border-gray-700 my-4" />
-
-                    {/* Skills */}
-                    <section id="section-skills" className="mb-6">
-                        <div className="flex items-center justify-between mb-3">
-                            <h3 className="text-lg font-semibold text-green-400">Skills</h3>
-                            <button
-                                onClick={addSkillGroup}
-                                className="text-xs bg-green-600 hover:bg-green-700 px-2 py-1 rounded"
-                            >
-                                + Add Group
-                            </button>
-                        </div>
-                        <div className="space-y-3">
-                            {data.sections.skills.groups.map((group, idx) => (
-                                <div key={idx} className="group/card bg-gray-800 rounded p-3 relative">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <input
-                                            type="text"
-                                            value={group.label}
-                                            onChange={(e) => updateSkillGroup(idx, 'label', e.target.value)}
-                                            className="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm font-medium focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
-                                        />
-                                        <button
-                                            onClick={() => removeSkillGroup(idx)}
-                                            className="opacity-0 group-hover/card:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10"
-                                            title="Remove skill group"
-                                        >
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                            </svg>
-                                        </button>
-                                    </div>
+                    {/* Skills Section */}
+                    <AccordionSection
+                        id="skills"
+                        title="Skills"
+                        icon="⚡"
+                        count={data.sections.skills.groups.length}
+                        summary={summaries.skills}
+                        color="green"
+                        isExpanded={expandedSections.skills}
+                        onToggle={() => toggleSection('skills')}
+                        onAdd={addSkillGroup}
+                        addLabel="Add Group"
+                    >
+                        {data.sections.skills.groups.map((group, idx) => (
+                            <div key={idx} className="group/card bg-gray-700/50 rounded p-3 relative">
+                                <div className="flex items-center gap-2 mb-2">
                                     <input
                                         type="text"
-                                        value={group.items.join(', ')}
-                                        onChange={(e) => updateSkillGroup(idx, 'items', e.target.value)}
-                                        placeholder="Skills (comma-separated)"
-                                        className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                                        value={group.label}
+                                        onChange={(e) => updateSkillGroup(idx, 'label', e.target.value)}
+                                        className="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm font-medium focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                                    />
+                                    <button
+                                        onClick={() => removeSkillGroup(idx)}
+                                        className="opacity-0 group-hover/card:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10"
+                                        title="Remove skill group"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <input
+                                    type="text"
+                                    value={group.items.join(', ')}
+                                    onChange={(e) => updateSkillGroup(idx, 'items', e.target.value)}
+                                    placeholder="Skills (comma-separated)"
+                                    className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                                />
+                            </div>
+                        ))}
+                        {data.sections.skills.groups.length === 0 && (
+                            <p className="text-sm text-gray-500 italic">No skill groups yet. Click "+ Add Group" to create one.</p>
+                        )}
+                    </AccordionSection>
+
+                    {/* Experience Section */}
+                    <AccordionSection
+                        id="experience"
+                        title="Experience"
+                        icon="💼"
+                        count={data.sections.experience.length}
+                        summary={summaries.experience}
+                        color="purple"
+                        isExpanded={expandedSections.experience}
+                        onToggle={() => toggleSection('experience')}
+                        onAdd={addExperience}
+                        addLabel="Add Job"
+                    >
+                        {data.sections.experience.map((exp, expIdx) => (
+                            <div key={expIdx} className="group/exp bg-gray-700/50 rounded p-3">
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm font-medium text-purple-300">
+                                        {exp.title} @ {exp.company}
+                                    </span>
+                                    <button
+                                        onClick={() => setDeleteConfirm({ type: 'experience', index: expIdx, name: `${exp.title} @ ${exp.company}` })}
+                                        className="opacity-0 group-hover/exp:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10"
+                                        title="Remove experience"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2 mb-2">
+                                    <input
+                                        type="text"
+                                        value={exp.title}
+                                        onChange={(e) => updateExperience(expIdx, 'title', e.target.value)}
+                                        placeholder="Title"
+                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
+                                    />
+                                    <input
+                                        type="text"
+                                        value={exp.company}
+                                        onChange={(e) => updateExperience(expIdx, 'company', e.target.value)}
+                                        placeholder="Company"
+                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
                                     />
                                 </div>
-                            ))}
-                        </div>
-                    </section>
-
-                    <hr className="border-gray-700 my-4" />
-
-                    {/* Experience */}
-                    <section id="section-experience" className="mb-6">
-                        <div className="flex items-center justify-between mb-3">
-                            <h3 className="text-lg font-semibold text-purple-400">Experience</h3>
-                            <button
-                                onClick={addExperience}
-                                className="text-xs bg-purple-600 hover:bg-purple-700 px-2 py-1 rounded"
-                            >
-                                + Add Experience
-                            </button>
-                        </div>
-                        <div className="space-y-4">
-                            {data.sections.experience.map((exp, expIdx) => (
-                                <div key={expIdx} className="group/exp bg-gray-800 rounded p-3">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <span className="text-sm font-medium text-purple-300">
-                                            {exp.title} @ {exp.company}
-                                        </span>
+                                <div className="grid grid-cols-3 gap-2 mb-2">
+                                    <input
+                                        type="text"
+                                        value={exp.location}
+                                        onChange={(e) => updateExperience(expIdx, 'location', e.target.value)}
+                                        placeholder="Location"
+                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
+                                    />
+                                    <input
+                                        type="text"
+                                        value={exp.start}
+                                        onChange={(e) => updateExperience(expIdx, 'start', e.target.value)}
+                                        placeholder="Start"
+                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
+                                    />
+                                    <input
+                                        type="text"
+                                        value={exp.end || ''}
+                                        onChange={(e) => updateExperience(expIdx, 'end', e.target.value || null)}
+                                        placeholder="End (or blank for Present)"
+                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-xs text-gray-400">Bullets</span>
                                         <button
-                                            onClick={() => setDeleteConfirm({ type: 'experience', index: expIdx, name: `${exp.title} @ ${exp.company}` })}
-                                            className="opacity-0 group-hover/exp:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10"
-                                            title="Remove experience"
+                                            onClick={() => addBullet(expIdx)}
+                                            className="text-xs text-purple-400 hover:text-purple-300"
                                         >
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                            </svg>
+                                            + Add Bullet
                                         </button>
                                     </div>
-                                    <div className="grid grid-cols-2 gap-2 mb-2">
-                                        <input
-                                            type="text"
-                                            value={exp.title}
-                                            onChange={(e) => updateExperience(expIdx, 'title', e.target.value)}
-                                            placeholder="Title"
-                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
-                                        />
-                                        <input
-                                            type="text"
-                                            value={exp.company}
-                                            onChange={(e) => updateExperience(expIdx, 'company', e.target.value)}
-                                            placeholder="Company"
-                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
-                                        />
-                                    </div>
-                                    <div className="grid grid-cols-3 gap-2 mb-2">
-                                        <input
-                                            type="text"
-                                            value={exp.location}
-                                            onChange={(e) => updateExperience(expIdx, 'location', e.target.value)}
-                                            placeholder="Location"
-                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
-                                        />
-                                        <input
-                                            type="text"
-                                            value={exp.start}
-                                            onChange={(e) => updateExperience(expIdx, 'start', e.target.value)}
-                                            placeholder="Start"
-                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
-                                        />
-                                        <input
-                                            type="text"
-                                            value={exp.end || ''}
-                                            onChange={(e) => updateExperience(expIdx, 'end', e.target.value || null)}
-                                            placeholder="End (or blank for Present)"
-                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-xs text-gray-400">Bullets</span>
+                                    {exp.bullets.map((bullet, bulletIdx) => (
+                                        <div key={bulletIdx} className="group/bullet flex gap-2">
+                                            <textarea
+                                                value={bullet}
+                                                onChange={(e) => updateBullet(expIdx, bulletIdx, e.target.value)}
+                                                placeholder="Bullet point..."
+                                                rows={2}
+                                                className="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 resize-none"
+                                            />
                                             <button
-                                                onClick={() => addBullet(expIdx)}
-                                                className="text-xs text-purple-400 hover:text-purple-300"
+                                                onClick={() => removeBullet(expIdx, bulletIdx)}
+                                                className="opacity-0 group-hover/bullet:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10 self-start"
+                                                title="Remove bullet"
                                             >
-                                                + Add Bullet
+                                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
                                             </button>
                                         </div>
-                                        {exp.bullets.map((bullet, bulletIdx) => (
-                                            <div key={bulletIdx} className="group/bullet flex gap-2">
-                                                <textarea
-                                                    value={bullet}
-                                                    onChange={(e) => updateBullet(expIdx, bulletIdx, e.target.value)}
-                                                    placeholder="Bullet point..."
-                                                    rows={2}
-                                                    className="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 resize-none"
-                                                />
-                                                <button
-                                                    onClick={() => removeBullet(expIdx, bulletIdx)}
-                                                    className="opacity-0 group-hover/bullet:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10 self-start"
-                                                    title="Remove bullet"
-                                                >
-                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    </section>
+                            </div>
+                        ))}
+                        {data.sections.experience.length === 0 && (
+                            <p className="text-sm text-gray-500 italic">No experience yet. Click "+ Add Job" to add one.</p>
+                        )}
+                    </AccordionSection>
 
-                    <hr className="border-gray-700 my-4" />
-
-                    {/* Projects */}
-                    <section id="section-projects" className="mb-6">
-                        <div className="flex items-center justify-between mb-3">
-                            <h3 className="text-lg font-semibold text-orange-400">Projects</h3>
-                            <button
-                                onClick={addProject}
-                                className="text-xs bg-orange-600 hover:bg-orange-700 px-2 py-1 rounded"
-                            >
-                                + Add Project
-                            </button>
-                        </div>
-                        <div className="space-y-4">
-                            {data.sections.projects.map((proj, projIdx) => (
-                                <div key={projIdx} className="group/proj bg-gray-800 rounded p-3">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <span className="text-sm font-medium text-orange-300">{proj.name}</span>
+                    {/* Projects Section */}
+                    <AccordionSection
+                        id="projects"
+                        title="Projects"
+                        icon="🚀"
+                        count={data.sections.projects.length}
+                        summary={summaries.projects}
+                        color="orange"
+                        isExpanded={expandedSections.projects}
+                        onToggle={() => toggleSection('projects')}
+                        onAdd={addProject}
+                        addLabel="Add Project"
+                    >
+                        {data.sections.projects.map((proj, projIdx) => (
+                            <div key={projIdx} className="group/proj bg-gray-700/50 rounded p-3">
+                                <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm font-medium text-orange-300">{proj.name}</span>
+                                    <button
+                                        onClick={() => setDeleteConfirm({ type: 'project', index: projIdx, name: proj.name })}
+                                        className="opacity-0 group-hover/proj:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10"
+                                        title="Remove project"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2 mb-2">
+                                    <input
+                                        type="text"
+                                        value={proj.name}
+                                        onChange={(e) => updateProject(projIdx, 'name', e.target.value)}
+                                        placeholder="Project Name"
+                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-orange-500 focus:outline-none"
+                                    />
+                                    <input
+                                        type="url"
+                                        value={proj.link || ''}
+                                        onChange={(e) => updateProject(projIdx, 'link', e.target.value)}
+                                        placeholder="GitHub Link"
+                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-orange-500 focus:outline-none"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-xs text-gray-400">Bullets</span>
                                         <button
-                                            onClick={() => setDeleteConfirm({ type: 'project', index: projIdx, name: proj.name })}
-                                            className="opacity-0 group-hover/proj:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10"
-                                            title="Remove project"
+                                            onClick={() => addProjectBullet(projIdx)}
+                                            className="text-xs text-orange-400 hover:text-orange-300"
                                         >
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                            </svg>
+                                            + Add Bullet
                                         </button>
                                     </div>
-                                    <div className="grid grid-cols-2 gap-2 mb-2">
-                                        <input
-                                            type="text"
-                                            value={proj.name}
-                                            onChange={(e) => updateProject(projIdx, 'name', e.target.value)}
-                                            placeholder="Project Name"
-                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-orange-500 focus:outline-none"
-                                        />
-                                        <input
-                                            type="url"
-                                            value={proj.link || ''}
-                                            onChange={(e) => updateProject(projIdx, 'link', e.target.value)}
-                                            placeholder="GitHub Link"
-                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-orange-500 focus:outline-none"
-                                        />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-xs text-gray-400">Bullets</span>
+                                    {proj.bullets.map((bullet, bulletIdx) => (
+                                        <div key={bulletIdx} className="group/pbullet flex gap-2">
+                                            <textarea
+                                                value={bullet}
+                                                onChange={(e) => updateProjectBullet(projIdx, bulletIdx, e.target.value)}
+                                                placeholder="Bullet point..."
+                                                rows={2}
+                                                className="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 resize-none"
+                                            />
                                             <button
-                                                onClick={() => addProjectBullet(projIdx)}
-                                                className="text-xs text-orange-400 hover:text-orange-300"
+                                                onClick={() => removeProjectBullet(projIdx, bulletIdx)}
+                                                className="opacity-0 group-hover/pbullet:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10 self-start"
+                                                title="Remove bullet"
                                             >
-                                                + Add Bullet
+                                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
                                             </button>
                                         </div>
-                                        {proj.bullets.map((bullet, bulletIdx) => (
-                                            <div key={bulletIdx} className="group/pbullet flex gap-2">
-                                                <textarea
-                                                    value={bullet}
-                                                    onChange={(e) => updateProjectBullet(projIdx, bulletIdx, e.target.value)}
-                                                    placeholder="Bullet point..."
-                                                    rows={2}
-                                                    className="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 resize-none"
-                                                />
-                                                <button
-                                                    onClick={() => removeProjectBullet(projIdx, bulletIdx)}
-                                                    className="opacity-0 group-hover/pbullet:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10 self-start"
-                                                    title="Remove bullet"
-                                                >
-                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    </section>
+                            </div>
+                        ))}
+                        {data.sections.projects.length === 0 && (
+                            <p className="text-sm text-gray-500 italic">No projects yet. Click "+ Add Project" to add one.</p>
+                        )}
+                    </AccordionSection>
 
-                    <hr className="border-gray-700 my-4" />
-
-                    {/* Education */}
-                    <section id="section-education" className="mb-6">
-                        <div className="flex items-center justify-between mb-3">
-                            <h3 className="text-lg font-semibold text-cyan-400">Education</h3>
-                        </div>
-                        <div className="space-y-3">
-                            {data.sections.education.map((edu, eduIdx) => (
-                                <div key={eduIdx} className="bg-gray-800 rounded p-3">
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <input
-                                            type="text"
-                                            value={edu.school}
-                                            onChange={(e) => updateEducation(eduIdx, 'school', e.target.value)}
-                                            placeholder="School"
-                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-cyan-500 focus:outline-none"
-                                        />
-                                        <input
-                                            type="text"
-                                            value={edu.degree}
-                                            onChange={(e) => updateEducation(eduIdx, 'degree', e.target.value)}
-                                            placeholder="Degree"
-                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-cyan-500 focus:outline-none"
-                                        />
-                                    </div>
+                    {/* Education Section */}
+                    <AccordionSection
+                        id="education"
+                        title="Education"
+                        icon="🎓"
+                        count={data.sections.education.length}
+                        summary={summaries.education}
+                        color="cyan"
+                        isExpanded={expandedSections.education}
+                        onToggle={() => toggleSection('education')}
+                    >
+                        {data.sections.education.map((edu, eduIdx) => (
+                            <div key={eduIdx} className="bg-gray-700/50 rounded p-3">
+                                <div className="grid grid-cols-2 gap-2">
+                                    <input
+                                        type="text"
+                                        value={edu.school}
+                                        onChange={(e) => updateEducation(eduIdx, 'school', e.target.value)}
+                                        placeholder="School"
+                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-cyan-500 focus:outline-none"
+                                    />
+                                    <input
+                                        type="text"
+                                        value={edu.degree}
+                                        onChange={(e) => updateEducation(eduIdx, 'degree', e.target.value)}
+                                        placeholder="Degree"
+                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-cyan-500 focus:outline-none"
+                                    />
                                 </div>
-                            ))}
-                        </div>
-                    </section>
+                            </div>
+                        ))}
+                        {data.sections.education.length === 0 && (
+                            <p className="text-sm text-gray-500 italic">No education entries yet.</p>
+                        )}
+                    </AccordionSection>
                 </div>
             </div>
 
