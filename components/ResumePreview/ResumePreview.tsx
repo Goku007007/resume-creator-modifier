@@ -7,6 +7,7 @@ import { ResumeJSON, Experience, Project, Education, SkillGroup } from '@/types/
 interface ResumePreviewProps {
     data: ResumeJSON;
     scale?: number;
+    highlightedSection?: string | null;
 }
 
 function formatDateRange(start: string, end: string | null): string {
@@ -14,9 +15,13 @@ function formatDateRange(start: string, end: string | null): string {
     return `${start} - ${endStr}`;
 }
 
-export default function ResumePreview({ data, scale = 1 }: ResumePreviewProps) {
+export default function ResumePreview({ data, scale = 1, highlightedSection }: ResumePreviewProps) {
     const { basics, sections, rendering } = data;
     const densityClass = `density-${rendering.density.toLowerCase()}`;
+
+    // Helper to get highlight class for a section
+    const getHighlightClass = (section: string) =>
+        highlightedSection === section ? 'section-highlighted' : '';
 
     // Map font names to proper CSS font-family strings
     const getFontFamily = (font: string): string => {
@@ -49,12 +54,12 @@ export default function ResumePreview({ data, scale = 1 }: ResumePreviewProps) {
                     }}
                 >
                     {/* Header */}
-                    <header className="resume-header">
+                    <header className={`resume-header ${getHighlightClass('contact')}`} data-section="contact">
                         <h1 className="resume-name">{basics.name}</h1>
                     </header>
 
                     {/* Contact Line */}
-                    <div className="resume-contact">
+                    <div className={`resume-contact ${getHighlightClass('contact')}`} data-section="contact">
                         <a href={`mailto:${basics.email}`}>{basics.email}</a>
                         {basics.links.map((link, idx) => (
                             <React.Fragment key={idx}>
@@ -69,7 +74,7 @@ export default function ResumePreview({ data, scale = 1 }: ResumePreviewProps) {
                     </div>
 
                     {/* Skills Section */}
-                    <section className="resume-section">
+                    <section className={`resume-section ${getHighlightClass('skills')}`} data-section="skills">
                         <h2 className="section-header">{sections.skills.heading}</h2>
                         <div className="skills-content-inline">
                             {sections.skills.groups.map((group: SkillGroup, idx: number) => (
@@ -83,7 +88,7 @@ export default function ResumePreview({ data, scale = 1 }: ResumePreviewProps) {
                     </section>
 
                     {/* Experience Section */}
-                    <section className="resume-section">
+                    <section className={`resume-section ${getHighlightClass('experience')}`} data-section="experience">
                         <h2 className="section-header">Experience</h2>
                         {sections.experience.map((exp: Experience, idx: number) => (
                             <div className="experience-item" key={idx}>
@@ -106,7 +111,7 @@ export default function ResumePreview({ data, scale = 1 }: ResumePreviewProps) {
                     </section>
 
                     {/* Projects Section */}
-                    <section className="resume-section">
+                    <section className={`resume-section ${getHighlightClass('projects')}`} data-section="projects">
                         <h2 className="section-header">Projects</h2>
                         {sections.projects.map((proj: Project, idx: number) => (
                             <div className="project-item" key={idx}>
@@ -130,7 +135,7 @@ export default function ResumePreview({ data, scale = 1 }: ResumePreviewProps) {
                     </section>
 
                     {/* Education Section */}
-                    <section className="resume-section">
+                    <section className={`resume-section ${getHighlightClass('education')}`} data-section="education">
                         <h2 className="section-header">Education</h2>
                         {sections.education.map((edu: Education, idx: number) => (
                             <div className="education-item" key={idx}>

@@ -7,6 +7,7 @@ import ConfirmDialog from '@/components/ConfirmDialog/ConfirmDialog';
 interface EditorPanelProps {
     data: ResumeJSON;
     onChange: (data: ResumeJSON) => void;
+    onSectionFocus?: (section: string) => void;
 }
 
 // Reusable Accordion Section Component
@@ -116,7 +117,7 @@ const SECTIONS = [
     { id: 'education', label: 'Education', icon: '🎓' },
 ];
 
-export default function EditorPanel({ data, onChange }: EditorPanelProps) {
+export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPanelProps) {
     const [activeSection, setActiveSection] = React.useState('basics');
     const [deleteConfirm, setDeleteConfirm] = React.useState<{ type: string; index: number; name: string } | null>(null);
     const containerRef = React.useRef<HTMLDivElement>(null);
@@ -435,6 +436,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                                     type="text"
                                     value={data.basics.name}
                                     onChange={(e) => updateBasics('name', e.target.value)}
+                                    onFocus={() => onSectionFocus?.('contact')}
                                     className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                                 />
                             </div>
@@ -445,6 +447,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                                         type="email"
                                         value={data.basics.email}
                                         onChange={(e) => updateBasics('email', e.target.value)}
+                                        onFocus={() => onSectionFocus?.('contact')}
                                         className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
                                     />
                                 </div>
@@ -454,6 +457,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                                         type="text"
                                         value={data.basics.phone}
                                         onChange={(e) => updateBasics('phone', e.target.value)}
+                                        onFocus={() => onSectionFocus?.('contact')}
                                         className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
                                     />
                                 </div>
@@ -464,6 +468,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                                         type="text"
                                         value={link.label}
                                         onChange={(e) => updateLink(idx, 'label', e.target.value)}
+                                        onFocus={() => onSectionFocus?.('contact')}
                                         placeholder="Label"
                                         className="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
                                     />
@@ -471,6 +476,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                                         type="url"
                                         value={link.url}
                                         onChange={(e) => updateLink(idx, 'url', e.target.value)}
+                                        onFocus={() => onSectionFocus?.('contact')}
                                         placeholder="URL"
                                         className="col-span-2 bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
                                     />
@@ -499,6 +505,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                                         type="text"
                                         value={group.label}
                                         onChange={(e) => updateSkillGroup(idx, 'label', e.target.value)}
+                                        onFocus={() => onSectionFocus?.('skills')}
                                         className="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm font-medium focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                                     />
                                     <button
@@ -515,6 +522,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                                     type="text"
                                     value={group.items.join(', ')}
                                     onChange={(e) => updateSkillGroup(idx, 'items', e.target.value)}
+                                    onFocus={() => onSectionFocus?.('skills')}
                                     placeholder="Skills (comma-separated)"
                                     className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                                 />
@@ -559,6 +567,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                                         type="text"
                                         value={exp.title}
                                         onChange={(e) => updateExperience(expIdx, 'title', e.target.value)}
+                                        onFocus={() => onSectionFocus?.('experience')}
                                         placeholder="Title"
                                         className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
                                     />
@@ -566,6 +575,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                                         type="text"
                                         value={exp.company}
                                         onChange={(e) => updateExperience(expIdx, 'company', e.target.value)}
+                                        onFocus={() => onSectionFocus?.('experience')}
                                         placeholder="Company"
                                         className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
                                     />
@@ -608,6 +618,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                                             <textarea
                                                 value={bullet}
                                                 onChange={(e) => updateBullet(expIdx, bulletIdx, e.target.value)}
+                                                onFocus={() => onSectionFocus?.('experience')}
                                                 placeholder="Bullet point..."
                                                 rows={2}
                                                 className="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 resize-none"
@@ -663,6 +674,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                                         type="text"
                                         value={proj.name}
                                         onChange={(e) => updateProject(projIdx, 'name', e.target.value)}
+                                        onFocus={() => onSectionFocus?.('projects')}
                                         placeholder="Project Name"
                                         className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-orange-500 focus:outline-none"
                                     />
@@ -670,6 +682,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                                         type="url"
                                         value={proj.link || ''}
                                         onChange={(e) => updateProject(projIdx, 'link', e.target.value)}
+                                        onFocus={() => onSectionFocus?.('projects')}
                                         placeholder="GitHub Link"
                                         className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-orange-500 focus:outline-none"
                                     />
@@ -689,6 +702,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                                             <textarea
                                                 value={bullet}
                                                 onChange={(e) => updateProjectBullet(projIdx, bulletIdx, e.target.value)}
+                                                onFocus={() => onSectionFocus?.('projects')}
                                                 placeholder="Bullet point..."
                                                 rows={2}
                                                 className="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 resize-none"
@@ -730,6 +744,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                                         type="text"
                                         value={edu.school}
                                         onChange={(e) => updateEducation(eduIdx, 'school', e.target.value)}
+                                        onFocus={() => onSectionFocus?.('education')}
                                         placeholder="School"
                                         className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-cyan-500 focus:outline-none"
                                     />
@@ -737,6 +752,7 @@ export default function EditorPanel({ data, onChange }: EditorPanelProps) {
                                         type="text"
                                         value={edu.degree}
                                         onChange={(e) => updateEducation(eduIdx, 'degree', e.target.value)}
+                                        onFocus={() => onSectionFocus?.('education')}
                                         placeholder="Degree"
                                         className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-cyan-500 focus:outline-none"
                                     />

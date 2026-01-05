@@ -30,7 +30,22 @@ export default function Home() {
   const [isExporting, setIsExporting] = useState(false);
   const [previewZoom, setPreviewZoom] = useState(0.85);
   const [isFullscreenOpen, setIsFullscreenOpen] = useState(false);
+  const [highlightedSection, setHighlightedSection] = useState<string | null>(null);
   const previewContainerRef = useRef<HTMLDivElement>(null);
+  const highlightTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Handle section focus - highlight corresponding preview section
+  const handleSectionFocus = useCallback((section: string) => {
+    // Clear any existing timeout
+    if (highlightTimeoutRef.current) {
+      clearTimeout(highlightTimeoutRef.current);
+    }
+    setHighlightedSection(section);
+    // Auto-clear after 2 seconds
+    highlightTimeoutRef.current = setTimeout(() => {
+      setHighlightedSection(null);
+    }, 2000);
+  }, []);
 
   // Load profiles on mount
   useEffect(() => {
@@ -428,13 +443,13 @@ export default function Home() {
             onFullscreen={() => setIsFullscreenOpen(true)}
           />
           <div ref={previewContainerRef} className="flex-1 overflow-auto bg-gray-800">
-            <ResumePreview data={resumeData} scale={previewZoom} />
+            <ResumePreview data={resumeData} scale={previewZoom} highlightedSection={highlightedSection} />
           </div>
         </div>
 
         {/* Right Pane - Editor */}
         <div className="w-1/2 overflow-hidden">
-          <EditorPanel data={resumeData} onChange={handleResumeChange} />
+          <EditorPanel data={resumeData} onChange={handleResumeChange} onSectionFocus={handleSectionFocus} />
         </div>
       </main>
 
