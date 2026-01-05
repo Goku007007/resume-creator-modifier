@@ -225,7 +225,7 @@
 /* Preview container styling */
 .resume-preview-container {
   background: #f5f5f5;
-  min-height: 100vh;
+  min-height: 100%;
   display: flex;
   justify-content: center;
   align-items: flex-start;

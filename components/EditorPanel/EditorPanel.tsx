@@ -17,7 +17,9 @@ interface AccordionSectionProps {
     icon: string;
     count?: number;
     summary: string;
-    color: string;
+    icon: string;
+    count?: number;
+    summary: string;
     isExpanded: boolean;
     onToggle: () => void;
     onAdd?: () => void;
@@ -62,28 +64,17 @@ function AccordionSection({
     icon,
     count,
     summary,
-    color,
     isExpanded,
     onToggle,
     onAdd,
     addLabel,
     children,
 }: AccordionSectionProps) {
-    const colorClasses: Record<string, { header: string; button: string; border: string }> = {
-        blue: { header: 'text-blue-400', button: 'bg-blue-600 hover:bg-blue-700', border: 'border-blue-500/30' },
-        green: { header: 'text-green-400', button: 'bg-green-600 hover:bg-green-700', border: 'border-green-500/30' },
-        purple: { header: 'text-purple-400', button: 'bg-purple-600 hover:bg-purple-700', border: 'border-purple-500/30' },
-        orange: { header: 'text-orange-400', button: 'bg-orange-600 hover:bg-orange-700', border: 'border-orange-500/30' },
-        cyan: { header: 'text-cyan-400', button: 'bg-cyan-600 hover:bg-cyan-700', border: 'border-cyan-500/30' },
-    };
-
-    const colors = colorClasses[color] || colorClasses.blue;
-
     return (
-        <section id={`section-${id}`} className={`bg-gray-800/50 rounded-lg border ${isExpanded ? colors.border : 'border-gray-700'} overflow-hidden transition-all`}>
+        <section id={`section-${id}`} className={`bg-gray-800/40 rounded-xl border ${isExpanded ? 'border-gray-700/80 shadow-sm' : 'border-gray-800/50'} overflow-hidden transition-all duration-200`}>
             {/* Accordion Header */}
             <div
-                className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-gray-800/80 transition-colors"
+                className={`flex items-center justify-between px-4 py-3 cursor-pointer transition-colors ${isExpanded ? 'bg-gray-800/50' : 'hover:bg-gray-800/50'}`}
                 onClick={onToggle}
             >
                 <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -98,9 +89,13 @@ function AccordionSection({
                     </svg>
 
                     {/* Icon + Title + Count */}
-                    <div className="flex items-center gap-2">
-                        <span className={colors.header}>{SectionIcons[icon as keyof typeof SectionIcons] || icon}</span>
-                        <h3 className={`font-semibold ${colors.header}`}>{title}</h3>
+                    <div className="flex items-center gap-3">
+                        <span className={`transition-colors ${isExpanded ? 'text-blue-400' : 'text-gray-400'}`}>
+                            {SectionIcons[icon as keyof typeof SectionIcons] || icon}
+                        </span>
+                        <h3 className={`font-medium transition-colors ${isExpanded ? 'text-gray-100' : 'text-gray-300'}`}>
+                            {title}
+                        </h3>
                         {count !== undefined && (
                             <span className="text-xs text-gray-500 bg-gray-700 px-1.5 py-0.5 rounded">{count}</span>
                         )}
@@ -119,7 +114,7 @@ function AccordionSection({
                             e.stopPropagation();
                             onAdd();
                         }}
-                        className={`text-xs ${colors.button} text-white px-2.5 py-1 rounded transition-colors flex items-center gap-1`}
+                        className="text-xs font-medium text-blue-400 hover:text-blue-300 px-2 py-1 rounded hover:bg-blue-400/10 transition-colors flex items-center gap-1.5"
                     >
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -436,9 +431,9 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                             <button
                                 key={section.id}
                                 onClick={() => scrollToSection(section.id)}
-                                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${activeSection === section.id
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'
+                                className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg transition-all border ${activeSection === section.id
+                                    ? 'bg-gray-800 text-blue-400 border-gray-700/80 shadow-sm'
+                                    : 'bg-transparent text-gray-500 border-transparent hover:text-gray-300 hover:bg-gray-800/40'
                                     }`}
                             >
                                 <span>{SectionIcons[section.icon as keyof typeof SectionIcons]}</span>
@@ -456,7 +451,6 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                         title="Contact Info"
                         icon="contact"
                         summary={summaries.basics}
-                        color="blue"
                         isExpanded={expandedSections.basics}
                         onToggle={() => toggleSection('basics')}
                     >
@@ -523,7 +517,6 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                         icon="skills"
                         count={data.sections.skills.groups.length}
                         summary={summaries.skills}
-                        color="green"
                         isExpanded={expandedSections.skills}
                         onToggle={() => toggleSection('skills')}
                         onAdd={addSkillGroup}
@@ -537,7 +530,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                         value={group.label}
                                         onChange={(e) => updateSkillGroup(idx, 'label', e.target.value)}
                                         onFocus={() => onSectionFocus?.('skills')}
-                                        className="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm font-medium focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                                        className="flex-1 bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                     <button
                                         onClick={() => removeSkillGroup(idx)}
@@ -555,7 +548,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                     onChange={(e) => updateSkillGroup(idx, 'items', e.target.value)}
                                     onFocus={() => onSectionFocus?.('skills')}
                                     placeholder="Skills (comma-separated)"
-                                    className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                                    className="w-full bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-300 placeholder-gray-600 transition-colors"
                                 />
                             </div>
                         ))}
@@ -571,16 +564,16 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                         icon="experience"
                         count={data.sections.experience.length}
                         summary={summaries.experience}
-                        color="purple"
                         isExpanded={expandedSections.experience}
                         onToggle={() => toggleSection('experience')}
                         onAdd={addExperience}
                         addLabel="Add Job"
                     >
                         {data.sections.experience.map((exp, expIdx) => (
-                            <div key={expIdx} className="group/exp bg-gray-700/50 rounded p-3">
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm font-medium text-purple-300">
+                            <div key={expIdx} className="group/exp bg-gray-800/40 rounded-lg p-4 border border-gray-800 hover:border-gray-700 transition-colors">
+                                <div className="flex items-center justify-between mb-3">
+                                    <span className="text-sm font-medium text-gray-300 flex items-center gap-2">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500/50"></span>
                                         {exp.title} @ {exp.company}
                                     </span>
                                     <button
@@ -600,7 +593,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                         onChange={(e) => updateExperience(expIdx, 'title', e.target.value)}
                                         onFocus={() => onSectionFocus?.('experience')}
                                         placeholder="Title"
-                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
+                                        className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                     <input
                                         type="text"
@@ -608,38 +601,38 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                         onChange={(e) => updateExperience(expIdx, 'company', e.target.value)}
                                         onFocus={() => onSectionFocus?.('experience')}
                                         placeholder="Company"
-                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
+                                        className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                 </div>
-                                <div className="grid grid-cols-3 gap-2 mb-2">
+                                <div className="grid grid-cols-3 gap-3 mb-3">
                                     <input
                                         type="text"
                                         value={exp.location}
                                         onChange={(e) => updateExperience(expIdx, 'location', e.target.value)}
                                         placeholder="Location"
-                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
+                                        className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                     <input
                                         type="text"
                                         value={exp.start}
                                         onChange={(e) => updateExperience(expIdx, 'start', e.target.value)}
                                         placeholder="Start"
-                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
+                                        className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                     <input
                                         type="text"
                                         value={exp.end || ''}
                                         onChange={(e) => updateExperience(expIdx, 'end', e.target.value || null)}
                                         placeholder="End (or blank for Present)"
-                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
+                                        className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                 </div>
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-xs text-gray-400">Bullets</span>
+                                        <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Bullets</span>
                                         <button
                                             onClick={() => addBullet(expIdx)}
-                                            className="text-xs text-purple-400 hover:text-purple-300"
+                                            className="text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors"
                                         >
                                             + Add Bullet
                                         </button>
@@ -652,7 +645,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                                 onFocus={() => onSectionFocus?.('experience')}
                                                 placeholder="Bullet point..."
                                                 rows={2}
-                                                className="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 resize-none"
+                                                className="flex-1 bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 resize-none text-gray-300 placeholder-gray-600 transition-colors"
                                             />
                                             <button
                                                 onClick={() => removeBullet(expIdx, bulletIdx)}
@@ -680,16 +673,18 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                         icon="projects"
                         count={data.sections.projects.length}
                         summary={summaries.projects}
-                        color="orange"
                         isExpanded={expandedSections.projects}
                         onToggle={() => toggleSection('projects')}
                         onAdd={addProject}
                         addLabel="Add Project"
                     >
                         {data.sections.projects.map((proj, projIdx) => (
-                            <div key={projIdx} className="group/proj bg-gray-700/50 rounded p-3">
-                                <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm font-medium text-orange-300">{proj.name}</span>
+                            <div key={projIdx} className="group/proj bg-gray-800/40 rounded-lg p-4 border border-gray-800 hover:border-gray-700 transition-colors">
+                                <div className="flex items-center justify-between mb-3">
+                                    <span className="text-sm font-medium text-gray-300 flex items-center gap-2">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500/50"></span>
+                                        {proj.name}
+                                    </span>
                                     <button
                                         onClick={() => setDeleteConfirm({ type: 'project', index: projIdx, name: proj.name })}
                                         className="opacity-0 group-hover/proj:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10"
@@ -707,7 +702,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                         onChange={(e) => updateProject(projIdx, 'name', e.target.value)}
                                         onFocus={() => onSectionFocus?.('projects')}
                                         placeholder="Project Name"
-                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-orange-500 focus:outline-none"
+                                        className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                     <input
                                         type="url"
@@ -715,15 +710,15 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                         onChange={(e) => updateProject(projIdx, 'link', e.target.value)}
                                         onFocus={() => onSectionFocus?.('projects')}
                                         placeholder="GitHub Link"
-                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-orange-500 focus:outline-none"
+                                        className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                 </div>
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-xs text-gray-400">Bullets</span>
+                                        <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Bullets</span>
                                         <button
                                             onClick={() => addProjectBullet(projIdx)}
-                                            className="text-xs text-orange-400 hover:text-orange-300"
+                                            className="text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors"
                                         >
                                             + Add Bullet
                                         </button>
@@ -736,7 +731,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                                 onFocus={() => onSectionFocus?.('projects')}
                                                 placeholder="Bullet point..."
                                                 rows={2}
-                                                className="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 resize-none"
+                                                className="flex-1 bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 resize-none text-gray-300 placeholder-gray-600 transition-colors"
                                             />
                                             <button
                                                 onClick={() => removeProjectBullet(projIdx, bulletIdx)}
@@ -764,12 +759,11 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                         icon="education"
                         count={data.sections.education.length}
                         summary={summaries.education}
-                        color="cyan"
                         isExpanded={expandedSections.education}
                         onToggle={() => toggleSection('education')}
                     >
                         {data.sections.education.map((edu, eduIdx) => (
-                            <div key={eduIdx} className="bg-gray-700/50 rounded p-3">
+                            <div key={eduIdx} className="bg-gray-800/40 rounded-lg p-3 border border-gray-800">
                                 <div className="grid grid-cols-2 gap-2">
                                     <input
                                         type="text"
@@ -777,7 +771,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                         onChange={(e) => updateEducation(eduIdx, 'school', e.target.value)}
                                         onFocus={() => onSectionFocus?.('education')}
                                         placeholder="School"
-                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-cyan-500 focus:outline-none"
+                                        className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                     <input
                                         type="text"
@@ -785,7 +779,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus }: EditorPa
                                         onChange={(e) => updateEducation(eduIdx, 'degree', e.target.value)}
                                         onFocus={() => onSectionFocus?.('education')}
                                         placeholder="Degree"
-                                        className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-cyan-500 focus:outline-none"
+                                        className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                 </div>
                             </div>
