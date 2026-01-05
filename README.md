@@ -1,36 +1,154 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Resume Modifier
 
-## Getting Started
+A local-first resume editing application with live preview, profile management, and PDF export.
 
-First, run the development server:
+## Features
+
+- **Live Preview**: Two-column layout with real-time resume preview
+- **Structured Editing**: Edit basics, skills, experience, projects, and education sections
+- **Profile Management**: Create, duplicate, rename, and delete role profiles
+- **JSON Patch**: Paste JSON to update resume data (merge patch or RFC 6902)
+- **PDF Export**: Download resume as PDF via Playwright
+- **Resume Linter**: Automatic quality scoring and warnings
+- **Local Storage**: All data stored locally in SQLite
+
+## Quick Start
 
 ```bash
+# Install dependencies
+npm install
+
+# Install Playwright browsers (for PDF export)
+npx playwright install chromium
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app will be available at `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Requirements
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js 18+
+- macOS (tested), Linux, or Windows
+- Times New Roman font (pre-installed on macOS)
 
-## Learn More
+## Fonts
 
-To learn more about Next.js, take a look at the following resources:
+The resume renderer uses:
+- **Primary**: Times New Roman (serif)
+- **Monospace fallback**: Geist Mono → Andale Mono → system monospace
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Times New Roman is pre-installed on macOS. On Linux, install with:
+```bash
+# Ubuntu/Debian
+sudo apt-get install ttf-mscorefonts-installer
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Fedora
+sudo dnf install mscore-fonts
+```
 
-## Deploy on Vercel
+## Adding New Profiles
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Click the profile dropdown in the top bar
+2. Select "+ New Profile" or "⧉ Duplicate Profile"
+3. Rename the profile as needed
+4. Edit the content in the right panel
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## JSON Paste/Patch
+
+Click the "JSON" button in the top bar to open the JSON editor.
+
+### Merge Patch (simple)
+Paste a partial JSON object to merge with current data:
+```json
+{
+  "basics": {
+    "name": "New Name"
+  }
+}
+```
+
+### JSON Patch (RFC 6902)
+Paste an array of operations for precise edits:
+```json
+[
+  {"op": "replace", "path": "/basics/name", "value": "New Name"},
+  {"op": "add", "path": "/sections/experience/0/bullets/-", "value": "New bullet point"}
+]
+```
+
+## Data Storage
+
+Data is stored in:
+```
+~/Library/Application Support/resume-modifier/data.db
+```
+
+## Sample Profiles
+
+The app comes with 4 pre-seeded profiles:
+- **Full-Stack** (default)
+- **Data Engineering**
+- **Cloud Engineering**
+- **Automation/Integration**
+
+## Resume JSON Schema
+
+```typescript
+{
+  profileMeta: {
+    profileName: string,
+    resumeName: string,
+    updatedAt: string
+  },
+  basics: {
+    name: string,
+    email: string,
+    phone: string,
+    links: [{ label: string, url: string }]
+  },
+  sections: {
+    skills: {
+      heading: string,
+      groups: [{ label: string, items: string[] }]
+    },
+    experience: [{
+      company: string,
+      location: string,
+      title: string,
+      start: string,
+      end: string | null,
+      bullets: string[]
+    }],
+    projects: [{
+      name: string,
+      link?: string,
+      bullets: string[]
+    }],
+    education: [{
+      school: string,
+      degree: string
+    }]
+  },
+  rendering: {
+    fontFamily: string,
+    monoFontFamily: string,
+    pageSize: "LETTER" | "A4",
+    density: "COMPACT" | "NORMAL" | "SPACIOUS"
+  }
+}
+```
+
+## Tech Stack
+
+- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
+- **Editor**: Monaco Editor (for JSON)
+- **Database**: SQLite (better-sqlite3)
+- **PDF Export**: Playwright
+- **Validation**: Ajv (JSON Schema)
+- **Patching**: fast-json-patch
+
+## License
+
+MIT

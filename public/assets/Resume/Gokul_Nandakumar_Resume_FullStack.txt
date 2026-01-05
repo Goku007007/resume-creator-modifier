@@ -1,0 +1,34 @@
+﻿Gokul Nandakumar
+goku.careers@gmail.com | Portfolio | github.com/Goku007007 | Linkedin | +1 (773) 930 2964 
+
+
+Skills
+Languages: Python, JavaScript, TypeScript, SQL, HTML5, CSS3 Frontend: React, Next.js, Angular, Recharts, Chart.js, Tailwind CSS Backend: Python (Django, FastAPI, Flask), Node.js (Express), RESTful APIs, Microservices Db: PostgreSQL, Redis, MySQL, MongoDB, Query Optimization, Schema Design Cloud & DevOps: Azure, AWS, Docker, CI/CD, GitHub Actions Tools: Git, pytest, Jest, Selenium, Webhooks, OAuth Cert:  AWS Certified Solutions Architect - Associate 
+AI - Assisted Dev & API: Cursor, Claude Code, ChatGPT-Cli-or-Codex, Cursor, Antigravity, LLM and Vid Gen APIs
+Experience
+Software Engineer, ChiEAC - Chicago, IL (Remote)        Jun 2025 - Present
+* Built AI document processing features using React, Python (FastAPI), and Claude API, reducing manual data entry time by 66% (6h → 2h) by automating transit report classification and extraction for 3 city departments
+* Developed analytics dashboard with React and TypeScript displaying real-time KPIs from Azure Synapse and PostgreSQL to standardize 12 metrics used by executive leadership and reduce query times by 40%
+* Implemented RESTful API endpoints using FastAPI and deployed with Docker on Azure, eliminating weekly manual report generation for operations team while maintaining 99.5% uptime through error handling and retry logic
+* Designed ETL pipelines using Airflow and Delta Lake to process daily transit data feeds, working with senior engineer to establish CI/CD workflows via GitHub Actions that cut deployment time from 2 hours to 30 minutes
+Software Engineer, ISQL Global - Remote        Oct 2022 - Jul 2023
+* Built CRM features for roofing contractors using Angular frontend and Django REST backend, reducing customer quote generation time by streamlining workflow forms and optimizing PostgreSQL queries for 2,000+ monthly quotes
+* Implemented automated testing and CI/CD pipelines using GitHub Actions and Docker, ensuring 99.9% data quality reliability and enabling rapid deployment of schema changes across microservices architecture
+* Integrated Google Maps Geocoding API for address validation, Stripe for payment processing, and Twilio for SMS notifications, reducing manual address corrections and payment follow ups by 15 hours/week
+* Optimized slow running database queries by adding indexes and implementing Redis caching for session data, improving page load times by 35% and reducing AWS RDS costs by 15% through connection pooling
+Software Engineer, Out In Dreams - Remote        Sep 2021 - Oct 2022
+* Built payment automation system using Python and Stripe Connect API, eliminating manual spreadsheet based payments for influencers and reducing finance team workload by 20 hours/week through automated payout and it helps reducing payment errors for $87K+ annual payouts
+* Created analytics dashboard using Next.js and Chart.js that pulled data from Google Ads and Instagram APIs, giving marketing team unified view of campaign performance and reducing manual report 
+* Optimized PostgreSQL queries and analyzed creator engagement data to identify retention opportunities, resulting in 18% improvement in quarter-over-quarter retention through data driven feature prioritization
+Projects
+National EV Charging Infrastructure Analytics        Github
+* Developed a data ingestion and analytics platform for 83k+ EV charging station records, utilizing (GCS) and BigQuery
+* Deployed an interactive dashboard to visualize network coverage gaps, processing large scale geospatial data to identify underserved regions.
+GPU Cluster Telemetry & Observability System        Github
+* BuiltBuilt a scalable observability platform using Python and DuckDB to monitor GPU cluster performance, ingesting 10M+ trace rows for granular utilization tracking.
+* Implemented an IsolationForest machine learning model to detect abnormal cluster behavior, reducing false alerts
+
+
+Education
+Illinois Institute of Technology - Master of Information Technology
+SREC - Bachelor of Computer Science and Engineering
