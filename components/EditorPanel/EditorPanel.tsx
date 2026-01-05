@@ -1,0 +1,621 @@
+'use client';
+
+import React from 'react';
+import { ResumeJSON, SkillGroup, Experience, Project, Education, Link } from '@/types/resume';
+import ConfirmDialog from '@/components/ConfirmDialog/ConfirmDialog';
+
+interface EditorPanelProps {
+    data: ResumeJSON;
+    onChange: (data: ResumeJSON) => void;
+}
+
+// Section IDs for navigation
+const SECTIONS = [
+    { id: 'basics', label: 'Contact', icon: '👤' },
+    { id: 'skills', label: 'Skills', icon: '⚡' },
+    { id: 'experience', label: 'Experience', icon: '💼' },
+    { id: 'projects', label: 'Projects', icon: '🚀' },
+    { id: 'education', label: 'Education', icon: '🎓' },
+];
+
+export default function EditorPanel({ data, onChange }: EditorPanelProps) {
+    const [activeSection, setActiveSection] = React.useState('basics');
+    const [deleteConfirm, setDeleteConfirm] = React.useState<{ type: string; index: number; name: string } | null>(null);
+    const containerRef = React.useRef<HTMLDivElement>(null);
+
+    // Update active section on scroll
+    React.useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const handleScroll = () => {
+            const sections = SECTIONS.map(s => ({
+                ...s,
+                el: container.querySelector(`#section-${s.id}`) as HTMLElement
+            })).filter(s => s.el);
+
+            const scrollTop = container.scrollTop + 80; // Offset for sticky header
+
+            for (let i = sections.length - 1; i >= 0; i--) {
+                if (sections[i].el.offsetTop <= scrollTop) {
+                    setActiveSection(sections[i].id);
+                    break;
+                }
+            }
+        };
+
+        container.addEventListener('scroll', handleScroll);
+        return () => container.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const scrollToSection = (sectionId: string) => {
+        const container = containerRef.current;
+        const element = container?.querySelector(`#section-${sectionId}`);
+        if (element && container) {
+            const offset = (element as HTMLElement).offsetTop - 60;
+            container.scrollTo({ top: offset, behavior: 'smooth' });
+            setActiveSection(sectionId);
+        }
+    };
+
+    const updateBasics = (field: string, value: string) => {
+        onChange({
+            ...data,
+            basics: { ...data.basics, [field]: value },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const updateLink = (index: number, field: keyof Link, value: string) => {
+        const newLinks = [...data.basics.links];
+        newLinks[index] = { ...newLinks[index], [field]: value };
+        onChange({
+            ...data,
+            basics: { ...data.basics, links: newLinks },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const updateSkillGroup = (index: number, field: keyof SkillGroup, value: string | string[]) => {
+        const newGroups = [...data.sections.skills.groups];
+        if (field === 'items' && typeof value === 'string') {
+            newGroups[index] = { ...newGroups[index], items: value.split(',').map((s) => s.trim()) };
+        } else {
+            newGroups[index] = { ...newGroups[index], [field]: value };
+        }
+        onChange({
+            ...data,
+            sections: { ...data.sections, skills: { ...data.sections.skills, groups: newGroups } },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const addSkillGroup = () => {
+        const newGroups = [...data.sections.skills.groups, { label: 'New Category', items: [] }];
+        onChange({
+            ...data,
+            sections: { ...data.sections, skills: { ...data.sections.skills, groups: newGroups } },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const removeSkillGroup = (index: number) => {
+        const newGroups = data.sections.skills.groups.filter((_, i) => i !== index);
+        onChange({
+            ...data,
+            sections: { ...data.sections, skills: { ...data.sections.skills, groups: newGroups } },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const updateExperience = (index: number, field: keyof Experience, value: string | string[] | null) => {
+        const newExp = [...data.sections.experience];
+        newExp[index] = { ...newExp[index], [field]: value };
+        onChange({
+            ...data,
+            sections: { ...data.sections, experience: newExp },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const updateBullet = (expIndex: number, bulletIndex: number, value: string) => {
+        const newExp = [...data.sections.experience];
+        const newBullets = [...newExp[expIndex].bullets];
+        newBullets[bulletIndex] = value;
+        newExp[expIndex] = { ...newExp[expIndex], bullets: newBullets };
+        onChange({
+            ...data,
+            sections: { ...data.sections, experience: newExp },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const addBullet = (expIndex: number) => {
+        const newExp = [...data.sections.experience];
+        newExp[expIndex] = { ...newExp[expIndex], bullets: [...newExp[expIndex].bullets, ''] };
+        onChange({
+            ...data,
+            sections: { ...data.sections, experience: newExp },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const removeBullet = (expIndex: number, bulletIndex: number) => {
+        const newExp = [...data.sections.experience];
+        newExp[expIndex] = {
+            ...newExp[expIndex],
+            bullets: newExp[expIndex].bullets.filter((_, i) => i !== bulletIndex),
+        };
+        onChange({
+            ...data,
+            sections: { ...data.sections, experience: newExp },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const addExperience = () => {
+        const newExp: Experience = {
+            company: 'New Company',
+            location: 'Location',
+            title: 'Title',
+            start: 'Jan 2024',
+            end: null,
+            bullets: [''],
+            tech: [],
+        };
+        onChange({
+            ...data,
+            sections: { ...data.sections, experience: [...data.sections.experience, newExp] },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const removeExperience = (index: number) => {
+        const newExp = data.sections.experience.filter((_, i) => i !== index);
+        onChange({
+            ...data,
+            sections: { ...data.sections, experience: newExp },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const updateProject = (index: number, field: keyof Project, value: string | string[]) => {
+        const newProjects = [...data.sections.projects];
+        newProjects[index] = { ...newProjects[index], [field]: value };
+        onChange({
+            ...data,
+            sections: { ...data.sections, projects: newProjects },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const updateProjectBullet = (projIndex: number, bulletIndex: number, value: string) => {
+        const newProjects = [...data.sections.projects];
+        const newBullets = [...newProjects[projIndex].bullets];
+        newBullets[bulletIndex] = value;
+        newProjects[projIndex] = { ...newProjects[projIndex], bullets: newBullets };
+        onChange({
+            ...data,
+            sections: { ...data.sections, projects: newProjects },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const addProjectBullet = (projIndex: number) => {
+        const newProjects = [...data.sections.projects];
+        newProjects[projIndex] = { ...newProjects[projIndex], bullets: [...newProjects[projIndex].bullets, ''] };
+        onChange({
+            ...data,
+            sections: { ...data.sections, projects: newProjects },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const removeProjectBullet = (projIndex: number, bulletIndex: number) => {
+        const newProjects = [...data.sections.projects];
+        newProjects[projIndex] = {
+            ...newProjects[projIndex],
+            bullets: newProjects[projIndex].bullets.filter((_, i) => i !== bulletIndex),
+        };
+        onChange({
+            ...data,
+            sections: { ...data.sections, projects: newProjects },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const addProject = () => {
+        const newProject: Project = { name: 'New Project', link: '', bullets: [''] };
+        onChange({
+            ...data,
+            sections: { ...data.sections, projects: [...data.sections.projects, newProject] },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const removeProject = (index: number) => {
+        const newProjects = data.sections.projects.filter((_, i) => i !== index);
+        onChange({
+            ...data,
+            sections: { ...data.sections, projects: newProjects },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const updateEducation = (index: number, field: keyof Education, value: string) => {
+        const newEdu = [...data.sections.education];
+        newEdu[index] = { ...newEdu[index], [field]: value };
+        onChange({
+            ...data,
+            sections: { ...data.sections, education: newEdu },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
+    const handleDeleteConfirm = () => {
+        if (!deleteConfirm) return;
+        if (deleteConfirm.type === 'experience') {
+            removeExperience(deleteConfirm.index);
+        } else if (deleteConfirm.type === 'project') {
+            removeProject(deleteConfirm.index);
+        }
+        setDeleteConfirm(null);
+    };
+
+    return (
+        <>
+            <div className="h-full flex flex-col bg-gray-900 text-gray-100">
+                {/* P1-1: Sticky Section Navigation */}
+                <div className="sticky top-0 z-10 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 px-2 py-2">
+                    <div className="flex gap-1">
+                        {SECTIONS.map((section) => (
+                            <button
+                                key={section.id}
+                                onClick={() => scrollToSection(section.id)}
+                                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${activeSection === section.id
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'
+                                    }`}
+                            >
+                                <span>{section.icon}</span>
+                                <span>{section.label}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Scrollable Content */}
+                <div ref={containerRef} className="flex-1 overflow-y-auto p-4">
+                    {/* Contact Section */}
+                    <section id="section-basics" className="mb-6">
+                        <div className="flex items-center justify-between mb-3">
+                            <h3 className="text-lg font-semibold text-blue-400">Contact Info</h3>
+                        </div>
+                        <div className="space-y-3">
+                            <div>
+                                <label className="block text-sm text-gray-400 mb-1">Name</label>
+                                <input
+                                    type="text"
+                                    value={data.basics.name}
+                                    onChange={(e) => updateBasics('name', e.target.value)}
+                                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                                />
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label className="block text-sm text-gray-400 mb-1">Email</label>
+                                    <input
+                                        type="email"
+                                        value={data.basics.email}
+                                        onChange={(e) => updateBasics('email', e.target.value)}
+                                        className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm text-gray-400 mb-1">Phone</label>
+                                    <input
+                                        type="text"
+                                        value={data.basics.phone}
+                                        onChange={(e) => updateBasics('phone', e.target.value)}
+                                        className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                                    />
+                                </div>
+                            </div>
+                            {data.basics.links.map((link, idx) => (
+                                <div key={idx} className="grid grid-cols-3 gap-2">
+                                    <input
+                                        type="text"
+                                        value={link.label}
+                                        onChange={(e) => updateLink(idx, 'label', e.target.value)}
+                                        placeholder="Label"
+                                        className="bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                                    />
+                                    <input
+                                        type="url"
+                                        value={link.url}
+                                        onChange={(e) => updateLink(idx, 'url', e.target.value)}
+                                        placeholder="URL"
+                                        className="col-span-2 bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    <hr className="border-gray-700 my-4" />
+
+                    {/* Skills */}
+                    <section id="section-skills" className="mb-6">
+                        <div className="flex items-center justify-between mb-3">
+                            <h3 className="text-lg font-semibold text-green-400">Skills</h3>
+                            <button
+                                onClick={addSkillGroup}
+                                className="text-xs bg-green-600 hover:bg-green-700 px-2 py-1 rounded"
+                            >
+                                + Add Group
+                            </button>
+                        </div>
+                        <div className="space-y-3">
+                            {data.sections.skills.groups.map((group, idx) => (
+                                <div key={idx} className="group/card bg-gray-800 rounded p-3 relative">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <input
+                                            type="text"
+                                            value={group.label}
+                                            onChange={(e) => updateSkillGroup(idx, 'label', e.target.value)}
+                                            className="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm font-medium focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                                        />
+                                        <button
+                                            onClick={() => removeSkillGroup(idx)}
+                                            className="opacity-0 group-hover/card:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10"
+                                            title="Remove skill group"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={group.items.join(', ')}
+                                        onChange={(e) => updateSkillGroup(idx, 'items', e.target.value)}
+                                        placeholder="Skills (comma-separated)"
+                                        className="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    <hr className="border-gray-700 my-4" />
+
+                    {/* Experience */}
+                    <section id="section-experience" className="mb-6">
+                        <div className="flex items-center justify-between mb-3">
+                            <h3 className="text-lg font-semibold text-purple-400">Experience</h3>
+                            <button
+                                onClick={addExperience}
+                                className="text-xs bg-purple-600 hover:bg-purple-700 px-2 py-1 rounded"
+                            >
+                                + Add Experience
+                            </button>
+                        </div>
+                        <div className="space-y-4">
+                            {data.sections.experience.map((exp, expIdx) => (
+                                <div key={expIdx} className="group/exp bg-gray-800 rounded p-3">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-sm font-medium text-purple-300">
+                                            {exp.title} @ {exp.company}
+                                        </span>
+                                        <button
+                                            onClick={() => setDeleteConfirm({ type: 'experience', index: expIdx, name: `${exp.title} @ ${exp.company}` })}
+                                            className="opacity-0 group-hover/exp:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10"
+                                            title="Remove experience"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2 mb-2">
+                                        <input
+                                            type="text"
+                                            value={exp.title}
+                                            onChange={(e) => updateExperience(expIdx, 'title', e.target.value)}
+                                            placeholder="Title"
+                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
+                                        />
+                                        <input
+                                            type="text"
+                                            value={exp.company}
+                                            onChange={(e) => updateExperience(expIdx, 'company', e.target.value)}
+                                            placeholder="Company"
+                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-3 gap-2 mb-2">
+                                        <input
+                                            type="text"
+                                            value={exp.location}
+                                            onChange={(e) => updateExperience(expIdx, 'location', e.target.value)}
+                                            placeholder="Location"
+                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
+                                        />
+                                        <input
+                                            type="text"
+                                            value={exp.start}
+                                            onChange={(e) => updateExperience(expIdx, 'start', e.target.value)}
+                                            placeholder="Start"
+                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
+                                        />
+                                        <input
+                                            type="text"
+                                            value={exp.end || ''}
+                                            onChange={(e) => updateExperience(expIdx, 'end', e.target.value || null)}
+                                            placeholder="End (or blank for Present)"
+                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-xs text-gray-400">Bullets</span>
+                                            <button
+                                                onClick={() => addBullet(expIdx)}
+                                                className="text-xs text-purple-400 hover:text-purple-300"
+                                            >
+                                                + Add Bullet
+                                            </button>
+                                        </div>
+                                        {exp.bullets.map((bullet, bulletIdx) => (
+                                            <div key={bulletIdx} className="group/bullet flex gap-2">
+                                                <textarea
+                                                    value={bullet}
+                                                    onChange={(e) => updateBullet(expIdx, bulletIdx, e.target.value)}
+                                                    placeholder="Bullet point..."
+                                                    rows={2}
+                                                    className="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 resize-none"
+                                                />
+                                                <button
+                                                    onClick={() => removeBullet(expIdx, bulletIdx)}
+                                                    className="opacity-0 group-hover/bullet:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10 self-start"
+                                                    title="Remove bullet"
+                                                >
+                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    <hr className="border-gray-700 my-4" />
+
+                    {/* Projects */}
+                    <section id="section-projects" className="mb-6">
+                        <div className="flex items-center justify-between mb-3">
+                            <h3 className="text-lg font-semibold text-orange-400">Projects</h3>
+                            <button
+                                onClick={addProject}
+                                className="text-xs bg-orange-600 hover:bg-orange-700 px-2 py-1 rounded"
+                            >
+                                + Add Project
+                            </button>
+                        </div>
+                        <div className="space-y-4">
+                            {data.sections.projects.map((proj, projIdx) => (
+                                <div key={projIdx} className="group/proj bg-gray-800 rounded p-3">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-sm font-medium text-orange-300">{proj.name}</span>
+                                        <button
+                                            onClick={() => setDeleteConfirm({ type: 'project', index: projIdx, name: proj.name })}
+                                            className="opacity-0 group-hover/proj:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10"
+                                            title="Remove project"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-2 mb-2">
+                                        <input
+                                            type="text"
+                                            value={proj.name}
+                                            onChange={(e) => updateProject(projIdx, 'name', e.target.value)}
+                                            placeholder="Project Name"
+                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-orange-500 focus:outline-none"
+                                        />
+                                        <input
+                                            type="url"
+                                            value={proj.link || ''}
+                                            onChange={(e) => updateProject(projIdx, 'link', e.target.value)}
+                                            placeholder="GitHub Link"
+                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-orange-500 focus:outline-none"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-xs text-gray-400">Bullets</span>
+                                            <button
+                                                onClick={() => addProjectBullet(projIdx)}
+                                                className="text-xs text-orange-400 hover:text-orange-300"
+                                            >
+                                                + Add Bullet
+                                            </button>
+                                        </div>
+                                        {proj.bullets.map((bullet, bulletIdx) => (
+                                            <div key={bulletIdx} className="group/pbullet flex gap-2">
+                                                <textarea
+                                                    value={bullet}
+                                                    onChange={(e) => updateProjectBullet(projIdx, bulletIdx, e.target.value)}
+                                                    placeholder="Bullet point..."
+                                                    rows={2}
+                                                    className="flex-1 bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20 resize-none"
+                                                />
+                                                <button
+                                                    onClick={() => removeProjectBullet(projIdx, bulletIdx)}
+                                                    className="opacity-0 group-hover/pbullet:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10 self-start"
+                                                    title="Remove bullet"
+                                                >
+                                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    <hr className="border-gray-700 my-4" />
+
+                    {/* Education */}
+                    <section id="section-education" className="mb-6">
+                        <div className="flex items-center justify-between mb-3">
+                            <h3 className="text-lg font-semibold text-cyan-400">Education</h3>
+                        </div>
+                        <div className="space-y-3">
+                            {data.sections.education.map((edu, eduIdx) => (
+                                <div key={eduIdx} className="bg-gray-800 rounded p-3">
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <input
+                                            type="text"
+                                            value={edu.school}
+                                            onChange={(e) => updateEducation(eduIdx, 'school', e.target.value)}
+                                            placeholder="School"
+                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-cyan-500 focus:outline-none"
+                                        />
+                                        <input
+                                            type="text"
+                                            value={edu.degree}
+                                            onChange={(e) => updateEducation(eduIdx, 'degree', e.target.value)}
+                                            placeholder="Degree"
+                                            className="bg-gray-700 border border-gray-600 rounded px-2 py-1 text-sm focus:border-cyan-500 focus:outline-none"
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            {/* Delete Confirmation Dialog */}
+            <ConfirmDialog
+                isOpen={deleteConfirm !== null}
+                title={`Delete ${deleteConfirm?.type === 'experience' ? 'Experience' : 'Project'}`}
+                message={`Are you sure you want to delete "${deleteConfirm?.name}"? This action cannot be undone.`}
+                confirmLabel="Delete"
+                cancelLabel="Cancel"
+                variant="destructive"
+                onConfirm={handleDeleteConfirm}
+                onCancel={() => setDeleteConfirm(null)}
+            />
+        </>
+    );
+}
