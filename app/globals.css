@@ -1,26 +1,210 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Geist Mono font */
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/fonts/GeistMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/fonts/GeistMono-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Monaco editor overrides */
+.monaco-editor {
+  border-radius: 8px;
+}
+
+/* ===== P0-4: Global Focus Indicators ===== */
+/* Ensure all interactive elements have visible focus states */
+
+/* Default focus ring for buttons and inputs */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+  outline: none;
+  ring: 2px;
+  ring-offset: 2px;
+  ring-color: #3b82f6;
+  box-shadow: 0 0 0 2px #1f2937, 0 0 0 4px #3b82f6;
+}
+
+/* Subtle focus ring for dark UI */
+.bg-gray-800:focus-visible,
+.bg-gray-900:focus-visible {
+  box-shadow: 0 0 0 2px #111827, 0 0 0 4px #3b82f6;
+}
+
+/* Remove default outline and use custom ring */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #1f2937, 0 0 0 4px #3b82f6;
+}
+
+/* Skip focus ring for mouse users (only show for keyboard) */
+@media (hover: hover) {
+  *:focus:not(:focus-visible) {
+    box-shadow: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Animation for focus ring */
+@keyframes focus-ring {
+  0% {
+    box-shadow: 0 0 0 2px #1f2937, 0 0 0 4px transparent;
+  }
+
+  100% {
+    box-shadow: 0 0 0 2px #1f2937, 0 0 0 4px #3b82f6;
+  }
+}
+
+/* Ensure tab order visibility */
+[tabindex]:focus-visible {
+  box-shadow: 0 0 0 2px #1f2937, 0 0 0 4px #3b82f6;
+}
+
+/* ===== P1-5: Standardized Input Styles ===== */
+/* Consistent styling for all form inputs per design system */
+
+/* Base input styles - applied via Tailwind utility classes */
+.input-base {
+  padding: 8px 12px;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #1f2937;
+  color: #f3f4f6;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input-base:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  outline: none;
+}
+
+.input-base:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input-base::placeholder {
+  color: #6b7280;
+}
+
+/* Error state */
+.input-base.input-error,
+.input-error {
+  border-color: #dc2626;
+}
+
+.input-base.input-error:focus,
+.input-error:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+}
+
+/* Button hierarchy classes (P1-2) */
+.btn-primary {
+  background: #2563eb;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: background 0.15s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid #374151;
+  color: #d1d5db;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #374151;
+  border-color: #4b5563;
+}
+
+.btn-tertiary {
+  background: transparent;
+  color: #3b82f6;
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.btn-tertiary:hover:not(:disabled) {
+  color: #60a5fa;
+}
+
+.btn-destructive {
+  background: #dc2626;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: background 0.15s ease;
+}
+
+.btn-destructive:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #6b7280;
+  padding: 8px 16px;
+  font-weight: 400;
+  transition: color 0.15s ease;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  color: #d1d5db;
 }

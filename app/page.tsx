@@ -1,65 +1,461 @@
-import Image from "next/image";
+'use client';
+
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import ResumePreview from '@/components/ResumePreview/ResumePreview';
+import EditorPanel from '@/components/EditorPanel/EditorPanel';
+import ProfileSwitcher from '@/components/ProfileSwitcher/ProfileSwitcher';
+import JsonPatchModal from '@/components/JsonPatchModal/JsonPatchModal';
+import PreviewToolbar from '@/components/PreviewToolbar/PreviewToolbar';
+import FullscreenPreviewModal from '@/components/FullscreenPreviewModal/FullscreenPreviewModal';
+import { ResumeJSON, DEFAULT_RESUME } from '@/types/resume';
+import { applyResumePatch } from '@/lib/patch';
+import { lintResume, getScore, LintResult } from '@/lib/linter';
+
+interface Profile {
+  id: string;
+  name: string;
+}
 
 export default function Home() {
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [currentProfileId, setCurrentProfileId] = useState<string>('');
+  const [resumeData, setResumeData] = useState<ResumeJSON>(DEFAULT_RESUME);
+  const [resumeName, setResumeName] = useState('');
+  const [isJsonModalOpen, setIsJsonModalOpen] = useState(false);
+  const [patchError, setPatchError] = useState<string | null>(null);
+  const [lintResults, setLintResults] = useState<LintResult[]>([]);
+  const [score, setScore] = useState(100);
+  const [isLoading, setIsLoading] = useState(true);
+  const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved' | 'error'>('saved');
+  const [isExporting, setIsExporting] = useState(false);
+  const [previewZoom, setPreviewZoom] = useState(0.85);
+  const [isFullscreenOpen, setIsFullscreenOpen] = useState(false);
+  const previewContainerRef = useRef<HTMLDivElement>(null);
+
+  // Load profiles on mount
+  useEffect(() => {
+    loadProfiles();
+  }, []);
+
+  // Run linter when resume data changes
+  useEffect(() => {
+    const results = lintResume(resumeData);
+    setLintResults(results);
+    setScore(getScore(results));
+  }, [resumeData]);
+
+  // Auto-save when resume data changes
+  useEffect(() => {
+    if (!currentProfileId || isLoading) return;
+
+    setSaveStatus('unsaved');
+    const timeout = setTimeout(() => {
+      saveProfile(currentProfileId, resumeData);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [resumeData, currentProfileId, isLoading]);
+
+  const loadProfiles = async () => {
+    try {
+      const response = await fetch('/api/profiles');
+      const data = await response.json();
+      setProfiles(data);
+
+      if (data.length > 0) {
+        await loadProfile(data[0].id);
+      }
+    } catch (error) {
+      console.error('Failed to load profiles:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loadProfile = async (id: string) => {
+    try {
+      const response = await fetch(`/api/profiles?id=${id}`);
+      const data = await response.json();
+      setCurrentProfileId(id);
+      setResumeData(data.content);
+      setResumeName(data.content.profileMeta.resumeName);
+      setSaveStatus('saved');
+    } catch (error) {
+      console.error('Failed to load profile:', error);
+    }
+  };
+
+  const saveProfile = async (id: string, data: ResumeJSON) => {
+    setSaveStatus('saving');
+    try {
+      await fetch('/api/profiles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'update', id, data }),
+      });
+      setSaveStatus('saved');
+    } catch (error) {
+      console.error('Failed to save profile:', error);
+      setSaveStatus('error');
+    }
+  };
+
+  const handleProfileSwitch = (id: string) => {
+    loadProfile(id);
+  };
+
+  const handleProfileCreate = async () => {
+    try {
+      const response = await fetch('/api/profiles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'create', name: 'New Profile' }),
+      });
+      const data = await response.json();
+      await loadProfiles();
+      await loadProfile(data.id);
+    } catch (error) {
+      console.error('Failed to create profile:', error);
+    }
+  };
+
+  const handleProfileDuplicate = async () => {
+    try {
+      const response = await fetch('/api/profiles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'duplicate', id: currentProfileId }),
+      });
+      const data = await response.json();
+      await loadProfiles();
+      await loadProfile(data.id);
+    } catch (error) {
+      console.error('Failed to duplicate profile:', error);
+    }
+  };
+
+  const handleProfileRename = async (name: string) => {
+    try {
+      await fetch('/api/profiles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'rename', id: currentProfileId, name }),
+      });
+      await loadProfiles();
+    } catch (error) {
+      console.error('Failed to rename profile:', error);
+    }
+  };
+
+  const handleProfileDelete = async () => {
+    try {
+      await fetch('/api/profiles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete', id: currentProfileId }),
+      });
+      await loadProfiles();
+    } catch (error) {
+      console.error('Failed to delete profile:', error);
+    }
+  };
+
+  const handleResumeChange = useCallback((newData: ResumeJSON) => {
+    setResumeData(newData);
+  }, []);
+
+  const handleResumeNameChange = (name: string) => {
+    setResumeName(name);
+    setResumeData((prev) => ({
+      ...prev,
+      profileMeta: { ...prev.profileMeta, resumeName: name },
+    }));
+  };
+
+  const handleApplyPatch = (patch: object, mode: 'merge' | 'patch') => {
+    const result = applyResumePatch(resumeData, patch, mode);
+    if (result.success && result.result) {
+      setResumeData(result.result);
+      setPatchError(null);
+      setIsJsonModalOpen(false);
+    } else {
+      setPatchError(result.error || 'Failed to apply patch');
+    }
+  };
+
+  const handleDownload = async () => {
+    if (isExporting) return; // Prevent double-clicks
+
+    setIsExporting(true);
+    try {
+      const response = await fetch('/api/export', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: resumeData, format: 'pdf' }),
+      });
+
+      if (!response.ok) throw new Error('Export failed');
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${resumeName || 'resume'}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Failed to export PDF. Please try again.');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <div className="min-h-screen bg-gray-950 flex flex-col">
+      {/* Top Bar */}
+      <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <h1 className="text-xl font-bold text-white">Resume Modifier</h1>
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={resumeName}
+              onChange={(e) => handleResumeNameChange(e.target.value)}
+              placeholder="Resume Name"
+              className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-64 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <div className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full ${saveStatus === 'saved' ? 'bg-green-500/10 text-green-400' :
+              saveStatus === 'saving' ? 'bg-yellow-500/10 text-yellow-400' :
+                saveStatus === 'error' ? 'bg-red-500/10 text-red-400' :
+                  'bg-orange-500/10 text-orange-400'
+              }`}>
+              {saveStatus === 'saved' && (
+                <>
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span>All changes saved</span>
+                </>
+              )}
+              {saveStatus === 'saving' && (
+                <>
+                  <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <span>Saving...</span>
+                </>
+              )}
+              {saveStatus === 'error' && (
+                <>
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  <span>Save failed</span>
+                </>
+              )}
+              {saveStatus === 'unsaved' && (
+                <>
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
+                  <span>Unsaved changes</span>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          {/* Score indicator */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-400">Score:</span>
+            <span className={`text-sm font-bold ${score >= 80 ? 'text-green-400' :
+              score >= 60 ? 'text-yellow-400' : 'text-red-400'
+              }`}>
+              {score}
+            </span>
+          </div>
+
+          {/* Font selector */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-400">Font:</span>
+            <select
+              value={resumeData.rendering.fontFamily}
+              onChange={(e) => setResumeData(prev => ({
+                ...prev,
+                rendering: { ...prev.rendering, fontFamily: e.target.value }
+              }))}
+              className="bg-gray-800 border border-gray-600 rounded-lg px-2 py-1.5 text-sm text-white focus:border-blue-500 focus:outline-none cursor-pointer"
+            >
+              <option value="Times New Roman">Times New Roman</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Garamond">EB Garamond</option>
+              <option value="Arial">Arial</option>
+              <option value="Helvetica">Helvetica</option>
+              <option value="Calibri">Calibri</option>
+              <option value="Geist Mono">Geist Mono</option>
+              <option value="Andale Mono">Andale Mono</option>
+            </select>
+          </div>
+
+          {/* Font size selector */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-400">Size:</span>
+            <select
+              value={resumeData.rendering.fontSize || 10.5}
+              onChange={(e) => setResumeData(prev => ({
+                ...prev,
+                rendering: { ...prev.rendering, fontSize: parseFloat(e.target.value) }
+              }))}
+              className="bg-gray-800 border border-gray-600 rounded-lg px-2 py-1.5 text-sm text-white focus:border-blue-500 focus:outline-none cursor-pointer"
+            >
+              <option value="9">9pt</option>
+              <option value="9.5">9.5pt</option>
+              <option value="10">10pt</option>
+              <option value="10.5">10.5pt</option>
+              <option value="11">11pt</option>
+              <option value="11.5">11.5pt</option>
+              <option value="12">12pt</option>
+            </select>
+          </div>
+
+          {/* Line spacing selector */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-400">Spacing:</span>
+            <input
+              type="number"
+              min="0.8"
+              max="2.0"
+              step="0.05"
+              value={resumeData.rendering.lineHeight || 1.35}
+              onChange={(e) => setResumeData(prev => ({
+                ...prev,
+                rendering: { ...prev.rendering, lineHeight: parseFloat(e.target.value) }
+              }))}
+              className="bg-gray-800 border border-gray-600 rounded-lg px-2 py-1.5 text-sm text-white w-16 focus:border-blue-500 focus:outline-none"
+            />
+          </div>
+
+          {/* JSON Patch button */}
+          <button
+            onClick={() => setIsJsonModalOpen(true)}
+            className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-300 transition-colors"
           >
-            Documentation
-          </a>
+            <span>{ }</span>
+            <span>JSON</span>
+          </button>
+
+          {/* Profile Switcher */}
+          <ProfileSwitcher
+            profiles={profiles}
+            currentProfileId={currentProfileId}
+            onSwitch={handleProfileSwitch}
+            onCreate={handleProfileCreate}
+            onDuplicate={handleProfileDuplicate}
+            onRename={handleProfileRename}
+            onDelete={handleProfileDelete}
+          />
+
+          {/* Download button */}
+          <button
+            onClick={handleDownload}
+            disabled={isExporting}
+            className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-blue-500 ${isExporting
+              ? 'bg-blue-600/50 cursor-not-allowed'
+              : 'bg-blue-600 hover:bg-blue-700'
+              }`}
+          >
+            {isExporting ? (
+              <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            ) : (
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+            )}
+            <span>{isExporting ? 'Generating...' : 'Download PDF'}</span>
+          </button>
+        </div>
+      </header>
+
+      {/* Lint warnings bar */}
+      {lintResults.length > 0 && (
+        <div className="bg-yellow-900/50 border-b border-yellow-700 px-4 py-2">
+          <div className="flex items-center gap-4 overflow-x-auto">
+            {lintResults.slice(0, 3).map((result, idx) => (
+              <div key={idx} className={`flex items-center gap-2 text-sm whitespace-nowrap ${result.severity === 'error' ? 'text-red-400' :
+                result.severity === 'warning' ? 'text-yellow-400' : 'text-blue-400'
+                }`}>
+                <span>{result.severity === 'error' ? '⚠' : result.severity === 'warning' ? '!' : 'ℹ'}</span>
+                <span>{result.message}</span>
+              </div>
+            ))}
+            {lintResults.length > 3 && (
+              <span className="text-sm text-gray-400">+{lintResults.length - 3} more</span>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Main Content - Two Column Layout */}
+      <main className="flex-1 flex overflow-hidden">
+        {/* Left Pane - Resume Preview with Toolbar */}
+        <div className="w-1/2 flex flex-col border-r border-gray-700">
+          <PreviewToolbar
+            zoom={previewZoom}
+            onZoomChange={setPreviewZoom}
+            onFitWidth={() => {
+              // Calculate fit width based on container width
+              if (previewContainerRef.current) {
+                const containerWidth = previewContainerRef.current.clientWidth - 48; // 24px padding each side
+                const pageWidth = 612; // 8.5" * 72 dpi
+                const fitZoom = containerWidth / pageWidth;
+                setPreviewZoom(Math.min(fitZoom, 1)); // Cap at 100%
+              }
+            }}
+            onFullscreen={() => setIsFullscreenOpen(true)}
+          />
+          <div ref={previewContainerRef} className="flex-1 overflow-auto bg-gray-800">
+            <ResumePreview data={resumeData} scale={previewZoom} />
+          </div>
+        </div>
+
+        {/* Right Pane - Editor */}
+        <div className="w-1/2 overflow-hidden">
+          <EditorPanel data={resumeData} onChange={handleResumeChange} />
         </div>
       </main>
+
+      {/* JSON Patch Modal */}
+      <JsonPatchModal
+        isOpen={isJsonModalOpen}
+        onClose={() => {
+          setIsJsonModalOpen(false);
+          setPatchError(null);
+        }}
+        onApply={handleApplyPatch}
+        currentData={resumeData}
+        error={patchError}
+      />
+
+      {/* Fullscreen Preview Modal */}
+      <FullscreenPreviewModal
+        isOpen={isFullscreenOpen}
+        onClose={() => setIsFullscreenOpen(false)}
+        data={resumeData}
+      />
     </div>
   );
 }
