@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">📄 Resume Modifier</h1>
+  <h1 align="center">Resume Modifier</h1>
   <p align="center">
     <strong>A powerful, local-first resume editing application</strong><br>
     Built to solve the pain of tailoring resumes for different job applications
@@ -16,7 +16,7 @@
 
 ---
 
-## 🎯 The Problem
+## The Problem
 
 As a job seeker applying to multiple roles, I faced a common challenge:
 
@@ -26,7 +26,7 @@ As a job seeker applying to multiple roles, I faced a common challenge:
 - **ATS optimization** requires tracking which skills are highlighted per role
 - **Version control** is non-existent in traditional tools
 
-## 💡 The Solution
+## The Solution
 
 I built **Resume Modifier** — a local-first web application that treats resumes as **structured data**, not documents.
 
@@ -39,7 +39,7 @@ I built **Resume Modifier** — a local-first web application that treats resume
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 ### Main Editor View
 *Two-column layout with live preview, skills extraction, and profile management*
@@ -53,22 +53,22 @@ I built **Resume Modifier** — a local-first web application that treats resume
 
 ---
 
-## ✨ Features
+## Features
 
 | Feature | Description |
 |---------|-------------|
-| **📝 Live Preview** | Two-column WYSIWYG editing with real-time PDF preview |
-| **👤 Profile Management** | Create, duplicate, rename role-specific resume profiles |
-| **🔧 JSON Patch** | Apply merge patches or RFC 6902 operations for bulk edits |
-| **📊 Skills Panel** | Auto-extracted tech stack from all resume sections |
-| **⚠️ Resume Linter** | Quality warnings: action verbs, consistency, length |
-| **📄 PDF Export** | One-click PDF generation via Playwright |
-| **💾 Local Storage** | All data stays on your machine (SQLite) |
-| **⌨️ Keyboard Navigation** | Click any field in preview to jump to edit form |
+| **Live Preview** | Two-column WYSIWYG editing with real-time PDF preview |
+| **Profile Management** | Create, duplicate, rename role-specific resume profiles |
+| **JSON Patch** | Apply merge patches or RFC 6902 operations for bulk edits |
+| **Skills Panel** | Auto-extracted tech stack from all resume sections |
+| **Resume Linter** | Quality warnings: action verbs, consistency, length |
+| **PDF Export** | One-click PDF generation via Playwright |
+| **Local Storage** | All data stays on your machine (SQLite) |
+| **Keyboard Navigation** | Click any field in preview to jump to edit form |
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - **Next.js 14** — React framework with App Router
@@ -90,7 +90,7 @@ I built **Resume Modifier** — a local-first web application that treats resume
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Clone the repository
@@ -113,7 +113,7 @@ The app will be available at `http://localhost:3001`
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 resume-modifier/
@@ -134,7 +134,7 @@ resume-modifier/
 
 ---
 
-## 📋 Resume JSON Schema
+## Resume JSON Schema
 
 The application uses a structured JSON format for resume data:
 
@@ -187,7 +187,7 @@ interface ResumeJSON {
 
 ---
 
-## 🔄 JSON Patch Examples
+## JSON Patch Examples
 
 ### Merge Patch (Simple Updates)
 ```json
@@ -216,7 +216,7 @@ interface ResumeJSON {
 
 ---
 
-## 📦 Data Storage
+## Data Storage
 
 All data is stored locally in SQLite:
 ```
@@ -225,7 +225,7 @@ All data is stored locally in SQLite:
 
 ---
 
-## 🧪 Development
+## Development
 
 ```bash
 # Run development server
@@ -240,12 +240,12 @@ npm run lint
 
 ---
 
-## 📄 License
+## License
 
 MIT
 
 ---
 
 <p align="center">
-  <sub>Built with ☕ by <a href="https://github.com/Goku007007">Gokul Nandakumar</a></sub>
+  <sub>Built by <a href="https://github.com/Goku007007">Gokul Nandakumar</a></sub>
 </p>
