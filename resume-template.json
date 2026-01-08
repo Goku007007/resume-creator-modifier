@@ -1,0 +1,125 @@
+{
+    "profileMeta": {
+        "profileName": "YOUR_PROFILE_NAME",
+        "resumeName": "Gokul_Nandakumar_Resume_ROLE",
+        "updatedAt": "2026-01-06T00:00:00.000Z"
+    },
+    "basics": {
+        "name": "Gokul Nandakumar",
+        "email": "goku.careers@gmail.com",
+        "phone": "+1 (773) 930 2964",
+        "links": [
+            {
+                "label": "Portfolio",
+                "url": "https://gokuldata.vercel.app/"
+            },
+            {
+                "label": "GitHub",
+                "url": "https://github.com/Goku007007"
+            },
+            {
+                "label": "LinkedIn",
+                "url": "https://www.linkedin.com/in/gokul-nandakumar/"
+            }
+        ],
+        "locationLine": ""
+    },
+    "sections": {
+        "skills": {
+            "heading": "Skills",
+            "groups": [
+                {
+                    "label": "Languages",
+                    "items": [
+                        "Language1",
+                        "Language2",
+                        "Language3"
+                    ]
+                },
+                {
+                    "label": "Frameworks",
+                    "items": [
+                        "Framework1",
+                        "Framework2"
+                    ]
+                },
+                {
+                    "label": "Cloud",
+                    "items": [
+                        "Cloud1",
+                        "Cloud2"
+                    ]
+                },
+                {
+                    "label": "Tools",
+                    "items": [
+                        "Tool1",
+                        "Tool2"
+                    ]
+                }
+            ]
+        },
+        "experience": [
+            {
+                "company": "Company Name",
+                "location": "City, State",
+                "title": "Your Job Title",
+                "start": "Mon YYYY",
+                "end": null,
+                "bullets": [
+                    "Achievement 1 with metrics and impact",
+                    "Achievement 2 describing what you built",
+                    "Achievement 3 showing technical skills used"
+                ],
+                "tech": [
+                    "Tech1",
+                    "Tech2",
+                    "Tech3"
+                ]
+            },
+            {
+                "company": "Previous Company",
+                "location": "City, State",
+                "title": "Previous Title",
+                "start": "Mon YYYY",
+                "end": "Mon YYYY",
+                "bullets": [
+                    "Bullet describing accomplishment",
+                    "Another bullet with quantifiable results"
+                ],
+                "tech": [
+                    "Tech1",
+                    "Tech2"
+                ]
+            }
+        ],
+        "projects": [
+            {
+                "name": "Project Name",
+                "link": "https://github.com/Goku007007/project",
+                "bullets": [
+                    "What you built and the technologies used",
+                    "Impact or results of the project"
+                ]
+            }
+        ],
+        "education": [
+            {
+                "school": "Illinois Institute of Technology",
+                "degree": "Master of Information Technology"
+            },
+            {
+                "school": "SREC",
+                "degree": "Bachelor of Computer Science and Engineering"
+            }
+        ]
+    },
+    "rendering": {
+        "fontFamily": "Calibri",
+        "fontSize": 11,
+        "lineHeight": 1.15,
+        "monoFontFamily": "Geist Mono, Andale Mono, monospace",
+        "pageSize": "LETTER",
+        "density": "COMPACT"
+    }
+}

@@ -1,0 +1,197 @@
+{
+    "profileMeta": {
+        "profileName": "AI-ML-Engineer",
+        "resumeName": "Alex_Chen_Resume_AIML",
+        "updatedAt": "2026-01-06T17:27:00.000Z"
+    },
+    "basics": {
+        "name": "Alex Chen",
+        "email": "alex.chen.dev@gmail.com",
+        "phone": "+1 (415) 555 1234",
+        "links": [
+            {
+                "label": "Portfolio",
+                "url": "https://alexchen.dev"
+            },
+            {
+                "label": "GitHub",
+                "url": "https://github.com/alexchen-ml"
+            },
+            {
+                "label": "LinkedIn",
+                "url": "https://linkedin.com/in/alexchen-ml"
+            }
+        ],
+        "locationLine": "San Francisco, CA"
+    },
+    "sections": {
+        "skills": {
+            "heading": "Technical Skills",
+            "groups": [
+                {
+                    "label": "Languages",
+                    "items": [
+                        "Python",
+                        "SQL",
+                        "JavaScript",
+                        "R",
+                        "Scala"
+                    ]
+                },
+                {
+                    "label": "ML/AI",
+                    "items": [
+                        "PyTorch",
+                        "TensorFlow",
+                        "Scikit-learn",
+                        "Hugging Face",
+                        "LangChain",
+                        "RAG"
+                    ]
+                },
+                {
+                    "label": "Data",
+                    "items": [
+                        "Pandas",
+                        "NumPy",
+                        "Spark",
+                        "Airflow",
+                        "dbt",
+                        "Delta Lake"
+                    ]
+                },
+                {
+                    "label": "Cloud",
+                    "items": [
+                        "AWS (SageMaker, Bedrock)",
+                        "GCP (Vertex AI)",
+                        "Databricks",
+                        "Kubernetes"
+                    ]
+                },
+                {
+                    "label": "Tools",
+                    "items": [
+                        "MLflow",
+                        "Weights & Biases",
+                        "Docker",
+                        "Git",
+                        "Terraform"
+                    ]
+                },
+                {
+                    "label": "Databases",
+                    "items": [
+                        "PostgreSQL",
+                        "Snowflake",
+                        "Pinecone",
+                        "Redis",
+                        "MongoDB"
+                    ]
+                }
+            ]
+        },
+        "experience": [
+            {
+                "company": "TechScale AI",
+                "location": "San Francisco, CA",
+                "title": "Senior ML Engineer",
+                "start": "Mar 2024",
+                "end": null,
+                "bullets": [
+                    "Architected RAG-based customer support system using LangChain and GPT-4, reducing average ticket resolution time by 42% and handling 15K+ daily queries with 94% accuracy",
+                    "Built real-time recommendation engine using PyTorch and AWS SageMaker, increasing user engagement by 28% and generating $2.1M additional annual revenue through personalized content delivery",
+                    "Led migration of ML infrastructure to Kubernetes, implementing auto-scaling that reduced inference costs by 35% while maintaining p99 latency under 200ms for 50M+ daily predictions",
+                    "Mentored team of 4 junior engineers on MLOps best practices, establishing CI/CD pipelines with GitHub Actions that reduced model deployment time from 2 days to 4 hours"
+                ],
+                "tech": [
+                    "Python",
+                    "PyTorch",
+                    "LangChain",
+                    "AWS SageMaker",
+                    "Kubernetes",
+                    "PostgreSQL"
+                ]
+            },
+            {
+                "company": "DataFlow Systems",
+                "location": "Seattle, WA",
+                "title": "Machine Learning Engineer",
+                "start": "Jun 2021",
+                "end": "Feb 2024",
+                "bullets": [
+                    "Developed fraud detection model using XGBoost and feature engineering pipeline in Spark, catching $4.2M in fraudulent transactions annually with 97.5% precision and 0.1% false positive rate",
+                    "Created automated model monitoring system using MLflow and Weights & Biases, detecting data drift issues 3x faster and reducing model degradation incidents by 60%",
+                    "Optimized ETL pipelines using Airflow and dbt, processing 500GB+ daily data from 12 sources and reducing batch job runtime from 6 hours to 45 minutes",
+                    "Implemented A/B testing framework for ML experiments, enabling data-driven model iteration that improved conversion prediction accuracy from 78% to 89%"
+                ],
+                "tech": [
+                    "Python",
+                    "Spark",
+                    "XGBoost",
+                    "MLflow",
+                    "Airflow",
+                    "Snowflake"
+                ]
+            },
+            {
+                "company": "InsightLab Analytics",
+                "location": "Boston, MA",
+                "title": "Data Scientist",
+                "start": "Aug 2019",
+                "end": "May 2021",
+                "bullets": [
+                    "Built customer churn prediction model using Random Forest and SHAP explainability, enabling retention team to proactively reach at-risk customers and reducing monthly churn by 18%",
+                    "Developed NLP pipeline for sentiment analysis of 100K+ customer reviews using BERT, providing product team with actionable insights that drove 5 feature improvements",
+                    "Created interactive Tableau dashboards for executive reporting, automating weekly analytics reports and saving leadership team 10+ hours per month"
+                ],
+                "tech": [
+                    "Python",
+                    "Scikit-learn",
+                    "BERT",
+                    "Tableau",
+                    "SQL",
+                    "AWS"
+                ]
+            }
+        ],
+        "projects": [
+            {
+                "name": "Open Source LLM Fine-Tuning Toolkit",
+                "link": "https://github.com/alexchen-ml/llm-finetune-kit",
+                "bullets": [
+                    "Created Python library for efficient LLM fine-tuning using LoRA and QLoRA techniques, achieving 90% cost reduction compared to full fine-tuning with minimal accuracy loss",
+                    "Implemented support for Llama 2, Mistral, and Phi models with unified API, garnering 2.5K+ GitHub stars and adoption by 50+ companies"
+                ]
+            },
+            {
+                "name": "Real-Time Sports Analytics Platform",
+                "link": "https://github.com/alexchen-ml/sports-ml-platform",
+                "bullets": [
+                    "Built end-to-end ML platform for live sports predictions using Kafka streaming and TensorFlow Serving, processing 10K+ events per second with sub-100ms latency",
+                    "Deployed on GCP using Terraform and Kubernetes, implementing blue-green deployments for zero-downtime model updates"
+                ]
+            }
+        ],
+        "education": [
+            {
+                "school": "Stanford University",
+                "degree": "Master of Science in Computer Science (AI Specialization)",
+                "dates": "2017 - 2019"
+            },
+            {
+                "school": "UC Berkeley",
+                "degree": "Bachelor of Science in Computer Science",
+                "dates": "2013 - 2017"
+            }
+        ]
+    },
+    "rendering": {
+        "fontFamily": "Calibri",
+        "fontSize": 11,
+        "lineHeight": 1.15,
+        "monoFontFamily": "Geist Mono, Andale Mono, monospace",
+        "pageSize": "LETTER",
+        "density": "COMPACT"
+    }
+}
