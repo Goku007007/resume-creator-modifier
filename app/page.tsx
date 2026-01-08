@@ -221,12 +221,17 @@ export default function Home() {
     const result = applyResumePatch(resumeData, patch, mode);
     if (result.success && result.result) {
       setResumeData(result.result);
+      // Sync resumeName state if the patch updated it
+      if (result.result.profileMeta?.resumeName) {
+        setResumeName(result.result.profileMeta.resumeName);
+      }
       setPatchError(null);
       setIsJsonModalOpen(false);
     } else {
       setPatchError(result.error || 'Failed to apply patch');
     }
   };
+
 
   const handleDownload = async () => {
     if (isExporting) return; // Prevent double-clicks
