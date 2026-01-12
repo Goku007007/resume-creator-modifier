@@ -31,7 +31,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
   const nameSize = Math.round(fontSize * 2 * 10) / 10;
 
   return `
-    @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap');
+
     
     * {
       margin: 0;

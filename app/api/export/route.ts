@@ -27,6 +27,9 @@ export async function POST(request: NextRequest) {
     // Load the HTML
     await page.setContent(html, { waitUntil: 'networkidle' });
 
+    // Essential: Wait for web fonts to fully load before rendering
+    await page.evaluate(() => document.fonts.ready);
+
     let output: Buffer;
     let contentType: string;
     let filename: string;
