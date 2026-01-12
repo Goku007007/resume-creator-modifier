@@ -320,7 +320,7 @@
 .resume-page.format-russell {
   padding: 0.28in 0.31in;
   font-family: 'Source Sans 3', 'Source Sans Pro', Arial, sans-serif;
-  font-size: 9pt;
+  /* font-size is inherited from inline style */
 }
 
 .format-russell .resume-header {
@@ -376,7 +376,7 @@
 .format-russell .skills-row {
   display: flex;
   margin-bottom: 0.5mm;
-  font-size: 10pt;
+  /* inherits base font size */
 }
 
 .format-russell .skill-label {
@@ -400,7 +400,7 @@
 }
 
 .format-russell .experience-title-line {
-  font-size: 10.5pt;
+  font-size: 1.05em;
 }
 
 .format-russell .experience-company {
@@ -427,7 +427,7 @@
 }
 
 .format-russell .experience-date {
-  font-size: 9.5pt;
+  font-size: 0.9em;
   font-style: italic;
 }
 
@@ -436,7 +436,7 @@
 }
 
 .format-russell .bullet-list li {
-  font-size: 10.5pt;
+  /* inherits base font size */
   line-height: 1.2;
   margin-bottom: 0;
 }
@@ -451,7 +451,7 @@
   justify-content: space-between;
   align-items: baseline;
   margin-bottom: 1mm;
-  font-size: 11pt;
+  font-size: 1.05em;
 }
 
 .format-russell .education-content {
@@ -468,7 +468,7 @@
 }
 
 .format-russell .education-date {
-  font-size: 9.5pt;
+  font-size: 0.9em;
   color: #666;
   flex-shrink: 0;
 }
@@ -491,11 +491,11 @@
 
 .format-russell .project-name {
   font-weight: bold;
-  font-size: 10.5pt;
+  font-size: 1.05em;
 }
 
 .format-russell .project-link {
-  font-size: 10pt;
+  font-size: 0.95em;
   color: blue !important;
   text-decoration: none;
   margin-left: 4px;

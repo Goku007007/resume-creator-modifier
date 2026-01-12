@@ -4,33 +4,33 @@
 import { ResumeJSON } from '@/types/resume';
 
 function formatDateRange(start: string, end: string | null): string {
-    return `${start} - ${end || 'Present'}`;
+  return `${start} - ${end || 'Present'}`;
 }
 
 function escapeHtml(text: string): string {
-    return text
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 export function generateResumeHTML(data: ResumeJSON): string {
-    const { basics, sections } = data;
+  const { basics, sections } = data;
 
-    const linksHtml = basics.links
-        .map(link => `<span class="separator">|</span><a href="${escapeHtml(link.url)}">${escapeHtml(link.label)}</a>`)
-        .join('');
+  const linksHtml = basics.links
+    .map(link => `<span class="separator">|</span><a href="${escapeHtml(link.url)}">${escapeHtml(link.label)}</a>`)
+    .join('');
 
-    const skillsHtml = sections.skills.groups
-        .map((group, idx) =>
-            `<span><span class="skill-label">${escapeHtml(group.label)}:</span> <span class="skill-items">${escapeHtml(group.items.join(', '))}</span>${idx < sections.skills.groups.length - 1 ? ' ' : ''}</span>`
-        )
-        .join('');
+  const skillsHtml = sections.skills.groups
+    .map((group, idx) =>
+      `<span><span class="skill-label">${escapeHtml(group.label)}:</span> <span class="skill-items">${escapeHtml(group.items.join(', '))}</span>${idx < sections.skills.groups.length - 1 ? ' ' : ''}</span>`
+    )
+    .join('');
 
-    const experienceHtml = sections.experience
-        .map(exp => `
+  const experienceHtml = sections.experience
+    .map(exp => `
       <div class="experience-item">
         <div class="experience-header">
           <span><span class="experience-title">${escapeHtml(exp.title)}</span><span class="experience-company">, ${escapeHtml(exp.company)} - ${escapeHtml(exp.location)}</span></span>
@@ -41,10 +41,10 @@ export function generateResumeHTML(data: ResumeJSON): string {
         </ul>
       </div>
     `)
-        .join('');
+    .join('');
 
-    const projectsHtml = sections.projects
-        .map(proj => `
+  const projectsHtml = sections.projects
+    .map(proj => `
       <div class="project-item">
         <div class="project-header">
           <span class="project-name">${escapeHtml(proj.name)}</span>
@@ -55,17 +55,17 @@ export function generateResumeHTML(data: ResumeJSON): string {
         </ul>
       </div>
     `)
-        .join('');
+    .join('');
 
-    const educationHtml = sections.education
-        .map(edu => `
+  const educationHtml = sections.education
+    .map(edu => `
       <div class="education-item">
         <span class="education-school">${escapeHtml(edu.school)}</span><span> - </span><span class="education-degree">${escapeHtml(edu.degree)}</span>
       </div>
     `)
-        .join('');
+    .join('');
 
-    return `
+  return `
     <div class="resume-page">
       <header class="resume-header">
         <h1 class="resume-name">${escapeHtml(basics.name)}</h1>

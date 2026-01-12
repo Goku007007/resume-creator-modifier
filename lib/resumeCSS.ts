@@ -4,26 +4,26 @@
 import { RenderingConfig } from '@/types/resume';
 
 export function getFontFamilyCSS(fontFamily: string): string {
-    const fontMap: Record<string, string> = {
-        'Times New Roman': "'Times New Roman', Times, serif",
-        'Georgia': "Georgia, 'Times New Roman', serif",
-        'Garamond': "'EB Garamond', Garamond, serif",
-        'Arial': "Arial, Helvetica, sans-serif",
-        'Helvetica': "Helvetica, Arial, sans-serif",
-        'Calibri': "Carlito, Calibri, sans-serif",
-        'Geist Mono': "'Geist Mono', 'Andale Mono', 'Courier New', monospace",
-        'Andale Mono': "'Andale Mono', 'Courier New', monospace",
-    };
-    return fontMap[fontFamily] || "'Times New Roman', Times, serif";
+  const fontMap: Record<string, string> = {
+    'Times New Roman': "'Times New Roman', Times, serif",
+    'Georgia': "Georgia, 'Times New Roman', serif",
+    'Garamond': "'EB Garamond', Garamond, serif",
+    'Arial': "Arial, Helvetica, sans-serif",
+    'Helvetica': "Helvetica, Arial, sans-serif",
+    'Calibri': "Carlito, Calibri, sans-serif",
+    'Geist Mono': "'Geist Mono', 'Andale Mono', 'Courier New', monospace",
+    'Andale Mono': "'Andale Mono', 'Courier New', monospace",
+  };
+  return fontMap[fontFamily] || "'Times New Roman', Times, serif";
 }
 
 export function generateResumeCSS(rendering: RenderingConfig): string {
-    const fontFamily = getFontFamilyCSS(rendering.fontFamily);
-    const fontSize = rendering.fontSize || 11;
-    const lineHeight = rendering.lineHeight || 1.15;
-    const bulletMargin = rendering.density === 'COMPACT' ? '0' : '1px';
+  const fontFamily = getFontFamilyCSS(rendering.fontFamily);
+  const fontSize = rendering.fontSize || 11;
+  const lineHeight = rendering.lineHeight || 1.15;
+  const bulletMargin = rendering.density === 'COMPACT' ? '0' : '1px';
 
-    return `
+  return `
     * {
       margin: 0;
       padding: 0;

@@ -20,10 +20,15 @@ export function getFontFamilyCSS(fontFamily: string): string {
 }
 
 export function generateResumeCSSRussell(rendering: RenderingConfig): string {
-  // Russell uses 9pt base font in LaTeX
-  const fontSize = rendering.fontSize || 9;
+  // Use user's font size settings
+  const fontSize = rendering.fontSize || 10;
   const lineHeight = rendering.lineHeight || 1.15;
   const bulletMargin = rendering.density === 'COMPACT' ? '0' : '1pt';
+
+  // Scale other sizes relative to base font
+  const titleSize = Math.round(fontSize * 1.05 * 10) / 10;
+  const dateSize = Math.round(fontSize * 0.9 * 10) / 10;
+  const nameSize = Math.round(fontSize * 2 * 10) / 10;
 
   return `
     @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap');
@@ -66,7 +71,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     }
     
     .format-russell .resume-name {
-      font-size: 20pt;
+      font-size: ${nameSize}pt;
       font-weight: bold;
       margin: 0;
       letter-spacing: 0.3px;
@@ -75,7 +80,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     /* Location line - italic, gray */
     .format-russell .resume-location {
       text-align: center;
-      font-size: 9pt;
+      font-size: ${dateSize}pt;
       font-style: italic;
       color: #999;
       margin: 1mm 0;
@@ -84,7 +89,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     /* Contact - single line with pipe separators */
     .format-russell .resume-contact {
       text-align: center;
-      font-size: 9pt;
+      font-size: ${dateSize}pt;
       margin-bottom: 6mm;
     }
     
@@ -109,7 +114,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     
     /* Section header - uppercase, gray line */
     .format-russell .section-header {
-      font-size: 10.5pt;
+      font-size: ${titleSize}pt;
       font-weight: bold;
       text-transform: uppercase;
       margin: 0 0 1.5mm 0;
@@ -127,7 +132,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     .format-russell .skills-row {
       display: flex;
       margin-bottom: 0.5mm;
-      font-size: 10pt;
+      font-size: ${fontSize}pt;
     }
     
     .format-russell .skill-label {
@@ -158,7 +163,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     }
     
     .format-russell .experience-title-line {
-      font-size: 10.5pt;
+      font-size: ${titleSize}pt;
     }
     
     .format-russell .experience-company {
@@ -185,7 +190,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     }
     
     .format-russell .experience-date {
-      font-size: 9.5pt;
+      font-size: ${dateSize}pt;
       font-style: italic;
       font-weight: normal;
       text-align: right;
@@ -203,7 +208,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
       margin-bottom: ${bulletMargin};
       padding-left: 2px;
       text-align: left;
-      font-size: 10.5pt;
+      font-size: ${fontSize}pt;
       line-height: 1.2;
       hyphens: none;
       word-break: normal;
@@ -219,7 +224,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
       justify-content: space-between;
       align-items: baseline;
       margin-bottom: 1mm;
-      font-size: 11pt;
+      font-size: ${titleSize}pt;
     }
     
     .format-russell .education-content {
@@ -236,7 +241,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     }
     
     .format-russell .education-date {
-      font-size: 9.5pt;
+      font-size: ${dateSize}pt;
       color: #666;
       flex-shrink: 0;
     }
@@ -259,11 +264,11 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     
     .format-russell .project-name {
       font-weight: bold;
-      font-size: 10.5pt;
+      font-size: ${titleSize}pt;
     }
     
     .format-russell .project-link {
-      font-size: 10pt;
+      font-size: ${fontSize}pt;
       color: blue !important;
       text-decoration: none;
       margin-left: 4px;
