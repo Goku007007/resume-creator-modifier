@@ -52,12 +52,12 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
       background: white;
     }
     
-    /* Russell page margins: 0.8cm = ~0.31in, 0.7cm = ~0.28in */
+    /* Russell page margins: 0.4in left/right, 0.35in top/bottom */
     .resume-page.format-russell {
       width: 8.5in;
       min-height: 11in;
       max-height: 11in;
-      padding: 0.28in 0.31in;
+      padding: 0.35in 0.4in;
       background: white;
       overflow: hidden;
       position: relative;
@@ -94,7 +94,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     }
     
     .format-russell .resume-contact a {
-      color: #000;
+      color: #0066cc !important;
       text-decoration: none;
     }
     
@@ -269,7 +269,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     
     .format-russell .project-link {
       font-size: ${fontSize}pt;
-      color: blue !important;
+      color: #0066cc !important;
       text-decoration: none;
       margin-left: 4px;
     }

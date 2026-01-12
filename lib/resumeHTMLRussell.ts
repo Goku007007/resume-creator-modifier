@@ -108,20 +108,6 @@ export function generateResumeHTMLRussell(data: ResumeJSON): string {
         ${contactHtml}
       </div>
       
-      <!-- Experience Section -->
-      <section class="resume-section">
-        <h2 class="section-header">EXPERIENCE</h2>
-        ${experienceHtml}
-      </section>
-      
-      <!-- Education Section -->
-      <section class="resume-section">
-        <h2 class="section-header">EDUCATION</h2>
-        <div class="education-table">
-          ${educationHtml}
-        </div>
-      </section>
-      
       <!-- Skills Section -->
       <section class="resume-section">
         <h2 class="section-header">SKILLS</h2>
@@ -130,10 +116,24 @@ export function generateResumeHTMLRussell(data: ResumeJSON): string {
         </div>
       </section>
       
+      <!-- Experience Section -->
+      <section class="resume-section">
+        <h2 class="section-header">EXPERIENCE</h2>
+        ${experienceHtml}
+      </section>
+      
       <!-- Projects Section -->
       <section class="resume-section">
         <h2 class="section-header">PROJECTS</h2>
         ${projectsHtml}
+      </section>
+      
+      <!-- Education Section -->
+      <section class="resume-section">
+        <h2 class="section-header">EDUCATION</h2>
+        <div class="education-table">
+          ${educationHtml}
+        </div>
       </section>
     </div>
   `;
