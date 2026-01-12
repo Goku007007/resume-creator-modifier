@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { chromium } from 'playwright';
 import { ResumeJSON } from '@/types/resume';
-import { generateResumeCSS, getFontFamilyCSS, GOOGLE_FONTS_LINK } from '@/lib/resumeCSS';
+import { generateResumeCSS, GOOGLE_FONTS_LINK } from '@/lib/resumeCSS';
 import { generateResumeHTML } from '@/lib/resumeHTML';
+import { generateResumeCSSRussell, GOOGLE_FONTS_LINK_RUSSELL } from '@/lib/resumeCSSRussell';
+import { generateResumeHTMLRussell } from '@/lib/resumeHTMLRussell';
 
 export async function POST(request: NextRequest) {
   try {
@@ -60,8 +62,11 @@ export async function POST(request: NextRequest) {
 
 function generateFullHTML(data: ResumeJSON): string {
   const { rendering } = data;
-  const css = generateResumeCSS(rendering);
-  const bodyHtml = generateResumeHTML(data);
+  const isRussell = rendering.format === 'russell';
+
+  const css = isRussell ? generateResumeCSSRussell(rendering) : generateResumeCSS(rendering);
+  const bodyHtml = isRussell ? generateResumeHTMLRussell(data) : generateResumeHTML(data);
+  const fontsLink = isRussell ? GOOGLE_FONTS_LINK_RUSSELL : GOOGLE_FONTS_LINK;
 
   return `
 <!DOCTYPE html>
@@ -70,7 +75,7 @@ function generateFullHTML(data: ResumeJSON): string {
   <meta charset="UTF-8">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="${GOOGLE_FONTS_LINK}" rel="stylesheet">
+  <link href="${fontsLink}" rel="stylesheet">
   <style>
     ${css}
   </style>
@@ -81,3 +86,4 @@ function generateFullHTML(data: ResumeJSON): string {
 </html>
   `;
 }
+

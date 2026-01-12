@@ -7,7 +7,6 @@ import { ResumeJSON, Experience, Project, Education, SkillGroup } from '@/types/
 interface ResumePreviewProps {
     data: ResumeJSON;
     scale?: number;
-    scale?: number;
     highlightedSection?: string | null;
     onSectionClick?: (section: string, field?: string, index?: number, subIndex?: number) => void;
 }
@@ -20,6 +19,7 @@ function formatDateRange(start: string, end: string | null): string {
 export default function ResumePreview({ data, scale = 1, highlightedSection, onSectionClick }: ResumePreviewProps) {
     const { basics, sections, rendering } = data;
     const densityClass = `density-${rendering.density.toLowerCase()}`;
+    const formatClass = rendering.format === 'russell' ? 'format-russell' : 'format-classic';
 
     // Helper to request scroll to editor section/field
     const handleSectionClick = (e: React.MouseEvent, sectionId: string, field?: string, index?: number, subIndex?: number) => {
@@ -53,7 +53,7 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                 style={{ transform: `scale(${scale})`, transformOrigin: 'top center' }}
             >
                 <div
-                    className={`resume-page ${densityClass}`}
+                    className={`resume-page ${densityClass} ${formatClass}`}
                     id="resume-content"
                     style={{
                         fontFamily: getFontFamily(rendering.fontFamily),
@@ -71,6 +71,11 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                         <h1 className="resume-name">{basics.name}</h1>
                     </header>
 
+                    {/* Location Line - Russell format only */}
+                    {rendering.format === 'russell' && basics.locationLine && (
+                        <div className="resume-location">{basics.locationLine}</div>
+                    )}
+
                     {/* Contact Line */}
                     <div
                         className={`resume-contact ${getHighlightClass('contact')}`}
@@ -78,42 +83,72 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                         onClick={(e) => handleSectionClick(e, 'basics')}
                         title="Edit Contact Info"
                     >
-                        <a href={`mailto:${basics.email}`} onClick={(e) => handleSectionClick(e, 'basics', 'email')}>{basics.email}</a>
-                        {basics.links.map((link, idx) => (
-                            <React.Fragment key={idx}>
+                        {rendering.format === 'russell' ? (
+                            // Russell format: email | link labels | phone
+                            <>
+                                <a href={`mailto:${basics.email}`} onClick={(e) => handleSectionClick(e, 'basics', 'email')}>{basics.email}</a>
+                                {basics.links.map((link, idx) => (
+                                    <React.Fragment key={idx}>
+                                        <span className="separator">|</span>
+                                        <a
+                                            href={link.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => handleSectionClick(e, 'basics', 'links', idx, 0)}
+                                        >
+                                            {link.label}
+                                        </a>
+                                    </React.Fragment>
+                                ))}
                                 <span className="separator">|</span>
-                                <a
-                                    href={link.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    onClick={(e) => handleSectionClick(e, 'basics', 'links', idx, 0)} // Using subIndex 0 for label/url roughly
-                                >
-                                    {link.label}
-                                </a>
-                            </React.Fragment>
-                        ))}
-                        <span className="separator">|</span>
-                        <span onClick={(e) => handleSectionClick(e, 'basics', 'phone')}>{basics.phone}</span>
+                                <span onClick={(e) => handleSectionClick(e, 'basics', 'phone')}>{basics.phone}</span>
+                            </>
+                        ) : (
+                            // Classic format: email | links | phone
+                            <>
+                                <a href={`mailto:${basics.email}`} onClick={(e) => handleSectionClick(e, 'basics', 'email')}>{basics.email}</a>
+                                {basics.links.map((link, idx) => (
+                                    <React.Fragment key={idx}>
+                                        <span className="separator">|</span>
+                                        <a
+                                            href={link.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            onClick={(e) => handleSectionClick(e, 'basics', 'links', idx, 0)}
+                                        >
+                                            {link.label}
+                                        </a>
+                                    </React.Fragment>
+                                ))}
+                                <span className="separator">|</span>
+                                <span onClick={(e) => handleSectionClick(e, 'basics', 'phone')}>{basics.phone}</span>
+                            </>
+                        )}
                     </div>
 
-                    {/* Skills Section */}
-                    <section
-                        className={`resume-section ${getHighlightClass('skills')}`}
-                        data-section="skills"
-                        onClick={(e) => handleSectionClick(e, 'skills')}
-                        title="Edit Skills"
-                    >
-                        <h2 className="section-header">{sections.skills.heading}</h2>
-                        <div className="skills-content-inline">
-                            {sections.skills.groups.map((group: SkillGroup, idx: number) => (
-                                <span key={idx}>
-                                    <span className="skill-label" onClick={(e) => handleSectionClick(e, 'skills', 'label', idx)}>{group.label}:</span>{' '}
-                                    <span className="skill-items" onClick={(e) => handleSectionClick(e, 'skills', 'items', idx)}>{group.items.join(', ')}</span>
-                                    {idx < sections.skills.groups.length - 1 && ' '}
-                                </span>
-                            ))}
-                        </div>
-                    </section>
+                    {/* Russell Format Section Order: Experience → Education → Skills → Projects */}
+                    {/* Classic Format Section Order: Skills → Experience → Projects → Education */}
+
+                    {rendering.format !== 'russell' && (
+                        /* Classic: Skills Section first */
+                        <section
+                            className={`resume-section ${getHighlightClass('skills')}`}
+                            data-section="skills"
+                            onClick={(e) => handleSectionClick(e, 'skills')}
+                            title="Edit Skills"
+                        >
+                            <h2 className="section-header">{sections.skills.heading}</h2>
+                            <div className="skills-content-inline">
+                                {sections.skills.groups.map((group: SkillGroup, idx: number) => (
+                                    <span key={idx}>
+                                        <span className="skill-label" onClick={(e) => handleSectionClick(e, 'skills', 'label', idx)}>{group.label}:</span>{' '}
+                                        <span className="skill-items" onClick={(e) => handleSectionClick(e, 'skills', 'items', idx)}>{group.items.join(', ')}</span>
+                                        {idx < sections.skills.groups.length - 1 && ' '}
+                                    </span>
+                                ))}
+                            </div>
+                        </section>
+                    )}
 
                     {/* Experience Section */}
                     <section
@@ -122,14 +157,26 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                         onClick={(e) => handleSectionClick(e, 'experience')}
                         title="Edit Experience"
                     >
-                        <h2 className="section-header">Experience</h2>
+                        <h2 className="section-header">{rendering.format === 'russell' ? 'EXPERIENCE' : 'Experience'}</h2>
                         {sections.experience.map((exp: Experience, idx: number) => (
                             <div className="experience-item" key={idx}>
                                 <div className="experience-header">
-                                    <span>
-                                        <span className="experience-title" onClick={(e) => handleSectionClick(e, 'experience', 'title', idx)}>{exp.title}</span>
-                                        <span className="experience-company" onClick={(e) => handleSectionClick(e, 'experience', 'company', idx)}>, {exp.company} - {exp.location}</span>
-                                    </span>
+                                    {rendering.format === 'russell' ? (
+                                        // Russell format: Company, Position | Location
+                                        <span className="experience-title-line">
+                                            <span className="experience-company" onClick={(e) => handleSectionClick(e, 'experience', 'company', idx)}>{exp.company}</span>
+                                            <span className="comma">, </span>
+                                            <span className="experience-position" onClick={(e) => handleSectionClick(e, 'experience', 'title', idx)}>{exp.title}</span>
+                                            <span className="location-separator"> | </span>
+                                            <span className="experience-location" onClick={(e) => handleSectionClick(e, 'experience', 'location', idx)}>{exp.location}</span>
+                                        </span>
+                                    ) : (
+                                        // Classic format: Title, Company - Location
+                                        <span>
+                                            <span className="experience-title" onClick={(e) => handleSectionClick(e, 'experience', 'title', idx)}>{exp.title}</span>
+                                            <span className="experience-company" onClick={(e) => handleSectionClick(e, 'experience', 'company', idx)}>, {exp.company} - {exp.location}</span>
+                                        </span>
+                                    )}
                                     <span className="experience-date" onClick={(e) => handleSectionClick(e, 'experience', 'start', idx)}>
                                         {formatDateRange(exp.start, exp.end)}
                                     </span>
@@ -143,56 +190,139 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                         ))}
                     </section>
 
-                    {/* Projects Section */}
-                    <section
-                        className={`resume-section ${getHighlightClass('projects')}`}
-                        data-section="projects"
-                        onClick={(e) => handleSectionClick(e, 'projects')}
-                        title="Edit Projects"
-                    >
-                        <h2 className="section-header">Projects</h2>
-                        {sections.projects.map((proj: Project, idx: number) => (
-                            <div className="project-item" key={idx}>
-                                <div className="project-header">
-                                    <span className="project-name" onClick={(e) => handleSectionClick(e, 'projects', 'name', idx)}>{proj.name}</span>
-                                    {proj.link && (
-                                        <span className="project-link">
+                    {rendering.format === 'russell' && (
+                        /* Russell: Education Section after Experience */
+                        <section
+                            className={`resume-section ${getHighlightClass('education')}`}
+                            data-section="education"
+                            onClick={(e) => handleSectionClick(e, 'education')}
+                            title="Edit Education"
+                        >
+                            <h2 className="section-header">EDUCATION</h2>
+                            <div className="education-table">
+                                {sections.education.map((edu: Education, idx: number) => (
+                                    <div className="education-row" key={idx}>
+                                        <span className="education-content">
+                                            <span className="education-school" onClick={(e) => handleSectionClick(e, 'education', 'school', idx)}>{edu.school}</span>
+                                            <span className="comma">, </span>
+                                            <span className="education-degree" onClick={(e) => handleSectionClick(e, 'education', 'degree', idx)}>{edu.degree}</span>
+                                        </span>
+                                        {edu.dates && <span className="education-date">{edu.dates}</span>}
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+
+                    {rendering.format === 'russell' && (
+                        /* Russell: Skills Section after Education */
+                        <section
+                            className={`resume-section ${getHighlightClass('skills')}`}
+                            data-section="skills"
+                            onClick={(e) => handleSectionClick(e, 'skills')}
+                            title="Edit Skills"
+                        >
+                            <h2 className="section-header">SKILLS</h2>
+                            <div className="skills-table">
+                                {sections.skills.groups.map((group: SkillGroup, idx: number) => (
+                                    <div className="skills-row" key={idx}>
+                                        <span className="skill-label" onClick={(e) => handleSectionClick(e, 'skills', 'label', idx)}>{group.label}</span>
+                                        <span className="skill-items" onClick={(e) => handleSectionClick(e, 'skills', 'items', idx)}>{group.items.join(', ')}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+
+                    {rendering.format !== 'russell' && (
+                        /* Classic: Projects Section */
+                        <section
+                            className={`resume-section ${getHighlightClass('projects')}`}
+                            data-section="projects"
+                            onClick={(e) => handleSectionClick(e, 'projects')}
+                            title="Edit Projects"
+                        >
+                            <h2 className="section-header">Projects</h2>
+                            {sections.projects.map((proj: Project, idx: number) => (
+                                <div className="project-item" key={idx}>
+                                    <div className="project-header">
+                                        <span className="project-name" onClick={(e) => handleSectionClick(e, 'projects', 'name', idx)}>{proj.name}</span>
+                                        {proj.link && (
+                                            <span className="project-link">
+                                                <a
+                                                    href={proj.link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    onClick={(e) => handleSectionClick(e, 'projects', 'link', idx)}
+                                                >
+                                                    Github
+                                                </a>
+                                            </span>
+                                        )}
+                                    </div>
+                                    <ul className="bullet-list">
+                                        {proj.bullets.map((bullet, bIdx) => (
+                                            <li key={bIdx} onClick={(e) => handleSectionClick(e, 'projects', 'bullets', idx, bIdx)}>{bullet}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ))}
+                        </section>
+                    )}
+
+                    {rendering.format === 'russell' && (
+                        /* Russell: Projects Section last */
+                        <section
+                            className={`resume-section ${getHighlightClass('projects')}`}
+                            data-section="projects"
+                            onClick={(e) => handleSectionClick(e, 'projects')}
+                            title="Edit Projects"
+                        >
+                            <h2 className="section-header">PROJECTS</h2>
+                            {sections.projects.map((proj: Project, idx: number) => (
+                                <div className="project-item" key={idx}>
+                                    <div className="project-header">
+                                        <span className="project-name" onClick={(e) => handleSectionClick(e, 'projects', 'name', idx)}>{proj.name}</span>
+                                        {proj.link && (
                                             <a
                                                 href={proj.link}
+                                                className="project-link"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 onClick={(e) => handleSectionClick(e, 'projects', 'link', idx)}
                                             >
-                                                Github
+                                                GitHub
                                             </a>
-                                        </span>
-                                    )}
+                                        )}
+                                    </div>
+                                    <ul className="bullet-list">
+                                        {proj.bullets.map((bullet, bIdx) => (
+                                            <li key={bIdx} onClick={(e) => handleSectionClick(e, 'projects', 'bullets', idx, bIdx)}>{bullet}</li>
+                                        ))}
+                                    </ul>
                                 </div>
-                                <ul className="bullet-list">
-                                    {proj.bullets.map((bullet, bIdx) => (
-                                        <li key={bIdx} onClick={(e) => handleSectionClick(e, 'projects', 'bullets', idx, bIdx)}>{bullet}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
-                    </section>
+                            ))}
+                        </section>
+                    )}
 
-                    {/* Education Section */}
-                    <section
-                        className={`resume-section ${getHighlightClass('education')}`}
-                        data-section="education"
-                        onClick={(e) => handleSectionClick(e, 'education')}
-                        title="Edit Education"
-                    >
-                        <h2 className="section-header">Education</h2>
-                        {sections.education.map((edu: Education, idx: number) => (
-                            <div className="education-item" key={idx}>
-                                <span className="education-school" onClick={(e) => handleSectionClick(e, 'education', 'school', idx)}>{edu.school}</span>
-                                <span> - </span>
-                                <span className="education-degree" onClick={(e) => handleSectionClick(e, 'education', 'degree', idx)}>{edu.degree}</span>
-                            </div>
-                        ))}
-                    </section>
+                    {rendering.format !== 'russell' && (
+                        /* Classic: Education Section last */
+                        <section
+                            className={`resume-section ${getHighlightClass('education')}`}
+                            data-section="education"
+                            onClick={(e) => handleSectionClick(e, 'education')}
+                            title="Edit Education"
+                        >
+                            <h2 className="section-header">Education</h2>
+                            {sections.education.map((edu: Education, idx: number) => (
+                                <div className="education-item" key={idx}>
+                                    <span className="education-school" onClick={(e) => handleSectionClick(e, 'education', 'school', idx)}>{edu.school}</span>
+                                    <span> - </span>
+                                    <span className="education-degree" onClick={(e) => handleSectionClick(e, 'education', 'degree', idx)}>{edu.degree}</span>
+                                </div>
+                            ))}
+                        </section>
+                    )}
                 </div>
             </div>
         </div>

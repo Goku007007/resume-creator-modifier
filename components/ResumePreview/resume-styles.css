@@ -1,4 +1,5 @@
 /* Resume Template Styles - Matches PDF Reference */
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap');
 
 /* Page container for letter size */
 .resume-page {
@@ -308,4 +309,198 @@
   background-color: rgba(59, 130, 246, 0.08);
   /* blue-500/8 */
   outline: 1px dashed rgba(59, 130, 246, 0.3);
+}
+
+/* ====================== */
+/* RUSSELL FORMAT STYLES  */
+/* Matches LaTeX Russell CV template exactly */
+/* ====================== */
+
+/* Russell format container - LaTeX margins: 0.8cm = ~0.31in, 0.7cm = ~0.28in */
+.resume-page.format-russell {
+  padding: 0.28in 0.31in;
+  font-family: 'Source Sans 3', 'Source Sans Pro', Arial, sans-serif;
+  font-size: 9pt;
+}
+
+.format-russell .resume-header {
+  margin-bottom: 0;
+}
+
+.format-russell .resume-name {
+  font-size: 20pt;
+  letter-spacing: 0.3px;
+}
+
+/* Location line for Russell format */
+.format-russell .resume-location {
+  text-align: center;
+  font-size: 9pt;
+  font-style: italic;
+  color: #999;
+  margin: 1mm 0;
+}
+
+.format-russell .resume-contact {
+  margin-bottom: 5mm;
+}
+
+.format-russell .resume-contact a {
+  color: #000 !important;
+}
+
+.format-russell .resume-contact .separator {
+  margin: 0 8px;
+  color: #414141;
+}
+
+/* Russell section styling */
+.format-russell .resume-section {
+  margin-bottom: 2mm;
+}
+
+.format-russell .section-header {
+  font-size: 10.5pt;
+  text-transform: uppercase;
+  border-bottom: 0.5pt solid #414141;
+  padding-bottom: 1px;
+  margin-bottom: 1.5mm;
+}
+
+/* Russell Skills - Tabular format */
+.format-russell .skills-table {
+  margin-top: 1.5mm;
+  width: 100%;
+}
+
+.format-russell .skills-row {
+  display: flex;
+  margin-bottom: 0.5mm;
+  font-size: 10pt;
+}
+
+.format-russell .skill-label {
+  font-weight: 600;
+  min-width: 180px;
+  flex-shrink: 0;
+}
+
+.format-russell .skill-items {
+  font-weight: 400;
+  flex: 1;
+}
+
+/* Russell Experience */
+.format-russell .experience-item {
+  margin-bottom: 2mm;
+}
+
+.format-russell .experience-item:last-child {
+  margin-bottom: 1mm;
+}
+
+.format-russell .experience-title-line {
+  font-size: 10.5pt;
+}
+
+.format-russell .experience-company {
+  font-weight: bold;
+}
+
+.format-russell .comma {
+  font-weight: normal;
+}
+
+.format-russell .experience-position {
+  font-style: italic;
+  font-weight: normal;
+}
+
+.format-russell .location-separator {
+  margin: 0 4px;
+  color: #414141;
+}
+
+.format-russell .experience-location {
+  font-style: italic;
+  font-weight: normal;
+}
+
+.format-russell .experience-date {
+  font-size: 9.5pt;
+  font-style: italic;
+}
+
+.format-russell .bullet-list {
+  padding-left: 16px;
+}
+
+.format-russell .bullet-list li {
+  font-size: 10.5pt;
+  line-height: 1.2;
+  margin-bottom: 0;
+}
+
+/* Russell Education - table row format */
+.format-russell .education-table {
+  margin-top: 1.5mm;
+}
+
+.format-russell .education-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1mm;
+  font-size: 11pt;
+}
+
+.format-russell .education-content {
+  flex: 1;
+}
+
+.format-russell .education-school {
+  font-weight: bold;
+}
+
+.format-russell .education-degree {
+  font-style: italic;
+  font-weight: normal;
+}
+
+.format-russell .education-date {
+  font-size: 9.5pt;
+  color: #666;
+  flex-shrink: 0;
+}
+
+/* Russell Projects */
+.format-russell .project-item {
+  margin-bottom: 2mm;
+}
+
+.format-russell .project-item:last-child {
+  margin-bottom: 1mm;
+}
+
+.format-russell .project-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 0.5mm;
+}
+
+.format-russell .project-name {
+  font-weight: bold;
+  font-size: 10.5pt;
+}
+
+.format-russell .project-link {
+  font-size: 10pt;
+  color: blue !important;
+  text-decoration: none;
+  margin-left: 4px;
+}
+
+.format-russell .project-link:hover {
+  text-decoration: underline;
 }

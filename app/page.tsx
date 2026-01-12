@@ -354,6 +354,22 @@ export default function Home() {
             Reset
           </button>
 
+          {/* Format selector */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-400">Format:</span>
+            <select
+              value={resumeData.rendering.format || 'classic'}
+              onChange={(e) => setResumeData(prev => ({
+                ...prev,
+                rendering: { ...prev.rendering, format: e.target.value as 'classic' | 'russell' }
+              }))}
+              className="bg-gray-800 border border-gray-600 rounded-lg px-2 py-1.5 text-sm text-white focus:border-blue-500 focus:outline-none cursor-pointer"
+            >
+              <option value="classic">Classic</option>
+              <option value="russell">Russell</option>
+            </select>
+          </div>
+
           {/* Font selector */}
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-400">Font:</span>

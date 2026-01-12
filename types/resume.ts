@@ -65,6 +65,7 @@ export interface RenderingConfig {
   monoFontFamily: string;
   pageSize: 'LETTER' | 'A4';
   density: 'COMPACT' | 'NORMAL' | 'SPACIOUS';
+  format?: 'classic' | 'russell';
 }
 
 export interface ResumeJSON {
@@ -179,5 +180,6 @@ export const DEFAULT_RESUME: ResumeJSON = {
     monoFontFamily: "Geist Mono, Andale Mono, monospace",
     pageSize: "LETTER",
     density: "COMPACT",
+    format: "classic",
   },
 };
