@@ -358,7 +358,7 @@ export default function Home() {
           <div className="flex items-center gap-1">
             {/* Format */}
             <select
-              value={resumeData.rendering.format || 'classic'}
+              value={resumeData.rendering.format || 'russell'}
               onChange={(e) => setResumeData(prev => ({
                 ...prev,
                 rendering: { ...prev.rendering, format: e.target.value as 'classic' | 'russell' }
@@ -396,7 +396,7 @@ export default function Home() {
           <div className="flex items-center gap-1">
             {/* Size */}
             <select
-              value={resumeData.rendering.fontSize || 10.5}
+              value={resumeData.rendering.fontSize || 10}
               onChange={(e) => setResumeData(prev => ({
                 ...prev,
                 rendering: { ...prev.rendering, fontSize: parseFloat(e.target.value) }
@@ -421,7 +421,7 @@ export default function Home() {
               min="0.8"
               max="2.0"
               step="0.05"
-              value={resumeData.rendering.lineHeight || 1.35}
+              value={resumeData.rendering.lineHeight || 1.3}
               onChange={(e) => setResumeData(prev => ({
                 ...prev,
                 rendering: { ...prev.rendering, lineHeight: parseFloat(e.target.value) }

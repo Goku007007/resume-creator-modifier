@@ -175,11 +175,11 @@ export const DEFAULT_RESUME: ResumeJSON = {
   },
   rendering: {
     fontFamily: "Calibri",
-    fontSize: 11,
-    lineHeight: 1.15,
+    fontSize: 10,
+    lineHeight: 1.3,
     monoFontFamily: "Geist Mono, Andale Mono, monospace",
     pageSize: "LETTER",
     density: "COMPACT",
-    format: "classic",
+    format: "russell",
   },
 };
