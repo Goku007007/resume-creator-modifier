@@ -28,7 +28,13 @@ export async function POST(request: NextRequest) {
     await page.setContent(html, { waitUntil: 'networkidle' });
 
     // Essential: Wait for web fonts to fully load before rendering
-    await page.evaluate(() => document.fonts.ready);
+    // Add a 3s timeout to prevents indefinite hangs if fonts fail to report ready
+    await page.evaluate(async () => {
+      await Promise.race([
+        document.fonts.ready,
+        new Promise(resolve => setTimeout(resolve, 3000))
+      ]);
+    });
 
     let output: Buffer;
     let contentType: string;

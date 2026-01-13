@@ -3,6 +3,7 @@
 // Section Order: Summary → Experience → Education → Skills → Projects
 
 import { ResumeJSON } from '@/types/resume';
+import { preventWidows } from '@/lib/utils/text';
 
 function formatDateRange(start: string, end: string | null): string {
   return `${start} - ${end || 'Present'}`;
@@ -48,7 +49,7 @@ export function generateResumeHTMLRussell(data: ResumeJSON): string {
           <span class="experience-date">${formatDateRange(exp.start, exp.end)}</span>
         </div>
         <ul class="bullet-list">
-          ${exp.bullets.map(bullet => `<li>${escapeHtml(bullet)}</li>`).join('')}
+          ${exp.bullets.map(bullet => `<li>${escapeHtml(preventWidows(bullet))}</li>`).join('')}
         </ul>
       </div>
     `)
@@ -86,7 +87,7 @@ export function generateResumeHTMLRussell(data: ResumeJSON): string {
           ${proj.link ? `<a href="${escapeHtml(proj.link)}" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>` : ''}
         </div>
         <ul class="bullet-list">
-          ${proj.bullets.map(bullet => `<li>${escapeHtml(bullet)}</li>`).join('')}
+          ${proj.bullets.map(bullet => `<li>${escapeHtml(preventWidows(bullet))}</li>`).join('')}
         </ul>
       </div>
     `)

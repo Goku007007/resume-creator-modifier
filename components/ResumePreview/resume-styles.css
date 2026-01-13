@@ -156,6 +156,7 @@
   -ms-hyphens: none;
   word-break: normal;
   overflow-wrap: break-word;
+  text-wrap: pretty;
 }
 
 /* Compact bullet spacing */
@@ -439,6 +440,7 @@
   /* inherits base font size */
   line-height: 1.2;
   margin-bottom: 0;
+  text-wrap: pretty;
 }
 
 /* Russell Education - table row format */

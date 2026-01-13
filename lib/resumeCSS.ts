@@ -168,6 +168,7 @@ export function generateResumeCSS(rendering: RenderingConfig): string {
       -ms-hyphens: none;
       word-break: normal;
       overflow-wrap: break-word;
+      text-wrap: pretty;
     }
     
     /* Projects */

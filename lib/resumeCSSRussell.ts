@@ -212,6 +212,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
       line-height: 1.2;
       hyphens: none;
       word-break: normal;
+      text-wrap: pretty;
     }
     
     /* Education - table row format */

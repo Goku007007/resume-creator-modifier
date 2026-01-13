@@ -274,16 +274,16 @@ export default function Home() {
   return (
     <div className="h-screen bg-gray-950 flex flex-col overflow-hidden">
       {/* Top Bar */}
-      <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 flex items-center justify-between">
+      <header className="bg-gray-900 border-b border-gray-800 px-3 py-2 flex items-center justify-between gap-2 overflow-x-auto min-w-max">
         <div className="flex items-center gap-4">
-          <h1 className="text-xl font-bold text-white">Resume Modifier</h1>
+          <h1 className="text-xl font-bold text-white hidden 2xl:block">Resume Modifier</h1>
           <div className="flex items-center gap-2">
             <input
               type="text"
               value={resumeName}
               onChange={(e) => handleResumeNameChange(e.target.value)}
               placeholder="Resume Name"
-              className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white w-64 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="bg-gray-800 border border-gray-700 rounded-lg px-2 py-1 text-sm text-white w-32 lg:w-48 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             />
             <div className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full ${saveStatus === 'saved' ? 'bg-green-500/10 text-green-400' :
               saveStatus === 'saving' ? 'bg-yellow-500/10 text-yellow-400' :
@@ -325,7 +325,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5">
           {/* Save Button */}
           <button
             onClick={() => setShowSaveConfirm(true)}
@@ -355,8 +355,8 @@ export default function Home() {
           </button>
 
           {/* Format selector */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-400">Format:</span>
+          <div className="flex items-center gap-1">
+            {/* Format */}
             <select
               value={resumeData.rendering.format || 'classic'}
               onChange={(e) => setResumeData(prev => ({
@@ -371,8 +371,8 @@ export default function Home() {
           </div>
 
           {/* Font selector */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-400">Font:</span>
+          <div className="flex items-center gap-1">
+            {/* Font */}
             <select
               value={resumeData.rendering.fontFamily}
               onChange={(e) => setResumeData(prev => ({
@@ -393,8 +393,8 @@ export default function Home() {
           </div>
 
           {/* Font size selector */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-400">Size:</span>
+          <div className="flex items-center gap-1">
+            {/* Size */}
             <select
               value={resumeData.rendering.fontSize || 10.5}
               onChange={(e) => setResumeData(prev => ({
@@ -414,8 +414,8 @@ export default function Home() {
           </div>
 
           {/* Line spacing selector */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-400">Spacing:</span>
+          <div className="flex items-center gap-1">
+            {/* Spacing */}
             <input
               type="number"
               min="0.8"

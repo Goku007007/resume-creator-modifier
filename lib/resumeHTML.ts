@@ -2,6 +2,7 @@
 // Single source of truth for resume HTML structure
 
 import { ResumeJSON } from '@/types/resume';
+import { preventWidows } from '@/lib/utils/text';
 
 function formatDateRange(start: string, end: string | null): string {
   return `${start} - ${end || 'Present'}`;
@@ -37,7 +38,7 @@ export function generateResumeHTML(data: ResumeJSON): string {
           <span class="experience-date">${formatDateRange(exp.start, exp.end)}</span>
         </div>
         <ul class="bullet-list">
-          ${exp.bullets.map(bullet => `<li>${escapeHtml(bullet)}</li>`).join('')}
+          ${exp.bullets.map(bullet => `<li>${escapeHtml(preventWidows(bullet))}</li>`).join('')}
         </ul>
       </div>
     `)
@@ -51,7 +52,7 @@ export function generateResumeHTML(data: ResumeJSON): string {
           ${proj.link ? `<span class="project-link"><a href="${escapeHtml(proj.link)}">Github</a></span>` : ''}
         </div>
         <ul class="bullet-list">
-          ${proj.bullets.map(bullet => `<li>${escapeHtml(bullet)}</li>`).join('')}
+          ${proj.bullets.map(bullet => `<li>${escapeHtml(preventWidows(bullet))}</li>`).join('')}
         </ul>
       </div>
     `)

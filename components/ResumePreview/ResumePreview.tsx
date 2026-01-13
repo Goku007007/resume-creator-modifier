@@ -3,6 +3,7 @@
 import React from 'react';
 import './resume-styles.css';
 import { ResumeJSON, Experience, Project, Education, SkillGroup } from '@/types/resume';
+import { preventWidows } from '@/lib/utils/text';
 
 interface ResumePreviewProps {
     data: ResumeJSON;
@@ -203,7 +204,7 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                                 </div>
                                 <ul className="bullet-list">
                                     {exp.bullets.map((bullet, bIdx) => (
-                                        <li key={bIdx} onClick={(e) => handleSectionClick(e, 'experience', 'bullets', idx, bIdx)}>{bullet}</li>
+                                        <li key={bIdx} onClick={(e) => handleSectionClick(e, 'experience', 'bullets', idx, bIdx)}>{preventWidows(bullet)}</li>
                                     ))}
                                 </ul>
                             </div>
@@ -297,7 +298,7 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                                     </div>
                                     <ul className="bullet-list">
                                         {proj.bullets.map((bullet, bIdx) => (
-                                            <li key={bIdx} onClick={(e) => handleSectionClick(e, 'projects', 'bullets', idx, bIdx)}>{bullet}</li>
+                                            <li key={bIdx} onClick={(e) => handleSectionClick(e, 'projects', 'bullets', idx, bIdx)}>{preventWidows(bullet)}</li>
                                         ))}
                                     </ul>
                                 </div>
