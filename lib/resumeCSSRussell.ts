@@ -21,9 +21,10 @@ export function getFontFamilyCSS(fontFamily: string): string {
 
 export function generateResumeCSSRussell(rendering: RenderingConfig): string {
   // Use user's font size settings
+  const fontFamily = getFontFamilyCSS(rendering.fontFamily || 'Source Sans Pro');
   const fontSize = rendering.fontSize || 10;
   const lineHeight = rendering.lineHeight || 1.15;
-  const bulletMargin = rendering.density === 'COMPACT' ? '0' : '1pt';
+  const bulletMargin = '0'; // Match preview behavior
 
   // Scale other sizes relative to base font
   const titleSize = Math.round(fontSize * 1.05 * 10) / 10;
@@ -45,7 +46,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     }
     
     body {
-      font-family: 'Source Sans 3', 'Source Sans Pro', Arial, sans-serif;
+      font-family: ${fontFamily};
       font-size: ${fontSize}pt;
       line-height: ${lineHeight};
       color: #000;
@@ -90,7 +91,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     .format-russell .resume-contact {
       text-align: center;
       font-size: ${dateSize}pt;
-      margin-bottom: 6mm;
+      margin-bottom: 3mm;
     }
     
     .format-russell .resume-contact a {
