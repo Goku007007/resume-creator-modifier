@@ -1,5 +1,6 @@
 /* Resume Template Styles - Matches PDF Reference */
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/bitmaks/cm-web-fonts@latest/fonts.css');
 
 /* Page container for letter size */
 .resume-page {
@@ -324,12 +325,18 @@
 }
 
 .format-russell .resume-header {
-  margin-bottom: 0;
+  margin-bottom: 1mm !important;
+  padding: 0 !important;
+  margin-top: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 .format-russell .resume-name {
   font-size: 2em;
+  font-weight: bold;
   letter-spacing: 0.3px;
+  margin: 0 !important;
 }
 
 /* Location line for Russell format */
@@ -338,12 +345,20 @@
   font-size: 0.9em;
   font-style: italic;
   color: #999;
-  margin: 1mm 0;
+  margin: 1mm 0 !important;
+  display: block;
+  width: 100%;
+  padding: 0 !important;
 }
 
 .format-russell .resume-contact {
+  text-align: center;
   font-size: 0.9em;
-  margin-bottom: 3mm;
+  margin-bottom: 3mm !important;
+  padding: 0 !important;
+  margin-top: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 .format-russell .resume-contact a {
@@ -357,7 +372,11 @@
 
 /* Russell section styling */
 .format-russell .resume-section {
-  margin-bottom: 3mm;
+  margin-bottom: 1.4mm !important;
+  padding: 0 !important;
+  margin-top: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 .format-russell .section-header {
@@ -455,7 +474,7 @@
   padding-left: 2px;
   text-align: left;
   font-size: 1em;
-  line-height: 1.2;
+  line-height: 1.3;
   hyphens: none;
   word-break: normal;
   text-wrap: pretty;

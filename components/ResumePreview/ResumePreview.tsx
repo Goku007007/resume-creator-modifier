@@ -43,6 +43,8 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
             'Calibri': "Carlito, Calibri, sans-serif",
             'Geist Mono': "'Geist Mono', 'Andale Mono', 'Courier New', monospace",
             'Andale Mono': "'Andale Mono', 'Courier New', monospace",
+            'Computer Modern': "'Computer Modern Serif', serif",
+            'Computer Modern Concrete': "'Computer Modern Concrete', serif",
         };
         return fontMap[font] || font;
     };

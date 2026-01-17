@@ -389,6 +389,8 @@ export default function Home() {
               <option value="Calibri">Calibri</option>
               <option value="Geist Mono">Geist Mono</option>
               <option value="Andale Mono">Andale Mono</option>
+              <option value="Computer Modern">Computer Modern (Standard)</option>
+              <option value="Computer Modern Concrete">Computer Modern (Thick)</option>
             </select>
           </div>
 

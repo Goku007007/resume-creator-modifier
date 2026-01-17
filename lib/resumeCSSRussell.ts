@@ -14,6 +14,8 @@ export function getFontFamilyCSS(fontFamily: string): string {
     'Calibri': "Carlito, Calibri, sans-serif",
     'Geist Mono': "'Geist Mono', 'Andale Mono', 'Courier New', monospace",
     'Andale Mono': "'Andale Mono', 'Courier New', monospace",
+    'Computer Modern': "'Computer Modern Serif', serif",
+    'Computer Modern Concrete': "'Computer Modern Concrete', serif",
     'Source Sans Pro': "'Source Sans 3', 'Source Sans Pro', Arial, sans-serif",
   };
   return fontMap[fontFamily] || "'Source Sans 3', 'Source Sans Pro', Arial, sans-serif";
@@ -33,6 +35,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
 
   return `
 
+    @import url('https://cdn.jsdelivr.net/gh/bitmaks/cm-web-fonts@latest/fonts.css');
     
     * {
       margin: 0;
@@ -68,7 +71,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     /* Header - Centered, Bold Name */
     .format-russell .resume-header {
       text-align: center;
-      margin-bottom: 0;
+      margin-bottom: 1mm;
     }
     
     .format-russell .resume-name {
@@ -85,6 +88,8 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
       font-style: italic;
       color: #999;
       margin: 1mm 0;
+      display: block;
+      width: 100%;
     }
     
     /* Contact - single line with pipe separators */
@@ -110,7 +115,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     
     /* Section styling */
     .format-russell .resume-section {
-      margin-bottom: 3mm;
+      margin-bottom: 1.4mm;
     }
     
     /* Section header - uppercase, gray line */
@@ -210,7 +215,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
       padding-left: 2px;
       text-align: left;
       font-size: ${fontSize}pt;
-      line-height: 1.2;
+      line-height: 1.3;
       hyphens: none;
       word-break: normal;
       text-wrap: pretty;
