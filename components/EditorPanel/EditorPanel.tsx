@@ -57,6 +57,11 @@ const SectionIcons = {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
         </svg>
     ),
+    summary: (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+    ),
 };
 
 function AccordionSection({
@@ -138,6 +143,7 @@ function AccordionSection({
 // Section IDs for navigation
 const SECTIONS = [
     { id: 'basics', label: 'Contact', icon: 'contact' },
+    { id: 'summary', label: 'Summary', icon: 'summary' },
     { id: 'skills', label: 'Skills', icon: 'skills' },
     { id: 'experience', label: 'Experience', icon: 'experience' },
     { id: 'projects', label: 'Projects', icon: 'projects' },
@@ -152,6 +158,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
     // Track which sections are expanded (all expanded by default)
     const [expandedSections, setExpandedSections] = React.useState<Record<string, boolean>>({
         basics: true,
+        summary: true,
         skills: true,
         experience: true,
         projects: true,
@@ -425,6 +432,22 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
         });
     };
 
+    const updateSummary = (field: 'content' | 'heading' | 'visible', value: any) => {
+        onChange({
+            ...data,
+            sections: {
+                ...data.sections,
+                summary: {
+                    visible: true,
+                    content: '',
+                    ...data.sections.summary,
+                    [field]: value
+                }
+            },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
     const handleDeleteConfirm = () => {
         if (!deleteConfirm) return;
         if (deleteConfirm.type === 'experience') {
@@ -438,6 +461,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
     // Generate summaries for collapsed sections
     const getSummaries = () => ({
         basics: data.basics.name || 'No name set',
+        summary: data.sections.summary?.heading || 'No summary set',
         skills: data.sections.skills.groups.map((g) => g.label).join(', ') || 'No skills added',
         experience: data.sections.experience.map((e) => `${e.title} @ ${e.company}`).slice(0, 2).join(', ') + (data.sections.experience.length > 2 ? '...' : '') || 'No experience added',
         projects: data.sections.projects.map((p) => p.name).slice(0, 3).join(', ') + (data.sections.projects.length > 3 ? '...' : '') || 'No projects added',
@@ -537,6 +561,48 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
                                     />
                                 </div>
                             ))}
+                        </div>
+                    </AccordionSection>
+
+                    {/* Summary Section */}
+                    <AccordionSection
+                        id="summary"
+                        title="Summary"
+                        icon="summary"
+                        summary={summaries.summary}
+                        isExpanded={expandedSections.summary}
+                        onToggle={() => toggleSection('summary')}
+                    >
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-2 mb-2">
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        className="sr-only peer"
+                                        checked={data.sections.summary?.visible ?? true}
+                                        onChange={(e) => updateSummary('visible', e.target.checked)}
+                                    />
+                                    <div className="w-9 h-5 bg-gray-700 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                    <span className="ml-2 text-sm text-gray-400">Include in resume</span>
+                                </label>
+                            </div>
+
+                            {(data.sections.summary?.visible ?? true) && (
+                                <>
+                                    <div>
+                                        <label className="block text-sm text-gray-400 mb-1">Summary Content</label>
+                                        <textarea
+                                            value={data.sections.summary?.content || ''}
+                                            onChange={(e) => updateSummary('content', e.target.value)}
+                                            onFocus={() => onSectionFocus?.('summary')}
+                                            placeholder="Write a brief professional summary..."
+                                            rows={4}
+                                            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                                        />
+                                        <p className="text-xs text-gray-500 mt-1">Use **text** to bold words</p>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </AccordionSection>
 

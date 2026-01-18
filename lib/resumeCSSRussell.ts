@@ -96,7 +96,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     .format-russell .resume-contact {
       text-align: center;
       font-size: ${dateSize}pt;
-      margin-bottom: 3mm;
+      margin-bottom: 2mm;
     }
     
     .format-russell .resume-contact a {
@@ -116,6 +116,23 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     /* Section styling */
     .format-russell .resume-section {
       margin-bottom: 1.4mm;
+    }
+
+    /* Summary - Left aligned, bold title, normal text */
+    .format-russell .summary-section {
+      text-align: left;
+      margin-bottom: 2mm;
+      margin-top: 0mm;
+    }
+
+    .format-russell .summary-title {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 1mm;
+    }
+
+    .format-russell .summary-content {
+      font-size: ${fontSize}pt;
     }
     
     /* Section header - uppercase, gray line */

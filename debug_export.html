@@ -1,0 +1,438 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+    @import url('https://cdn.jsdelivr.net/gh/bitmaks/cm-web-fonts@latest/fonts.css');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    @page {
+      size: letter;
+      margin: 0;
+    }
+    
+    body {
+      font-family: Carlito, Calibri, sans-serif;
+      font-size: 10pt;
+      line-height: 1.3;
+      color: #000;
+      background: white;
+    }
+    
+    /* Russell page margins: 0.4in left/right, 0.35in top/bottom */
+    .resume-page.format-russell {
+      width: 8.5in;
+      min-height: 11in;
+      max-height: 11in;
+      padding: 0.35in 0.4in;
+      background: white;
+      overflow: hidden;
+      position: relative;
+      box-sizing: border-box;
+    }
+    
+    /* Header - Centered, Bold Name */
+    .format-russell .resume-header {
+      text-align: center;
+      margin-bottom: 1mm;
+    }
+    
+    .format-russell .resume-name {
+      font-size: 20pt;
+      font-weight: bold;
+      margin: 0;
+      letter-spacing: 0.3px;
+    }
+    
+    /* Location line - italic, gray */
+    .format-russell .resume-location {
+      text-align: center;
+      font-size: 9pt;
+      font-style: italic;
+      color: #999;
+      margin: 1mm 0;
+      display: block;
+      width: 100%;
+    }
+    
+    /* Contact - single line with pipe separators */
+    .format-russell .resume-contact {
+      text-align: center;
+      font-size: 9pt;
+      margin-bottom: 3mm;
+    }
+    
+    .format-russell .resume-contact a {
+      color: #0066cc !important;
+      text-decoration: none;
+    }
+    
+    .format-russell .resume-contact a:hover {
+      text-decoration: underline;
+    }
+    
+    .format-russell .separator {
+      margin: 0 8px;
+      color: #414141;
+    }
+    
+    /* Section styling */
+    .format-russell .resume-section {
+      margin-bottom: 1.4mm;
+    }
+
+    /* Summary - Left aligned, bold title, normal text */
+    .format-russell .summary-section {
+      text-align: left;
+      margin-bottom: 0mm;
+      margin-top: 1mm;
+    }
+
+    .format-russell .summary-title {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 1mm;
+    }
+
+    .format-russell .summary-content {
+      font-size: 10pt;
+    }
+    
+    /* Section header - uppercase, gray line */
+    .format-russell .section-header {
+      font-size: 10.5pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin: 0 0 1.5mm 0;
+      padding-bottom: 1px;
+      border-bottom: 0.5pt solid #414141;
+      color: #000;
+    }
+    
+    /* Skills - Two column table */
+    .format-russell .skills-table {
+      margin-top: 1.5mm;
+      width: 100%;
+    }
+    
+    .format-russell .skills-row {
+      display: flex;
+      margin-bottom: 0.5mm;
+      font-size: 10pt;
+    }
+    
+    .format-russell .skill-label {
+      font-weight: 600;
+      min-width: 180px;
+      flex-shrink: 0;
+    }
+    
+    .format-russell .skill-items {
+      font-weight: 400;
+      flex: 1;
+    }
+    
+    /* Experience */
+    .format-russell .experience-item {
+      margin-bottom: 2mm;
+    }
+    
+    .format-russell .experience-item:last-child {
+      margin-bottom: 1mm;
+    }
+    
+    .format-russell .experience-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.5mm;
+    }
+    
+    .format-russell .experience-title-line {
+      font-size: 10.5pt;
+    }
+    
+    .format-russell .experience-company {
+      font-weight: bold;
+    }
+    
+    .format-russell .comma {
+      font-weight: normal;
+    }
+    
+    .format-russell .experience-position {
+      font-style: italic;
+      font-weight: normal;
+    }
+    
+    .format-russell .location-separator {
+      margin: 0 4px;
+      color: #414141;
+    }
+    
+    .format-russell .experience-location {
+      font-style: italic;
+      font-weight: normal;
+    }
+    
+    .format-russell .experience-date {
+      font-size: 9pt;
+      font-style: italic;
+      font-weight: normal;
+      text-align: right;
+      flex-shrink: 0;
+    }
+    
+    /* Bullets - matching LaTeX cvitems */
+    .format-russell .bullet-list {
+      margin: 0;
+      padding-left: 16px;
+      list-style-type: disc;
+    }
+    
+    .format-russell .bullet-list li {
+      margin-bottom: 0;
+      padding-left: 2px;
+      text-align: left;
+      font-size: 10pt;
+      line-height: 1.3;
+      hyphens: none;
+      word-break: normal;
+      text-wrap: pretty;
+    }
+    
+    /* Education - table row format */
+    .format-russell .education-table {
+      margin-top: 1.5mm;
+    }
+    
+    .format-russell .education-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1mm;
+      font-size: 10.5pt;
+    }
+    
+    .format-russell .education-content {
+      flex: 1;
+    }
+    
+    .format-russell .education-school {
+      font-weight: bold;
+    }
+    
+    .format-russell .education-degree {
+      font-style: italic;
+      font-weight: normal;
+    }
+    
+    .format-russell .education-date {
+      font-size: 9pt;
+      color: #666;
+      flex-shrink: 0;
+    }
+    
+    /* Projects */
+    .format-russell .project-item {
+      margin-bottom: 2mm;
+    }
+    
+    .format-russell .project-item:last-child {
+      margin-bottom: 1mm;
+    }
+    
+    .format-russell .project-header {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 0.5mm;
+    }
+    
+    .format-russell .project-name {
+      font-weight: bold;
+      font-size: 10.5pt;
+    }
+    
+    .format-russell .project-link {
+      font-size: 10pt;
+      color: #0066cc !important;
+      text-decoration: none;
+      margin-left: 4px;
+    }
+    
+    .format-russell .project-link:hover {
+      text-decoration: underline;
+    }
+    
+    /* Links in general */
+    .format-russell a {
+      color: #0066cc;
+    }
+  </style>
+</head>
+<body>
+
+    <div class="resume-page format-russell">
+      <!-- Header -->
+      <header class="resume-header">
+        <h1 class="resume-name">Gokul Nandakumar</h1>
+      </header>
+      
+      <!-- Location Line -->
+      
+      
+      <!-- Contact Info -->
+      <div class="resume-contact">
+        <a href="mailto:goku.careers@gmail.com">goku.careers@gmail.com</a><span class="separator">|</span><a href="https://gokuldata.vercel.app/">Portfolio</a><span class="separator">|</span><a href="https://github.com/Goku007007">GitHub</a><span class="separator">|</span><a href="https://www.linkedin.com/in/gokul-nandakumar/">LinkedIn</a><span class="separator">|</span><span>+1 (773) 930 2964</span>
+      </div>
+
+      <!-- Summary Section -->
+      
+      <div class="summary-section">
+        <div class="summary-content">I have a loop round(3 rounds of 45 minutes) interview for Microsoft MLE (IC2)</div>
+      </div>
+      
+      
+      <!-- Skills Section -->
+      <section class="resume-section">
+        <h2 class="section-header">SKILLS</h2>
+        <div class="skills-table">
+          <div class="skills-row">
+                <span class="skill-label">Languages</span>
+                <span class="skill-items">Python, JavaScript, TypeScript, SQL, HTML5, CSS3</span>
+            </div><div class="skills-row">
+                <span class="skill-label">Frontend</span>
+                <span class="skill-items">React, Next.js, Angular, Recharts, Chart.js, Tailwind CSS</span>
+            </div><div class="skills-row">
+                <span class="skill-label">Backend</span>
+                <span class="skill-items">Python (Django, FastAPI, Flask), Node.js (Express), RESTful APIs, Microservices</span>
+            </div><div class="skills-row">
+                <span class="skill-label">Db</span>
+                <span class="skill-items">PostgreSQL, Redis, MySQL, MongoDB, Query Optimization, Schema Design</span>
+            </div><div class="skills-row">
+                <span class="skill-label">Cloud &amp; DevOps</span>
+                <span class="skill-items">Azure, AWS, Docker, CI/CD, GitHub Actions</span>
+            </div><div class="skills-row">
+                <span class="skill-label">Tools</span>
+                <span class="skill-items">Git, pytest, Jest, Selenium, Webhooks, OAuth</span>
+            </div><div class="skills-row">
+                <span class="skill-label">Cert</span>
+                <span class="skill-items">AWS Certified Solutions Architect - Associate</span>
+            </div><div class="skills-row">
+                <span class="skill-label">AI - Assisted Dev &amp; API</span>
+                <span class="skill-items">Cursor, Claude Code, ChatGPT-Cli-or-Codex, Antigravity, LLM and Vid Gen APIs</span>
+            </div>
+        </div>
+      </section>
+      
+      <!-- Experience Section -->
+      <section class="resume-section">
+        <h2 class="section-header">EXPERIENCE</h2>
+        
+      <div class="experience-item">
+        <div class="experience-header">
+          <span class="experience-title-line">
+            <span class="experience-company">ChiEAC</span><span class="comma">,</span>
+            <span class="experience-position">Software Engineer</span>
+            <span class="location-separator">|</span>
+            <span class="experience-location">Chicago, IL (Remote)</span>
+          </span>
+          <span class="experience-date">Jun 2025 - Present</span>
+        </div>
+        <ul class="bullet-list">
+          <li>Built AI document processing features using React, Python (FastAPI), and Claude API, reducing manual data entry time by 66% (6h → 2h) by automating transit report classification and extraction for 3 city departments</li><li>Developed analytics dashboard with React and TypeScript displaying real-time KPIs from Azure Synapse and PostgreSQL to standardize 12 metrics used by executive leadership and reduce query times by 40%</li><li>Implemented RESTful API endpoints using FastAPI and deployed with Docker on Azure, eliminating weekly manual report generation for operations team while maintaining 99.5% uptime through error handling and retry logic</li><li>Designed ETL pipelines using Airflow and Delta Lake to process daily transit data feeds, working with senior engineer to establish CI/CD workflows via GitHub Actions that cut deployment time from 2 hours to 30 minutes</li>
+        </ul>
+      </div>
+    
+      <div class="experience-item">
+        <div class="experience-header">
+          <span class="experience-title-line">
+            <span class="experience-company">ISQL Global</span><span class="comma">,</span>
+            <span class="experience-position">Software Engineer</span>
+            <span class="location-separator">|</span>
+            <span class="experience-location">Remote</span>
+          </span>
+          <span class="experience-date">Oct 2022 - Jul 2023</span>
+        </div>
+        <ul class="bullet-list">
+          <li>Built CRM features for roofing contractors using Angular frontend and Django REST backend, reducing customer quote generation time by streamlining workflow forms and optimizing PostgreSQL queries for 2,000+ monthly quotes</li><li>Implemented automated testing and CI/CD pipelines using GitHub Actions and Docker, ensuring 99.9% data quality reliability and enabling rapid deployment of schema changes across microservices architecture</li><li>Integrated Google Maps Geocoding API for address validation, Stripe for payment processing, and Twilio for SMS notifications, reducing manual address corrections and payment follow ups by 15 hours/week</li><li>Optimized slow running database queries by adding indexes and implementing Redis caching for session data, improving page load times by 35% and reducing AWS RDS costs by 15% through connection pooling</li>
+        </ul>
+      </div>
+    
+      <div class="experience-item">
+        <div class="experience-header">
+          <span class="experience-title-line">
+            <span class="experience-company">Out In Dreams</span><span class="comma">,</span>
+            <span class="experience-position">Software Engineer</span>
+            <span class="location-separator">|</span>
+            <span class="experience-location">Remote</span>
+          </span>
+          <span class="experience-date">Sep 2021 - Oct 2022</span>
+        </div>
+        <ul class="bullet-list">
+          <li>Built payment automation system using Python and Stripe Connect API, eliminating manual spreadsheet based payments for influencers and reducing finance team workload by 20 hours/week through automated payout and it helps reducing payment errors for $87K+ annual payouts</li><li>Created analytics dashboard using Next.js and Chart.js that pulled data from Google Ads and Instagram APIs, giving marketing team unified view of campaign performance and reducing manual report</li><li>Optimized PostgreSQL queries and analyzed creator engagement data to identify retention opportunities, resulting in 18% improvement in quarter-over-quarter retention through data driven feature prioritization</li>
+        </ul>
+      </div>
+    
+      </section>
+      
+      <!-- Projects Section -->
+      <section class="resume-section">
+        <h2 class="section-header">PROJECTS</h2>
+        
+      <div class="project-item">
+        <div class="project-header">
+          <span class="project-name">National EV Charging Infrastructure Analytics</span>
+          <a href="https://github.com/Goku007007/ev-charger-uptime-snapshot" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+        <ul class="bullet-list">
+          <li>Developed a data ingestion and analytics platform for 83k+ EV charging station records, utilizing (GCS) and BigQuery</li><li>Deployed an interactive dashboard to visualize network coverage gaps, processing large scale geospatial data to identify underserved regions.</li>
+        </ul>
+      </div>
+    
+      <div class="project-item">
+        <div class="project-header">
+          <span class="project-name">GPU Cluster Telemetry &amp; Observability System</span>
+          <a href="https://github.com/Goku007007/gpu-telemetry-lakehouse" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+        <ul class="bullet-list">
+          <li>Built a scalable observability platform using Python and DuckDB to monitor GPU cluster performance, ingesting 10M+ trace rows for granular utilization tracking.</li><li>Implemented an IsolationForest machine learning model to detect abnormal cluster behavior, reducing false alerts</li>
+        </ul>
+      </div>
+    
+      </section>
+      
+      <!-- Education Section -->
+      <section class="resume-section">
+        <h2 class="section-header">EDUCATION</h2>
+        <div class="education-table">
+          
+      <div class="education-row">
+        <span class="education-content">
+          <span class="education-school">Illinois Institute of Technology</span><span class="comma">,</span>
+          <span class="education-degree">Master of Information Technology</span>
+        </span>
+        
+      </div>
+    
+      <div class="education-row">
+        <span class="education-content">
+          <span class="education-school">SREC</span><span class="comma">,</span>
+          <span class="education-degree">Bachelor of Computer Science and Engineering</span>
+        </span>
+        
+      </div>
+    
+        </div>
+      </section>
+    </div>
+  
+</body>
+</html>

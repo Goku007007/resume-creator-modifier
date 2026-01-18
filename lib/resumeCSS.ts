@@ -74,13 +74,23 @@ export function generateResumeCSS(rendering: RenderingConfig): string {
     .contact {
       text-align: center;
       font-size: 9.5pt;
-      margin-bottom: 8px;
+      margin-bottom: 2mm;
     }
     
     .resume-contact a,
     .contact a {
       color: #0066cc;
       text-decoration: none;
+    }
+
+    .summary-section {
+      margin-top: 0mm;
+      margin-bottom: 2mm;
+      text-align: left;
+    }
+
+    .summary-content {
+      margin: 0;
     }
     
     a {

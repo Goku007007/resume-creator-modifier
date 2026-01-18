@@ -3,6 +3,7 @@
 
 import { ResumeJSON } from '@/types/resume';
 import { preventWidows } from '@/lib/utils/text';
+import { parseBoldMarkdown } from '@/lib/utils/formatBoldText';
 
 function formatDateRange(start: string, end: string | null): string {
   return `${start} - ${end || 'Present'}`;
@@ -79,6 +80,12 @@ export function generateResumeHTML(data: ResumeJSON): string {
         <span>${escapeHtml(basics.phone)}</span>
       </div>
       
+      ${sections.summary?.visible && sections.summary?.content ? `
+      <div class="summary-section">
+        <div class="summary-content">${parseBoldMarkdown(sections.summary.content)}</div>
+      </div>
+      ` : ''}
+
       <section class="resume-section">
         <h2 class="section-header">${escapeHtml(sections.skills.heading)}</h2>
         <div class="skills-content-inline">

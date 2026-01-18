@@ -4,6 +4,7 @@ import React from 'react';
 import './resume-styles.css';
 import { ResumeJSON, Experience, Project, Education, SkillGroup } from '@/types/resume';
 import { preventWidows } from '@/lib/utils/text';
+import { renderBoldText } from '@/lib/utils/formatBoldText';
 
 interface ResumePreviewProps {
     data: ResumeJSON;
@@ -131,6 +132,28 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
 
                     {/* Russell Format Section Order: Experience → Education → Skills → Projects */}
                     {/* Classic Format Section Order: Skills → Experience → Projects → Education */}
+
+                    {/* Summary Section (Both formats) */}
+                    {data.sections.summary?.visible && data.sections.summary?.content && (
+                        <div
+                            className="resume-section"
+                            data-section="summary"
+                            onClick={(e) => handleSectionClick(e, 'summary')}
+                            title="Edit Summary"
+                            style={{
+                                marginBottom: '2mm',
+                                marginTop: '0mm'
+                            }}
+                        >
+                            <p style={{
+                                textAlign: 'left',
+                                margin: 0,
+                                fontSize: '1em'
+                            }}>
+                                {renderBoldText(data.sections.summary.content)}
+                            </p>
+                        </div>
+                    )}
 
                     {rendering.format !== 'russell' && (
                         /* Classic: Skills Section first */

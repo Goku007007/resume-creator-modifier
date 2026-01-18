@@ -51,7 +51,14 @@ export interface Education {
   dates?: string;
 }
 
+export interface SummarySection {
+  visible: boolean;
+  content: string;
+  heading?: string;
+}
+
 export interface Sections {
+  summary?: SummarySection;
   skills: SkillsSection;
   experience: Experience[];
   projects: Project[];
@@ -94,6 +101,10 @@ export const DEFAULT_RESUME: ResumeJSON = {
     locationLine: "",
   },
   sections: {
+    summary: {
+      visible: true,
+      content: "Founding-minded Full-Stack Engineer focused on data pipelines, AI-driven systems, and high-stakes user workflows; experienced owning ambiguous, production-critical platforms end-to-end."
+    },
     skills: {
       heading: "Skills",
       groups: [

@@ -53,7 +53,7 @@
 .resume-contact {
   text-align: center;
   font-size: 9.5pt;
-  margin-bottom: 8px;
+  margin-bottom: 2mm;
 }
 
 .resume-contact a {
@@ -354,7 +354,7 @@
 .format-russell .resume-contact {
   text-align: center;
   font-size: 0.9em;
-  margin-bottom: 3mm !important;
+  margin-bottom: 2mm !important;
   padding: 0 !important;
   margin-top: 0 !important;
   margin-left: 0 !important;
