@@ -5,6 +5,7 @@ import './resume-styles.css';
 import { ResumeJSON, Experience, Project, Education, SkillGroup } from '@/types/resume';
 import { preventWidows } from '@/lib/utils/text';
 import { renderBoldText } from '@/lib/utils/formatBoldText';
+import { formatUrlForDisplay } from '@/lib/utils/url';
 
 interface ResumePreviewProps {
     data: ResumeJSON;
@@ -88,7 +89,7 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                         title="Edit Contact Info"
                     >
                         {rendering.format === 'russell' ? (
-                            // Russell format: email | link labels | phone
+                            // Russell format: email | link formatted urls | phone
                             <>
                                 <a href={`mailto:${basics.email}`} onClick={(e) => handleSectionClick(e, 'basics', 'email')}>{basics.email}</a>
                                 {basics.links.map((link, idx) => (
@@ -100,7 +101,7 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                                             rel="noopener noreferrer"
                                             onClick={(e) => handleSectionClick(e, 'basics', 'links', idx, 0)}
                                         >
-                                            {link.label}
+                                            {formatUrlForDisplay(link.url)}
                                         </a>
                                     </React.Fragment>
                                 ))}
@@ -108,7 +109,7 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                                 <span onClick={(e) => handleSectionClick(e, 'basics', 'phone')}>{basics.phone}</span>
                             </>
                         ) : (
-                            // Classic format: email | links | phone
+                            // Classic format: email | link formatted urls | phone
                             <>
                                 <a href={`mailto:${basics.email}`} onClick={(e) => handleSectionClick(e, 'basics', 'email')}>{basics.email}</a>
                                 {basics.links.map((link, idx) => (
@@ -120,7 +121,7 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                                             rel="noopener noreferrer"
                                             onClick={(e) => handleSectionClick(e, 'basics', 'links', idx, 0)}
                                         >
-                                            {link.label}
+                                            {formatUrlForDisplay(link.url)}
                                         </a>
                                     </React.Fragment>
                                 ))}
@@ -227,6 +228,14 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                                         {formatDateRange(exp.start, exp.end)}
                                     </span>
                                 </div>
+                                {exp.description && (
+                                    <div
+                                        className="experience-description"
+                                        onClick={(e) => handleSectionClick(e, 'experience', 'description', idx)}
+                                    >
+                                        {exp.description}
+                                    </div>
+                                )}
                                 <ul className="bullet-list">
                                     {exp.bullets.map((bullet, bIdx) => (
                                         <li key={bIdx} onClick={(e) => handleSectionClick(e, 'experience', 'bullets', idx, bIdx)}>{preventWidows(bullet)}</li>

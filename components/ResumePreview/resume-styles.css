@@ -141,6 +141,12 @@
   font-size: 10pt;
 }
 
+/* Experience description - one-liner below header */
+.experience-description {
+  font-style: normal;
+  margin-bottom: 1px;
+}
+
 /* Bullet lists */
 .bullet-list {
   margin: 0;

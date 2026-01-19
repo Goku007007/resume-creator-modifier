@@ -161,6 +161,11 @@ export function generateResumeCSS(rendering: RenderingConfig): string {
       text-align: right;
       font-size: 10pt;
     }
+
+    .experience-description {
+      font-style: normal;
+      margin-bottom: 1px;
+    }
     
     /* Bullets */
     .bullet-list {

@@ -274,7 +274,7 @@ export default function Home() {
   return (
     <div className="h-screen bg-gray-950 flex flex-col overflow-hidden">
       {/* Top Bar */}
-      <header className="bg-gray-900 border-b border-gray-800 px-3 py-2 flex items-center justify-between gap-2 overflow-x-auto min-w-max">
+      <header className="bg-gray-900 border-b border-gray-800 px-3 py-2 flex items-center justify-between gap-2">
         <div className="flex items-center gap-4">
           <h1 className="text-xl font-bold text-white hidden 2xl:block">Resume Modifier</h1>
           <div className="flex items-center gap-2">

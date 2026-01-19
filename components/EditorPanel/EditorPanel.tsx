@@ -730,6 +730,17 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
                                         className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                 </div>
+                                <div className="mb-3">
+                                    <input
+                                        id={`input-experience-${expIdx}-description`}
+                                        type="text"
+                                        value={exp.description || ''}
+                                        onChange={(e) => updateExperience(expIdx, 'description', e.target.value)}
+                                        onFocus={() => onSectionFocus?.('experience')}
+                                        placeholder="One-liner description (e.g., High-growth startup building AI platforms)"
+                                        className="w-full bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
+                                    />
+                                </div>
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between">
                                         <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Bullets</span>

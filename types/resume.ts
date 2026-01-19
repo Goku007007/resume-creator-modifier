@@ -35,6 +35,7 @@ export interface Experience {
   title: string;
   start: string;
   end: string | null;
+  description?: string;
   bullets: string[];
   tech?: string[];
 }

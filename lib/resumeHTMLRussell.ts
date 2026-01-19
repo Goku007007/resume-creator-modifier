@@ -5,6 +5,7 @@
 import { ResumeJSON } from '@/types/resume';
 import { preventWidows } from '@/lib/utils/text';
 import { parseBoldMarkdown } from '@/lib/utils/formatBoldText';
+import { formatUrlForDisplay } from '@/lib/utils/url';
 
 function formatDateRange(start: string, end: string | null): string {
   return `${start} - ${end || 'Present'}`;
@@ -28,8 +29,8 @@ export function generateResumeHTMLRussell(data: ResumeJSON): string {
     contactItems.push(`<a href="mailto:${escapeHtml(basics.email)}">${escapeHtml(basics.email)}</a>`);
   }
   basics.links.forEach(link => {
-    // Use link label instead of full URL
-    contactItems.push(`<a href="${escapeHtml(link.url)}">${escapeHtml(link.label)}</a>`);
+    // Use formatted URL instead of link label (matching user's request)
+    contactItems.push(`<a href="${escapeHtml(link.url)}">${escapeHtml(formatUrlForDisplay(link.url))}</a>`);
   });
   if (basics.phone) {
     contactItems.push(`<span>${escapeHtml(basics.phone)}</span>`);
@@ -49,6 +50,7 @@ export function generateResumeHTMLRussell(data: ResumeJSON): string {
           </span>
           <span class="experience-date">${formatDateRange(exp.start, exp.end)}</span>
         </div>
+        ${exp.description ? `<div class="experience-description">${escapeHtml(exp.description)}</div>` : ''}
         <ul class="bullet-list">
           ${exp.bullets.map(bullet => `<li>${escapeHtml(preventWidows(bullet))}</li>`).join('')}
         </ul>

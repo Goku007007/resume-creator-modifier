@@ -4,6 +4,7 @@
 import { ResumeJSON } from '@/types/resume';
 import { preventWidows } from '@/lib/utils/text';
 import { parseBoldMarkdown } from '@/lib/utils/formatBoldText';
+import { formatUrlForDisplay } from '@/lib/utils/url';
 
 function formatDateRange(start: string, end: string | null): string {
   return `${start} - ${end || 'Present'}`;
@@ -22,7 +23,7 @@ export function generateResumeHTML(data: ResumeJSON): string {
   const { basics, sections } = data;
 
   const linksHtml = basics.links
-    .map(link => `<span class="separator">|</span><a href="${escapeHtml(link.url)}">${escapeHtml(link.label)}</a>`)
+    .map(link => `<span class="separator">|</span><a href="${escapeHtml(link.url)}">${escapeHtml(formatUrlForDisplay(link.url))}</a>`)
     .join('');
 
   const skillsHtml = sections.skills.groups
@@ -38,6 +39,7 @@ export function generateResumeHTML(data: ResumeJSON): string {
           <span><span class="experience-title">${escapeHtml(exp.title)}</span><span class="experience-company">, ${escapeHtml(exp.company)} - ${escapeHtml(exp.location)}</span></span>
           <span class="experience-date">${formatDateRange(exp.start, exp.end)}</span>
         </div>
+        ${exp.description ? `<div class="experience-description">${escapeHtml(exp.description)}</div>` : ''}
         <ul class="bullet-list">
           ${exp.bullets.map(bullet => `<li>${escapeHtml(preventWidows(bullet))}</li>`).join('')}
         </ul>

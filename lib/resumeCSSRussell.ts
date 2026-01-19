@@ -219,6 +219,11 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
       text-align: right;
       flex-shrink: 0;
     }
+
+    .format-russell .experience-description {
+      font-style: normal;
+      margin-bottom: 0.5mm;
+    }
     
     /* Bullets - matching LaTeX cvitems */
     .format-russell .bullet-list {
