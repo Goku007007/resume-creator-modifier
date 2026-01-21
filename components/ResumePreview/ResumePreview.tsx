@@ -2,7 +2,7 @@
 
 import React from 'react';
 import './resume-styles.css';
-import { ResumeJSON, Experience, Project, Education, SkillGroup } from '@/types/resume';
+import { ResumeJSON, Experience, Project, Education, SkillGroup, LanguageEntry } from '@/types/resume';
 import { preventWidows } from '@/lib/utils/text';
 import { renderBoldText } from '@/lib/utils/formatBoldText';
 import { formatUrlForDisplay } from '@/lib/utils/url';
@@ -22,7 +22,11 @@ function formatDateRange(start: string, end: string | null): string {
 export default function ResumePreview({ data, scale = 1, highlightedSection, onSectionClick }: ResumePreviewProps) {
     const { basics, sections, rendering } = data;
     const densityClass = `density-${rendering.density.toLowerCase()}`;
-    const formatClass = rendering.format === 'russell' ? 'format-russell' : 'format-classic';
+    const formatClass = rendering.format === 'russell'
+        ? 'format-russell'
+        : rendering.format === 'german'
+            ? 'format-german'
+            : 'format-classic';
 
     // Helper to request scroll to editor section/field
     const handleSectionClick = (e: React.MouseEvent, sectionId: string, field?: string, index?: number, subIndex?: number) => {
@@ -76,9 +80,14 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                         <h1 className="resume-name">{basics.name}</h1>
                     </header>
 
-                    {/* Location Line - Russell format only */}
-                    {rendering.format === 'russell' && basics.locationLine && (
+                    {/* Location Line - Russell and German formats */}
+                    {(rendering.format === 'russell' || rendering.format === 'german') && basics.locationLine && (
                         <div className="resume-location">{basics.locationLine}</div>
+                    )}
+
+                    {/* Work Authorization Line - German format only (recruiters screen for this first) */}
+                    {rendering.format === 'german' && basics.workAuthorization && (
+                        <div className="work-authorization">{basics.workAuthorization}</div>
                     )}
 
                     {/* Contact Line */}
@@ -304,7 +313,95 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                         </>
                     )}
 
-                    {rendering.format !== 'russell' && (
+                    {rendering.format === 'german' && (
+                        <>
+                            {/* German: Projects Section with explicit URLs */}
+                            <section
+                                className={`resume-section ${getHighlightClass('projects')}`}
+                                data-section="projects"
+                                onClick={(e) => handleSectionClick(e, 'projects')}
+                                title="Edit Projects"
+                            >
+                                <h2 className="section-header">PROJECTS</h2>
+                                {sections.projects.map((proj: Project, idx: number) => (
+                                    <div className="project-item" key={idx}>
+                                        <div className="project-header">
+                                            <span className="project-name" onClick={(e) => handleSectionClick(e, 'projects', 'name', idx)}>{proj.name}</span>
+                                            {proj.link && (
+                                                <a
+                                                    href={proj.link}
+                                                    className="project-link"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    onClick={(e) => handleSectionClick(e, 'projects', 'link', idx)}
+                                                >
+                                                    {formatUrlForDisplay(proj.link)}
+                                                </a>
+                                            )}
+                                        </div>
+                                        <ul className="bullet-list">
+                                            {proj.bullets.map((bullet, bIdx) => (
+                                                <li key={bIdx} onClick={(e) => handleSectionClick(e, 'projects', 'bullets', idx, bIdx)}>{preventWidows(bullet)}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                ))}
+                            </section>
+
+                            {/* German: Education Section with location and dates */}
+                            <section
+                                className={`resume-section ${getHighlightClass('education')}`}
+                                data-section="education"
+                                onClick={(e) => handleSectionClick(e, 'education')}
+                                title="Edit Education"
+                            >
+                                <h2 className="section-header">EDUCATION</h2>
+                                <div className="education-table">
+                                    {sections.education.map((edu: Education, idx: number) => (
+                                        <div className="education-row" key={idx}>
+                                            <span className="education-content">
+                                                <span className="education-school" onClick={(e) => handleSectionClick(e, 'education', 'school', idx)}>{edu.school}</span>
+                                                <span className="comma">, </span>
+                                                <span className="education-degree" onClick={(e) => handleSectionClick(e, 'education', 'degree', idx)}>{edu.degree}</span>
+                                                {edu.location && <span className="education-location"> ({edu.location})</span>}
+                                            </span>
+                                            {(edu.startDate || edu.endDate || edu.dates) && (
+                                                <span className="education-date">
+                                                    {edu.startDate && edu.endDate
+                                                        ? `${edu.startDate} - ${edu.endDate}`
+                                                        : edu.startDate
+                                                            ? `${edu.startDate} - Present`
+                                                            : edu.dates}
+                                                </span>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+
+                            {/* German: Languages Section with CEFR levels */}
+                            {sections.languages && sections.languages.length > 0 && (
+                                <section
+                                    className={`resume-section ${getHighlightClass('languages')}`}
+                                    data-section="languages"
+                                    onClick={(e) => handleSectionClick(e, 'languages')}
+                                    title="Edit Languages"
+                                >
+                                    <h2 className="section-header">LANGUAGES</h2>
+                                    <div className="languages-list">
+                                        {sections.languages.map((lang: LanguageEntry, idx: number) => (
+                                            <span className="language-item" key={idx}>
+                                                <span className="language-name">{lang.language}:</span>
+                                                <span className="language-level">{lang.proficiency}</span>
+                                            </span>
+                                        ))}
+                                    </div>
+                                </section>
+                            )}
+                        </>
+                    )}
+
+                    {rendering.format !== 'russell' && rendering.format !== 'german' && (
                         /* Classic: Projects Section */
                         <section
                             className={`resume-section ${getHighlightClass('projects')}`}
@@ -342,7 +439,7 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
 
 
 
-                    {rendering.format !== 'russell' && (
+                    {rendering.format !== 'russell' && rendering.format !== 'german' && (
                         /* Classic: Education Section last */
                         <section
                             className={`resume-section ${getHighlightClass('education')}`}

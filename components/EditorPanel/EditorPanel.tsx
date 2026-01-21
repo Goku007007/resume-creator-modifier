@@ -18,9 +18,6 @@ interface AccordionSectionProps {
     icon: string;
     count?: number;
     summary: string;
-    icon: string;
-    count?: number;
-    summary: string;
     isExpanded: boolean;
     onToggle: () => void;
     onAdd?: () => void;
@@ -204,7 +201,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
                 setTimeout(() => {
                     const idParts = ['input', scrollTarget.section];
                     if (typeof scrollTarget.index === 'number') idParts.push(scrollTarget.index.toString());
-                    idParts.push(scrollTarget.field);
+                    idParts.push(scrollTarget.field!);
                     if (typeof scrollTarget.subIndex === 'number') idParts.push(scrollTarget.subIndex.toString());
 
                     const elementId = idParts.join('-');

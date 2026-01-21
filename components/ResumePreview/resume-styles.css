@@ -549,3 +549,274 @@
 .format-russell .project-link:hover {
   text-decoration: underline;
 }
+
+/* ====================== */
+/* GERMAN FORMAT STYLES   */
+/* German HR conventions, A4 page size */
+/* ====================== */
+
+/* German format container - A4 size (210mm × 297mm) */
+.resume-page.format-german {
+  width: 210mm;
+  min-height: 297mm;
+  max-height: 297mm;
+  padding: 7mm 8mm;
+  /* font-family is inherited from inline style */
+}
+
+.format-german .resume-header {
+  margin-bottom: 1mm !important;
+  padding: 0 !important;
+  margin-top: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.format-german .resume-name {
+  font-size: 2em;
+  font-weight: bold;
+  letter-spacing: 0.3px;
+  margin: 0 !important;
+}
+
+/* Work Authorization Line - German recruiters screen for this first */
+.format-german .work-authorization {
+  text-align: center;
+  font-size: 0.95em;
+  color: #444;
+  margin: 1mm 0 !important;
+  font-style: italic;
+  padding: 0 !important;
+}
+
+/* Location line for German format */
+.format-german .resume-location {
+  text-align: center;
+  font-size: 0.9em;
+  font-style: italic;
+  color: #999;
+  margin: 1mm 0 !important;
+  display: block;
+  width: 100%;
+  padding: 0 !important;
+}
+
+.format-german .resume-contact {
+  text-align: center;
+  font-size: 0.9em;
+  margin-bottom: 2mm !important;
+  padding: 0 !important;
+  margin-top: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.format-german .resume-contact a {
+  color: #0066cc !important;
+}
+
+.format-german .resume-contact .separator {
+  margin: 0 8px;
+  color: #414141;
+}
+
+/* German section styling */
+.format-german .resume-section {
+  margin-bottom: 1.4mm !important;
+  padding: 0 !important;
+  margin-top: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.format-german .section-header {
+  font-size: 1.05em;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 0.5pt solid #414141;
+  padding-bottom: 1px;
+  margin: 0 0 1.5mm 0;
+  color: #000;
+}
+
+/* German Skills - Tabular format */
+.format-german .skills-table {
+  margin-top: 1.5mm;
+  width: 100%;
+}
+
+.format-german .skills-row {
+  display: flex;
+  margin-bottom: 0.5mm;
+  font-size: 1em;
+}
+
+.format-german .skill-label {
+  font-weight: 600;
+  min-width: 180px;
+  flex-shrink: 0;
+}
+
+.format-german .skill-items {
+  font-weight: 400;
+  flex: 1;
+}
+
+/* German Experience */
+.format-german .experience-item {
+  margin-bottom: 2mm;
+}
+
+.format-german .experience-item:last-child {
+  margin-bottom: 1mm;
+}
+
+.format-german .experience-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5mm;
+}
+
+.format-german .experience-title-line {
+  font-size: 1.05em;
+}
+
+.format-german .experience-company {
+  font-weight: bold;
+}
+
+.format-german .comma {
+  font-weight: normal;
+}
+
+.format-german .experience-position {
+  font-style: italic;
+  font-weight: normal;
+}
+
+.format-german .location-separator {
+  margin: 0 4px;
+  color: #414141;
+}
+
+.format-german .experience-location {
+  font-style: italic;
+  font-weight: normal;
+}
+
+.format-german .experience-date {
+  font-size: 0.9em;
+  font-style: italic;
+  font-weight: normal;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.format-german .bullet-list {
+  margin: 0;
+  padding-left: 16px;
+  list-style-type: disc;
+}
+
+.format-german .bullet-list li {
+  margin-bottom: 0;
+  padding-left: 2px;
+  text-align: left;
+  font-size: 1em;
+  line-height: 1.3;
+  hyphens: none;
+  word-break: normal;
+  text-wrap: pretty;
+}
+
+/* German Education - table row format with location and dates */
+.format-german .education-table {
+  margin-top: 1.5mm;
+}
+
+.format-german .education-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1mm;
+  font-size: 1.05em;
+}
+
+.format-german .education-content {
+  flex: 1;
+}
+
+.format-german .education-school {
+  font-weight: bold;
+}
+
+.format-german .education-degree {
+  font-style: italic;
+  font-weight: normal;
+}
+
+.format-german .education-location {
+  font-style: italic;
+  color: #666;
+}
+
+.format-german .education-date {
+  font-size: 0.9em;
+  color: #666;
+  flex-shrink: 0;
+}
+
+/* German Projects - explicit clickable URLs */
+.format-german .project-item {
+  margin-bottom: 2mm;
+}
+
+.format-german .project-item:last-child {
+  margin-bottom: 1mm;
+}
+
+.format-german .project-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 0.5mm;
+}
+
+.format-german .project-name {
+  font-weight: bold;
+  font-size: 1.05em;
+}
+
+.format-german .project-link {
+  font-size: 1em;
+  color: #0066cc !important;
+  text-decoration: none;
+  margin-left: 4px;
+}
+
+.format-german .project-link:hover {
+  text-decoration: underline;
+}
+
+/* German Languages Section - CEFR levels */
+.format-german .languages-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 1em;
+  margin-top: 1.5mm;
+}
+
+.format-german .language-item {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.format-german .language-name {
+  font-weight: 600;
+}
+
+.format-german .language-level {
+  color: #666;
+}

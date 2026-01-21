@@ -5,6 +5,8 @@ import { generateResumeCSS, GOOGLE_FONTS_LINK } from '@/lib/resumeCSS';
 import { generateResumeHTML } from '@/lib/resumeHTML';
 import { generateResumeCSSRussell, GOOGLE_FONTS_LINK_RUSSELL } from '@/lib/resumeCSSRussell';
 import { generateResumeHTMLRussell } from '@/lib/resumeHTMLRussell';
+import { generateResumeCSSGerman, GOOGLE_FONTS_LINK_GERMAN } from '@/lib/resumeCSSGerman';
+import { generateResumeHTMLGerman } from '@/lib/resumeHTMLGerman';
 
 export async function POST(request: NextRequest) {
     try {
@@ -41,8 +43,10 @@ export async function POST(request: NextRequest) {
         let filename: string;
 
         if (format === 'pdf') {
+            // Use A4 for German format, Letter for others
+            const isGerman = data.rendering.format === 'german';
             output = await page.pdf({
-                format: 'Letter',
+                format: isGerman ? 'A4' : 'Letter',
                 printBackground: true,
                 margin: { top: 0, right: 0, bottom: 0, left: 0 },
             });
@@ -72,10 +76,26 @@ export async function POST(request: NextRequest) {
 function generateFullHTML(data: ResumeJSON): string {
     const { rendering } = data;
     const isRussell = rendering.format === 'russell';
+    const isGerman = rendering.format === 'german';
 
-    const css = isRussell ? generateResumeCSSRussell(rendering) : generateResumeCSS(rendering);
-    const bodyHtml = isRussell ? generateResumeHTMLRussell(data) : generateResumeHTML(data);
-    const fontsLink = isRussell ? GOOGLE_FONTS_LINK_RUSSELL : GOOGLE_FONTS_LINK;
+    // Select CSS/HTML generators based on format
+    const css = isGerman
+        ? generateResumeCSSGerman(rendering)
+        : isRussell
+            ? generateResumeCSSRussell(rendering)
+            : generateResumeCSS(rendering);
+
+    const bodyHtml = isGerman
+        ? generateResumeHTMLGerman(data)
+        : isRussell
+            ? generateResumeHTMLRussell(data)
+            : generateResumeHTML(data);
+
+    const fontsLink = isGerman
+        ? GOOGLE_FONTS_LINK_GERMAN
+        : isRussell
+            ? GOOGLE_FONTS_LINK_RUSSELL
+            : GOOGLE_FONTS_LINK;
 
     return `
 <!DOCTYPE html>

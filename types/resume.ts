@@ -17,6 +17,7 @@ export interface Basics {
   phone: string;
   links: Link[];
   locationLine?: string;
+  workAuthorization?: string;  // German format: e.g., "EU Work Permit | Open to Relocation"
 }
 
 export interface SkillGroup {
@@ -50,6 +51,9 @@ export interface Education {
   school: string;
   degree: string;
   dates?: string;
+  location?: string;   // German format: e.g., "Chicago, USA"
+  startDate?: string;  // German format: for explicit timeline
+  endDate?: string;    // German format: for explicit timeline
 }
 
 export interface SummarySection {
@@ -58,12 +62,19 @@ export interface SummarySection {
   heading?: string;
 }
 
+// German format: Language proficiency entry
+export interface LanguageEntry {
+  language: string;
+  proficiency: string;  // e.g., "C1", "Native", "B2 (CEFR)"
+}
+
 export interface Sections {
   summary?: SummarySection;
   skills: SkillsSection;
   experience: Experience[];
   projects: Project[];
   education: Education[];
+  languages?: LanguageEntry[];  // German format: optional languages section
 }
 
 export interface RenderingConfig {
@@ -73,7 +84,7 @@ export interface RenderingConfig {
   monoFontFamily: string;
   pageSize: 'LETTER' | 'A4';
   density: 'COMPACT' | 'NORMAL' | 'SPACIOUS';
-  format?: 'classic' | 'russell';
+  format?: 'classic' | 'russell' | 'german';
 }
 
 export interface ResumeJSON {
