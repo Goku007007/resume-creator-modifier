@@ -23,8 +23,12 @@ export async function POST(request: NextRequest) {
         const browser = await chromium.launch();
         const page = await browser.newPage();
 
-        // Set viewport to letter size
-        await page.setViewportSize({ width: 816, height: 1056 });
+        // Set viewport based on page size - A4 for German, Letter for others
+        const isGerman = data.rendering.format === 'german';
+        // A4 at 96 DPI: 794 × 1123 pixels, Letter at 96 DPI: 816 × 1056 pixels
+        const viewportWidth = isGerman ? 794 : 816;
+        const viewportHeight = isGerman ? 1123 : 1056;
+        await page.setViewportSize({ width: viewportWidth, height: viewportHeight });
 
         // Load the HTML
         await page.setContent(html, { waitUntil: 'networkidle' });
