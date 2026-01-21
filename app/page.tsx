@@ -361,12 +361,13 @@ export default function Home() {
               value={resumeData.rendering.format || 'russell'}
               onChange={(e) => setResumeData(prev => ({
                 ...prev,
-                rendering: { ...prev.rendering, format: e.target.value as 'classic' | 'russell' }
+                rendering: { ...prev.rendering, format: e.target.value as 'classic' | 'russell' | 'german' }
               }))}
               className="bg-gray-800 border border-gray-600 rounded-lg px-2 py-1.5 text-sm text-white focus:border-blue-500 focus:outline-none cursor-pointer"
             >
               <option value="classic">Classic</option>
               <option value="russell">Russell</option>
+              <option value="german">German (A4)</option>
             </select>
           </div>
 

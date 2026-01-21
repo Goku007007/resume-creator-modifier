@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ResumeJSON, SkillGroup, Experience, Project, Education, Link } from '@/types/resume';
+import { ResumeJSON, SkillGroup, Experience, Project, Education, Link, LanguageEntry } from '@/types/resume';
 import ConfirmDialog from '@/components/ConfirmDialog/ConfirmDialog';
 
 interface EditorPanelProps {
@@ -558,6 +558,24 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
                                     />
                                 </div>
                             ))}
+                            {/* German Format: Work Authorization */}
+                            {data.rendering.format === 'german' && (
+                                <div className="mt-3 border-t border-gray-700 pt-3">
+                                    <label className="block text-sm text-gray-400 mb-1">
+                                        Work Authorization <span className="text-xs text-blue-400">(German format)</span>
+                                    </label>
+                                    <input
+                                        id="input-basics-workAuthorization"
+                                        type="text"
+                                        value={data.basics.workAuthorization || ''}
+                                        onChange={(e) => updateBasics('workAuthorization', e.target.value)}
+                                        onFocus={() => onSectionFocus?.('contact')}
+                                        placeholder="e.g., EU Work Permit | Open to Relocation"
+                                        className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                                    />
+                                    <p className="text-xs text-gray-500 mt-1">Displayed under your name for German recruiters</p>
+                                </div>
+                            )}
                         </div>
                     </AccordionSection>
 
@@ -899,12 +917,122 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
                                         className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
                                     />
                                 </div>
+                                {/* German Format: Extra Education Fields */}
+                                {data.rendering.format === 'german' && (
+                                    <div className="grid grid-cols-3 gap-2 mt-2">
+                                        <input
+                                            id={`input-education-${eduIdx}-location`}
+                                            type="text"
+                                            value={edu.location || ''}
+                                            onChange={(e) => updateEducation(eduIdx, 'location', e.target.value)}
+                                            onFocus={() => onSectionFocus?.('education')}
+                                            placeholder="City, Country"
+                                            className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
+                                        />
+                                        <input
+                                            id={`input-education-${eduIdx}-startDate`}
+                                            type="text"
+                                            value={edu.startDate || ''}
+                                            onChange={(e) => updateEducation(eduIdx, 'startDate', e.target.value)}
+                                            onFocus={() => onSectionFocus?.('education')}
+                                            placeholder="Start (e.g., Aug 2023)"
+                                            className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
+                                        />
+                                        <input
+                                            id={`input-education-${eduIdx}-endDate`}
+                                            type="text"
+                                            value={edu.endDate || ''}
+                                            onChange={(e) => updateEducation(eduIdx, 'endDate', e.target.value)}
+                                            onFocus={() => onSectionFocus?.('education')}
+                                            placeholder="End (e.g., May 2025)"
+                                            className="bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
+                                        />
+                                    </div>
+                                )}
                             </div>
                         ))}
                         {data.sections.education.length === 0 && (
                             <p className="text-sm text-gray-500 italic">No education entries yet.</p>
                         )}
                     </AccordionSection>
+
+                    {/* Languages Section - German Format Only */}
+                    {data.rendering.format === 'german' && (
+                        <AccordionSection
+                            id="languages"
+                            title="Languages"
+                            icon="skills"
+                            count={data.sections.languages?.length || 0}
+                            summary={data.sections.languages?.map(l => l.language).join(', ') || 'No languages added'}
+                            isExpanded={expandedSections.languages || false}
+                            onToggle={() => toggleSection('languages')}
+                            onAdd={() => {
+                                const newLanguages = [...(data.sections.languages || []), { language: '', proficiency: '' }];
+                                onChange({
+                                    ...data,
+                                    sections: { ...data.sections, languages: newLanguages },
+                                    profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+                                });
+                            }}
+                            addLabel="Add Language"
+                        >
+                            {(data.sections.languages || []).map((lang, langIdx) => (
+                                <div key={langIdx} className="group/lang bg-gray-800/40 rounded-lg p-3 border border-gray-800 flex items-center gap-2">
+                                    <input
+                                        id={`input-languages-${langIdx}-language`}
+                                        type="text"
+                                        value={lang.language}
+                                        onChange={(e) => {
+                                            const newLanguages = [...(data.sections.languages || [])];
+                                            newLanguages[langIdx] = { ...newLanguages[langIdx], language: e.target.value };
+                                            onChange({
+                                                ...data,
+                                                sections: { ...data.sections, languages: newLanguages },
+                                                profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+                                            });
+                                        }}
+                                        placeholder="Language (e.g., English)"
+                                        className="flex-1 bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
+                                    />
+                                    <input
+                                        id={`input-languages-${langIdx}-proficiency`}
+                                        type="text"
+                                        value={lang.proficiency}
+                                        onChange={(e) => {
+                                            const newLanguages = [...(data.sections.languages || [])];
+                                            newLanguages[langIdx] = { ...newLanguages[langIdx], proficiency: e.target.value };
+                                            onChange({
+                                                ...data,
+                                                sections: { ...data.sections, languages: newLanguages },
+                                                profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+                                            });
+                                        }}
+                                        placeholder="Level (e.g., C2, Native)"
+                                        className="flex-1 bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
+                                    />
+                                    <button
+                                        onClick={() => {
+                                            const newLanguages = (data.sections.languages || []).filter((_, i) => i !== langIdx);
+                                            onChange({
+                                                ...data,
+                                                sections: { ...data.sections, languages: newLanguages },
+                                                profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+                                            });
+                                        }}
+                                        className="opacity-0 group-hover/lang:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10"
+                                        title="Remove language"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            ))}
+                            {(!data.sections.languages || data.sections.languages.length === 0) && (
+                                <p className="text-sm text-gray-500 italic">No languages added. Click "+ Add Language" to add CEFR language proficiencies.</p>
+                            )}
+                        </AccordionSection>
+                    )}
                 </div>
             </div>
 
