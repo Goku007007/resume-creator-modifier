@@ -50,9 +50,22 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
             'Geist Mono': "'Geist Mono', 'Andale Mono', 'Courier New', monospace",
             'Andale Mono': "'Andale Mono', 'Courier New', monospace",
             'Computer Modern': "'Computer Modern Serif', serif",
+            'Computer Modern Thick1': "'Computer Modern Serif', serif",
+            'Computer Modern Thick2': "'Computer Modern Serif', serif",
+            'Computer Modern Thick3': "'Computer Modern Serif', serif",
             'Computer Modern Concrete': "'Computer Modern Concrete', serif",
         };
         return fontMap[font] || font;
+    };
+
+    // Get text stroke for thick variants (simulates thicker text since CM font doesn't have intermediate weights)
+    const getTextStroke = (font: string): string | undefined => {
+        const strokeMap: Record<string, string> = {
+            'Computer Modern Thick1': '0.05px currentColor',
+            'Computer Modern Thick2': '0.1px currentColor',
+            'Computer Modern Thick3': '0.15px currentColor',
+        };
+        return strokeMap[font];
     };
 
     return (
@@ -67,7 +80,8 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                     style={{
                         fontFamily: getFontFamily(rendering.fontFamily),
                         fontSize: `${rendering.fontSize || 11}pt`,
-                        lineHeight: rendering.lineHeight || 1.15
+                        lineHeight: rendering.lineHeight || 1.15,
+                        WebkitTextStroke: getTextStroke(rendering.fontFamily)
                     }}
                 >
                     {/* Header */}

@@ -5,36 +5,47 @@
 import { RenderingConfig } from '@/types/resume';
 
 export function getFontFamilyCSSGerman(fontFamily: string): string {
-    const fontMap: Record<string, string> = {
-        'Times New Roman': "'Times New Roman', Times, serif",
-        'Georgia': "Georgia, 'Times New Roman', serif",
-        'Garamond': "'EB Garamond', Garamond, serif",
-        'Arial': "Arial, Helvetica, sans-serif",
-        'Helvetica': "Helvetica, Arial, sans-serif",
-        'Calibri': "Carlito, Calibri, sans-serif",
-        'Geist Mono': "'Geist Mono', 'Andale Mono', 'Courier New', monospace",
-        'Andale Mono': "'Andale Mono', 'Courier New', monospace",
-        'Computer Modern': "'Computer Modern Serif', serif",
-        'Computer Modern Concrete': "'Computer Modern Concrete', serif",
-        'Source Sans Pro': "'Source Sans 3', 'Source Sans Pro', Arial, sans-serif",
-    };
-    return fontMap[fontFamily] || "'Source Sans 3', 'Source Sans Pro', Arial, sans-serif";
+  const fontMap: Record<string, string> = {
+    'Times New Roman': "'Times New Roman', Times, serif",
+    'Georgia': "Georgia, 'Times New Roman', serif",
+    'Garamond': "'EB Garamond', Garamond, serif",
+    'Arial': "Arial, Helvetica, sans-serif",
+    'Helvetica': "Helvetica, Arial, sans-serif",
+    'Calibri': "Carlito, Calibri, sans-serif",
+    'Geist Mono': "'Geist Mono', 'Andale Mono', 'Courier New', monospace",
+    'Andale Mono': "'Andale Mono', 'Courier New', monospace",
+    'Computer Modern': "'Computer Modern Serif', serif",
+    'Computer Modern Thick1': "'Computer Modern Serif', serif",
+    'Computer Modern Thick2': "'Computer Modern Serif', serif",
+    'Computer Modern Thick3': "'Computer Modern Serif', serif",
+    'Computer Modern Concrete': "'Computer Modern Concrete', serif",
+    'Source Sans Pro': "'Source Sans 3', 'Source Sans Pro', Arial, sans-serif",
+  };
+  return fontMap[fontFamily] || "'Source Sans 3', 'Source Sans Pro', Arial, sans-serif";
 }
 
 export function generateResumeCSSGerman(rendering: RenderingConfig): string {
-    // Use user's font size settings
-    const fontFamily = getFontFamilyCSSGerman(rendering.fontFamily || 'Source Sans Pro');
-    const fontSize = rendering.fontSize || 10;
-    const lineHeight = rendering.lineHeight || 1.15;
-    const bulletMargin = '0';
+  // Use user's font size settings
+  const fontFamily = getFontFamilyCSSGerman(rendering.fontFamily || 'Source Sans Pro');
+  const fontSize = rendering.fontSize || 10;
+  const lineHeight = rendering.lineHeight || 1.15;
+  const bulletMargin = '0';
 
-    // Scale other sizes relative to base font
-    const titleSize = Math.round(fontSize * 1.05 * 10) / 10;
-    const dateSize = Math.round(fontSize * 0.9 * 10) / 10;
-    const nameSize = Math.round(fontSize * 2 * 10) / 10;
-    const authSize = Math.round(fontSize * 0.95 * 10) / 10;
+  // Get text stroke for thick variants (simulates thicker text since CM font doesn't have intermediate weights)
+  const textStrokeMap: Record<string, string> = {
+    'Computer Modern Thick1': '0.05px currentColor',
+    'Computer Modern Thick2': '0.1px currentColor',
+    'Computer Modern Thick3': '0.15px currentColor',
+  };
+  const textStroke = textStrokeMap[rendering.fontFamily] || 'none';
 
-    return `
+  // Scale other sizes relative to base font
+  const titleSize = Math.round(fontSize * 1.05 * 10) / 10;
+  const dateSize = Math.round(fontSize * 0.9 * 10) / 10;
+  const nameSize = Math.round(fontSize * 2 * 10) / 10;
+  const authSize = Math.round(fontSize * 0.95 * 10) / 10;
+
+  return `
 
     @import url('https://cdn.jsdelivr.net/gh/bitmaks/cm-web-fonts@latest/fonts.css');
     
@@ -54,6 +65,7 @@ export function generateResumeCSSGerman(rendering: RenderingConfig): string {
       font-family: ${fontFamily};
       font-size: ${fontSize}pt;
       line-height: ${lineHeight};
+      -webkit-text-stroke: ${textStroke};
       color: #000;
       background: white;
     }

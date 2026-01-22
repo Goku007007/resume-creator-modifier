@@ -13,6 +13,11 @@ export function getFontFamilyCSS(fontFamily: string): string {
     'Calibri': "Carlito, Calibri, sans-serif",
     'Geist Mono': "'Geist Mono', 'Andale Mono', 'Courier New', monospace",
     'Andale Mono': "'Andale Mono', 'Courier New', monospace",
+    'Computer Modern': "'Computer Modern Serif', serif",
+    'Computer Modern Thick1': "'Computer Modern Serif', serif",
+    'Computer Modern Thick2': "'Computer Modern Serif', serif",
+    'Computer Modern Thick3': "'Computer Modern Serif', serif",
+    'Computer Modern Concrete': "'Computer Modern Concrete', serif",
   };
   return fontMap[fontFamily] || "'Times New Roman', Times, serif";
 }
@@ -23,7 +28,17 @@ export function generateResumeCSS(rendering: RenderingConfig): string {
   const lineHeight = rendering.lineHeight || 1.15;
   const bulletMargin = rendering.density === 'COMPACT' ? '0' : '1px';
 
+  // Get text stroke for thick variants (simulates thicker text since CM font doesn't have intermediate weights)
+  const textStrokeMap: Record<string, string> = {
+    'Computer Modern Thick1': '0.05px currentColor',
+    'Computer Modern Thick2': '0.1px currentColor',
+    'Computer Modern Thick3': '0.15px currentColor',
+  };
+  const textStroke = textStrokeMap[rendering.fontFamily] || 'none';
+
   return `
+    @import url('https://cdn.jsdelivr.net/gh/bitmaks/cm-web-fonts@latest/fonts.css');
+    
     * {
       margin: 0;
       padding: 0;
@@ -39,6 +54,7 @@ export function generateResumeCSS(rendering: RenderingConfig): string {
       font-family: ${fontFamily};
       font-size: ${fontSize}pt;
       line-height: ${lineHeight};
+      -webkit-text-stroke: ${textStroke};
       color: #000;
       background: white;
     }

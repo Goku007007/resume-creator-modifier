@@ -15,6 +15,9 @@ export function getFontFamilyCSS(fontFamily: string): string {
     'Geist Mono': "'Geist Mono', 'Andale Mono', 'Courier New', monospace",
     'Andale Mono': "'Andale Mono', 'Courier New', monospace",
     'Computer Modern': "'Computer Modern Serif', serif",
+    'Computer Modern Thick1': "'Computer Modern Serif', serif",
+    'Computer Modern Thick2': "'Computer Modern Serif', serif",
+    'Computer Modern Thick3': "'Computer Modern Serif', serif",
     'Computer Modern Concrete': "'Computer Modern Concrete', serif",
     'Source Sans Pro': "'Source Sans 3', 'Source Sans Pro', Arial, sans-serif",
   };
@@ -27,6 +30,14 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
   const fontSize = rendering.fontSize || 10;
   const lineHeight = rendering.lineHeight || 1.15;
   const bulletMargin = '0'; // Match preview behavior
+
+  // Get text stroke for thick variants (simulates thicker text since CM font doesn't have intermediate weights)
+  const textStrokeMap: Record<string, string> = {
+    'Computer Modern Thick1': '0.05px currentColor',
+    'Computer Modern Thick2': '0.1px currentColor',
+    'Computer Modern Thick3': '0.15px currentColor',
+  };
+  const textStroke = textStrokeMap[rendering.fontFamily] || 'none';
 
   // Scale other sizes relative to base font
   const titleSize = Math.round(fontSize * 1.05 * 10) / 10;
@@ -52,6 +63,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
       font-family: ${fontFamily};
       font-size: ${fontSize}pt;
       line-height: ${lineHeight};
+      -webkit-text-stroke: ${textStroke};
       color: #000;
       background: white;
     }
