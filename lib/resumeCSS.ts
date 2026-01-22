@@ -37,7 +37,7 @@ export function generateResumeCSS(rendering: RenderingConfig): string {
   const textStroke = textStrokeMap[rendering.fontFamily] || 'none';
 
   // Only import Computer Modern fonts if they're being used (saves ~500KB in PDF size)
-  const isComputerModern = rendering.fontFamily.startsWith('Computer Modern');
+  const isComputerModern = rendering.fontFamily?.startsWith('Computer Modern') ?? false;
   const fontImport = isComputerModern
     ? "@import url('https://cdn.jsdelivr.net/gh/bitmaks/cm-web-fonts@latest/fonts.css');"
     : '';
