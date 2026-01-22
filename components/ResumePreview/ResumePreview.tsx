@@ -94,14 +94,14 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                         <h1 className="resume-name">{basics.name}</h1>
                     </header>
 
-                    {/* Location Line - Russell and German formats */}
-                    {(rendering.format === 'russell' || rendering.format === 'german') && basics.locationLine && (
-                        <div className="resume-location">{basics.locationLine}</div>
-                    )}
-
                     {/* Work Authorization Line - German format only (recruiters screen for this first) */}
                     {rendering.format === 'german' && basics.workAuthorization && (
                         <div className="work-authorization">{basics.workAuthorization}</div>
+                    )}
+
+                    {/* Location Line - Russell and German formats */}
+                    {(rendering.format === 'russell' || rendering.format === 'german') && basics.locationLine && (
+                        <div className="resume-location">{basics.locationLine}</div>
                     )}
 
                     {/* Contact Line */}
@@ -179,7 +179,7 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                         </div>
                     )}
 
-                    {rendering.format !== 'russell' && (
+                    {rendering.format !== 'russell' && rendering.format !== 'german' && (
                         /* Classic: Skills Section first */
                         <section
                             className={`resume-section ${getHighlightClass('skills')}`}
@@ -200,8 +200,8 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                         </section>
                     )}
 
-                    {rendering.format === 'russell' && (
-                        /* Russell: Skills Section first */
+                    {(rendering.format === 'russell' || rendering.format === 'german') && (
+                        /* Russell/German: Skills Section in tabular format */
                         <section
                             className={`resume-section ${getHighlightClass('skills')}`}
                             data-section="skills"
@@ -227,12 +227,12 @@ export default function ResumePreview({ data, scale = 1, highlightedSection, onS
                         onClick={(e) => handleSectionClick(e, 'experience')}
                         title="Edit Experience"
                     >
-                        <h2 className="section-header">{rendering.format === 'russell' ? 'EXPERIENCE' : 'Experience'}</h2>
+                        <h2 className="section-header">{(rendering.format === 'russell' || rendering.format === 'german') ? 'EXPERIENCE' : 'Experience'}</h2>
                         {sections.experience.map((exp: Experience, idx: number) => (
                             <div className="experience-item" key={idx}>
                                 <div className="experience-header">
-                                    {rendering.format === 'russell' ? (
-                                        // Russell format: Company, Position | Location
+                                    {(rendering.format === 'russell' || rendering.format === 'german') ? (
+                                        // Russell/German format: Company, Position | Location
                                         <span className="experience-title-line">
                                             <span className="experience-company" onClick={(e) => handleSectionClick(e, 'experience', 'company', idx)}>{exp.company}</span>
                                             <span className="comma">, </span>
