@@ -45,9 +45,15 @@ export function generateResumeCSSGerman(rendering: RenderingConfig): string {
   const nameSize = Math.round(fontSize * 2 * 10) / 10;
   const authSize = Math.round(fontSize * 0.95 * 10) / 10;
 
+  // Only import Computer Modern fonts if they're being used (saves ~500KB in PDF size)
+  const isComputerModern = rendering.fontFamily.startsWith('Computer Modern');
+  const fontImport = isComputerModern
+    ? "@import url('https://cdn.jsdelivr.net/gh/bitmaks/cm-web-fonts@latest/fonts.css');"
+    : '';
+
   return `
 
-    @import url('https://cdn.jsdelivr.net/gh/bitmaks/cm-web-fonts@latest/fonts.css');
+    ${fontImport}
     
     * {
       margin: 0;
