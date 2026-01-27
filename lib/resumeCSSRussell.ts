@@ -31,6 +31,11 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
   const lineHeight = rendering.lineHeight || 1.15;
   const bulletMargin = '0'; // Match preview behavior
 
+  // Check for 2-page format
+  const isTwoPage = rendering.format?.includes('2page') ?? false;
+  const pageHeight = isTwoPage ? '22in' : '11in'; // US Letter doubled is 22in
+  const minHeight = isTwoPage ? '22in' : '11in';
+
   // Get text stroke for thick variants (simulates thicker text since CM font doesn't have intermediate weights)
   const textStrokeMap: Record<string, string> = {
     'Computer Modern Thick1': '0.05px currentColor',
@@ -62,7 +67,7 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     
     @page {
       size: letter;
-      margin: 0;
+      margin: ${isTwoPage ? '0.35in 0.4in' : '0'};
     }
     
     body {
@@ -77,11 +82,11 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     /* Russell page margins: 0.4in left/right, 0.35in top/bottom */
     .resume-page.format-russell {
       width: 8.5in;
-      min-height: 11in;
-      max-height: 11in;
-      padding: 0.35in 0.4in;
+      ${isTwoPage ? '' : `min-height: ${minHeight};`}
+      ${isTwoPage ? '' : `max-height: ${pageHeight};`}
+      padding: ${isTwoPage ? '0' : '0.35in 0.4in'};
       background: white;
-      overflow: hidden;
+      overflow: ${isTwoPage ? 'visible' : 'hidden'};
       position: relative;
       box-sizing: border-box;
     }
@@ -208,16 +213,16 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     }
     
     .format-russell .experience-company {
-      font-weight: bold;
+      font-weight: normal;
     }
-    
+
     .format-russell .comma {
       font-weight: normal;
     }
     
     .format-russell .experience-position {
-      font-style: italic;
-      font-weight: normal;
+      font-style: normal;
+      font-weight: bold;
     }
     
     .format-russell .location-separator {
@@ -279,12 +284,12 @@ export function generateResumeCSSRussell(rendering: RenderingConfig): string {
     }
     
     .format-russell .education-school {
-      font-weight: bold;
-    }
-    
-    .format-russell .education-degree {
-      font-style: italic;
       font-weight: normal;
+    }
+
+    .format-russell .education-degree {
+      font-style: normal;
+      font-weight: bold;
     }
     
     .format-russell .education-date {

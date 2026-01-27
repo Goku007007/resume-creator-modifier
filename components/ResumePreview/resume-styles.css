@@ -206,11 +206,11 @@
 }
 
 .education-school {
-  font-weight: bold;
+  font-weight: normal;
 }
 
 .education-degree {
-  font-weight: normal;
+  font-weight: bold;
 }
 
 /* Print styles */
@@ -439,7 +439,7 @@
 }
 
 .format-russell .experience-company {
-  font-weight: bold;
+  font-weight: normal;
 }
 
 .format-russell .comma {
@@ -447,8 +447,8 @@
 }
 
 .format-russell .experience-position {
-  font-style: italic;
-  font-weight: normal;
+  font-style: normal;
+  font-weight: bold;
 }
 
 .format-russell .location-separator {
@@ -504,12 +504,12 @@
 }
 
 .format-russell .education-school {
-  font-weight: bold;
+  font-weight: normal;
 }
 
 .format-russell .education-degree {
-  font-style: italic;
-  font-weight: normal;
+  font-style: normal;
+  font-weight: bold;
 }
 
 .format-russell .education-date {
@@ -683,7 +683,7 @@
 }
 
 .format-german .experience-company {
-  font-weight: bold;
+  font-weight: normal;
 }
 
 .format-german .comma {
@@ -691,8 +691,8 @@
 }
 
 .format-german .experience-position {
-  font-style: italic;
-  font-weight: normal;
+  font-style: normal;
+  font-weight: bold;
 }
 
 .format-german .location-separator {
@@ -748,12 +748,12 @@
 }
 
 .format-german .education-school {
-  font-weight: bold;
+  font-weight: normal;
 }
 
 .format-german .education-degree {
-  font-style: italic;
-  font-weight: normal;
+  font-style: normal;
+  font-weight: bold;
 }
 
 .format-german .education-location {

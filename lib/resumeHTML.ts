@@ -1,10 +1,11 @@
 // Shared Resume HTML Generator
 // Single source of truth for resume HTML structure
 
-import { ResumeJSON } from '@/types/resume';
+import { ResumeJSON, SectionKey } from '@/types/resume';
 import { preventWidows } from '@/lib/utils/text';
 import { parseBoldMarkdown } from '@/lib/utils/formatBoldText';
 import { formatUrlForDisplay } from '@/lib/utils/url';
+import { normalizeSectionOrder } from '@/lib/utils/sectionOrder';
 
 function formatDateRange(start: string, end: string | null): string {
   return `${start} - ${end || 'Present'}`;
@@ -28,7 +29,7 @@ export function generateResumeHTML(data: ResumeJSON): string {
 
   const skillsHtml = sections.skills.groups
     .map((group, idx) =>
-      `<span><span class="skill-label">${escapeHtml(group.label)}:</span> <span class="skill-items">${escapeHtml(group.items.join(', '))}</span>${idx < sections.skills.groups.length - 1 ? ' ' : ''}</span>`
+      `<span><span class="skill-label">${escapeHtml(group.label)}:</span> <span class="skill-items">${group.items.map((item) => parseBoldMarkdown(item)).join(', ')}</span>${idx < sections.skills.groups.length - 1 ? ' ' : ''}</span>`
     )
     .join('');
 
@@ -41,7 +42,7 @@ export function generateResumeHTML(data: ResumeJSON): string {
         </div>
         ${exp.description ? `<div class="experience-description">${escapeHtml(exp.description)}</div>` : ''}
         <ul class="bullet-list">
-          ${exp.bullets.map(bullet => `<li>${escapeHtml(preventWidows(bullet))}</li>`).join('')}
+          ${exp.bullets.map(bullet => `<li>${parseBoldMarkdown(preventWidows(bullet))}</li>`).join('')}
         </ul>
       </div>
     `)
@@ -55,7 +56,7 @@ export function generateResumeHTML(data: ResumeJSON): string {
           ${proj.link ? `<span class="project-link"><a href="${escapeHtml(proj.link)}">Github</a></span>` : ''}
         </div>
         <ul class="bullet-list">
-          ${proj.bullets.map(bullet => `<li>${escapeHtml(preventWidows(bullet))}</li>`).join('')}
+          ${proj.bullets.map(bullet => `<li>${parseBoldMarkdown(preventWidows(bullet))}</li>`).join('')}
         </ul>
       </div>
     `)
@@ -68,6 +69,39 @@ export function generateResumeHTML(data: ResumeJSON): string {
       </div>
     `)
     .join('');
+
+  const sectionOrder = normalizeSectionOrder(data.rendering.sectionOrder, data.rendering.format, false);
+  const sectionBlocks: Record<SectionKey, string> = {
+    skills: `
+      <section class="resume-section">
+        <h2 class="section-header">${escapeHtml(sections.skills.heading)}</h2>
+        <div class="skills-content-inline">
+          ${skillsHtml}
+        </div>
+      </section>
+    `,
+    experience: `
+      <section class="resume-section">
+        <h2 class="section-header">Experience</h2>
+        ${experienceHtml}
+      </section>
+    `,
+    projects: `
+      <section class="resume-section">
+        <h2 class="section-header">Projects</h2>
+        ${projectsHtml}
+      </section>
+    `,
+    education: `
+      <section class="resume-section">
+        <h2 class="section-header">Education</h2>
+        ${educationHtml}
+      </section>
+    `,
+    languages: '',
+  };
+
+  const orderedSectionsHtml = sectionOrder.map((key) => sectionBlocks[key] || '').join('');
 
   return `
     <div class="resume-page">
@@ -88,27 +122,7 @@ export function generateResumeHTML(data: ResumeJSON): string {
       </div>
       ` : ''}
 
-      <section class="resume-section">
-        <h2 class="section-header">${escapeHtml(sections.skills.heading)}</h2>
-        <div class="skills-content-inline">
-          ${skillsHtml}
-        </div>
-      </section>
-      
-      <section class="resume-section">
-        <h2 class="section-header">Experience</h2>
-        ${experienceHtml}
-      </section>
-      
-      <section class="resume-section">
-        <h2 class="section-header">Projects</h2>
-        ${projectsHtml}
-      </section>
-      
-      <section class="resume-section">
-        <h2 class="section-header">Education</h2>
-        ${educationHtml}
-      </section>
+      ${orderedSectionsHtml}
     </div>
   `;
 }

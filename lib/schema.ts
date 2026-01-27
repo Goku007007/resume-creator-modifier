@@ -110,6 +110,10 @@ const resumeSchema = {
                 monoFontFamily: { type: 'string' },
                 pageSize: { type: 'string', enum: ['LETTER', 'A4'] },
                 density: { type: 'string', enum: ['COMPACT', 'NORMAL', 'SPACIOUS'] },
+                sectionOrder: {
+                    type: 'array',
+                    items: { type: 'string', enum: ['skills', 'experience', 'projects', 'education', 'languages'] },
+                },
             },
         },
     },

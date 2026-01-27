@@ -31,6 +31,12 @@ export function generateResumeCSSGerman(rendering: RenderingConfig): string {
   const lineHeight = rendering.lineHeight || 1.15;
   const bulletMargin = '0';
 
+  // Check for 2-page format
+  const isTwoPage = rendering.format?.includes('2page') ?? false;
+  // A4 Page Height is 297mm. 2 pages = 594mm.
+  const pageHeight = isTwoPage ? '594mm' : '297mm';
+  const minHeight = isTwoPage ? '594mm' : '297mm';
+
   // Get text stroke for thick variants (simulates thicker text since CM font doesn't have intermediate weights)
   const textStrokeMap: Record<string, string> = {
     'Computer Modern Thick1': '0.05px currentColor',
@@ -64,7 +70,7 @@ export function generateResumeCSSGerman(rendering: RenderingConfig): string {
     /* A4 page size for German applications */
     @page {
       size: A4;
-      margin: 0;
+      margin: ${isTwoPage ? '7mm 8mm' : '0'};
     }
     
     body {
@@ -79,11 +85,11 @@ export function generateResumeCSSGerman(rendering: RenderingConfig): string {
     /* German page: A4 size (210mm × 297mm) */
     .resume-page.format-german {
       width: 210mm;
-      min-height: 297mm;
-      max-height: 297mm;
-      padding: 7mm 8mm;
+      ${isTwoPage ? '' : `min-height: ${minHeight};`}
+      ${isTwoPage ? '' : `max-height: ${pageHeight};`}
+      padding: ${isTwoPage ? '0' : '7mm 8mm'};
       background: white;
-      overflow: hidden;
+      overflow: ${isTwoPage ? 'visible' : 'hidden'};
       position: relative;
       box-sizing: border-box;
     }
@@ -219,7 +225,7 @@ export function generateResumeCSSGerman(rendering: RenderingConfig): string {
     }
     
     .format-german .experience-company {
-      font-weight: bold;
+      font-weight: normal;
     }
     
     .format-german .comma {
@@ -227,8 +233,8 @@ export function generateResumeCSSGerman(rendering: RenderingConfig): string {
     }
     
     .format-german .experience-position {
-      font-style: italic;
-      font-weight: normal;
+      font-style: normal;
+      font-weight: bold;
     }
     
     .format-german .location-separator {
@@ -290,12 +296,12 @@ export function generateResumeCSSGerman(rendering: RenderingConfig): string {
     }
     
     .format-german .education-school {
-      font-weight: bold;
+      font-weight: normal;
     }
     
     .format-german .education-degree {
-      font-style: italic;
-      font-weight: normal;
+      font-style: normal;
+      font-weight: bold;
     }
     
     .format-german .education-location {

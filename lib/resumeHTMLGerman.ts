@@ -1,11 +1,12 @@
 // German Format HTML Generator
 // Optimized for German HR conventions
-// Section Order: Summary → Skills → Experience → Projects → Education → Languages
+// Section order is user-configurable (default: Skills → Experience → Projects → Education → Languages)
 
-import { ResumeJSON } from '@/types/resume';
+import { ResumeJSON, SectionKey } from '@/types/resume';
 import { preventWidows } from '@/lib/utils/text';
 import { parseBoldMarkdown } from '@/lib/utils/formatBoldText';
 import { formatUrlForDisplay } from '@/lib/utils/url';
+import { normalizeSectionOrder } from '@/lib/utils/sectionOrder';
 
 function formatDateRange(start: string, end: string | null): string {
     return `${start} - ${end || 'Present'}`;
@@ -58,7 +59,7 @@ export function generateResumeHTMLGerman(data: ResumeJSON): string {
         .map(group =>
             `<div class="skills-row">
         <span class="skill-label">${escapeHtml(group.label)}</span>
-        <span class="skill-items">${escapeHtml(group.items.join(', '))}</span>
+        <span class="skill-items">${group.items.map((item) => parseBoldMarkdown(item)).join(', ')}</span>
       </div>`
         )
         .join('');
@@ -78,7 +79,7 @@ export function generateResumeHTMLGerman(data: ResumeJSON): string {
         </div>
         ${exp.description ? `<div class="experience-description">${escapeHtml(exp.description)}</div>` : ''}
         <ul class="bullet-list">
-          ${exp.bullets.map(bullet => `<li>${escapeHtml(preventWidows(bullet))}</li>`).join('')}
+          ${exp.bullets.map(bullet => `<li>${parseBoldMarkdown(preventWidows(bullet))}</li>`).join('')}
         </ul>
       </div>
     `)
@@ -93,7 +94,7 @@ export function generateResumeHTMLGerman(data: ResumeJSON): string {
           ${proj.link ? `<a href="${escapeHtml(proj.link)}" class="project-link" target="_blank" rel="noopener noreferrer">${escapeHtml(formatUrlForDisplay(proj.link))}</a>` : ''}
         </div>
         <ul class="bullet-list">
-          ${proj.bullets.map(bullet => `<li>${escapeHtml(preventWidows(bullet))}</li>`).join('')}
+          ${proj.bullets.map(bullet => `<li>${parseBoldMarkdown(preventWidows(bullet))}</li>`).join('')}
         </ul>
       </div>
     `)
@@ -116,7 +117,8 @@ export function generateResumeHTMLGerman(data: ResumeJSON): string {
         .join('');
 
     // Languages with CEFR proficiency levels
-    const languagesHtml = sections.languages && sections.languages.length > 0
+    const hasLanguages = sections.languages && sections.languages.length > 0;
+    const languagesHtml = hasLanguages
         ? `
       <section class="resume-section">
         <h2 class="section-header">LANGUAGES</h2>
@@ -132,7 +134,40 @@ export function generateResumeHTMLGerman(data: ResumeJSON): string {
     `
         : '';
 
-    // German format section order: Summary → Skills → Experience → Projects → Education → Languages
+    const sectionOrder = normalizeSectionOrder(data.rendering.sectionOrder, data.rendering.format, !!hasLanguages);
+    const sectionBlocks: Record<SectionKey, string> = {
+        skills: `
+      <section class="resume-section">
+        <h2 class="section-header">SKILLS</h2>
+        <div class="skills-table">
+          ${skillsHtml}
+        </div>
+      </section>
+    `,
+        experience: `
+      <section class="resume-section">
+        <h2 class="section-header">EXPERIENCE</h2>
+        ${experienceHtml}
+      </section>
+    `,
+        projects: `
+      <section class="resume-section">
+        <h2 class="section-header">PROJECTS</h2>
+        ${projectsHtml}
+      </section>
+    `,
+        education: `
+      <section class="resume-section">
+        <h2 class="section-header">EDUCATION</h2>
+        <div class="education-table">
+          ${educationHtml}
+        </div>
+      </section>
+    `,
+        languages: languagesHtml,
+    };
+    const orderedSectionsHtml = sectionOrder.map((key) => sectionBlocks[key] || '').join('');
+
     return `
     <div class="resume-page format-german">
       <!-- Header -->
@@ -157,37 +192,8 @@ export function generateResumeHTMLGerman(data: ResumeJSON): string {
         <div class="summary-content">${parseBoldMarkdown(sections.summary.content)}</div>
       </div>
       ` : ''}
-      
-      <!-- Skills Section -->
-      <section class="resume-section">
-        <h2 class="section-header">SKILLS</h2>
-        <div class="skills-table">
-          ${skillsHtml}
-        </div>
-      </section>
-      
-      <!-- Experience Section -->
-      <section class="resume-section">
-        <h2 class="section-header">EXPERIENCE</h2>
-        ${experienceHtml}
-      </section>
-      
-      <!-- Projects Section -->
-      <section class="resume-section">
-        <h2 class="section-header">PROJECTS</h2>
-        ${projectsHtml}
-      </section>
-      
-      <!-- Education Section -->
-      <section class="resume-section">
-        <h2 class="section-header">EDUCATION</h2>
-        <div class="education-table">
-          ${educationHtml}
-        </div>
-      </section>
-      
-      <!-- Languages Section (German format) -->
-      ${languagesHtml}
+
+      ${orderedSectionsHtml}
     </div>
   `;
 }

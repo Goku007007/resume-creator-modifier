@@ -28,6 +28,11 @@ export function generateResumeCSS(rendering: RenderingConfig): string {
   const lineHeight = rendering.lineHeight || 1.15;
   const bulletMargin = rendering.density === 'COMPACT' ? '0' : '1px';
 
+  // Check for 2-page format
+  const isTwoPage = rendering.format?.includes('2page') ?? false;
+  const pageHeight = isTwoPage ? '22in' : '11in'; // US Letter doubled is 22in
+  const minHeight = isTwoPage ? '22in' : '11in';
+
   // Get text stroke for thick variants (simulates thicker text since CM font doesn't have intermediate weights)
   const textStrokeMap: Record<string, string> = {
     'Computer Modern Thick1': '0.05px currentColor',
@@ -53,7 +58,7 @@ export function generateResumeCSS(rendering: RenderingConfig): string {
     
     @page {
       size: letter;
-      margin: 0;
+      margin: ${isTwoPage ? '0.5in 0.6in' : '0'};
     }
     
     body {
@@ -67,11 +72,11 @@ export function generateResumeCSS(rendering: RenderingConfig): string {
     
     .resume-page {
       width: 8.5in;
-      min-height: 11in;
-      max-height: 11in;
-      padding: 0.5in 0.6in;
+      ${isTwoPage ? '' : `min-height: ${minHeight};`}
+      ${isTwoPage ? '' : `max-height: ${pageHeight};`}
+      padding: ${isTwoPage ? '0' : '0.5in 0.6in'};
       background: white;
-      overflow: hidden;
+      overflow: ${isTwoPage ? 'visible' : 'hidden'};
       position: relative;
       box-sizing: border-box;
     }
@@ -243,11 +248,11 @@ export function generateResumeCSS(rendering: RenderingConfig): string {
     }
     
     .education-school {
-      font-weight: bold;
+      font-weight: normal;
     }
     
     .education-degree {
-      font-weight: normal;
+      font-weight: bold;
     }
   `;
 }

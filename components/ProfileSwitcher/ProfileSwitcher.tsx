@@ -4,7 +4,7 @@ import React from 'react';
 import ConfirmDialog from '@/components/ConfirmDialog/ConfirmDialog';
 
 interface ProfileSwitcherProps {
-    profiles: { id: string; name: string }[];
+    profiles: { id: string; name: string; source?: 'old' | 'new' }[];
     currentProfileId: string;
     onSwitch: (id: string) => void;
     onCreate: () => void;
@@ -30,8 +30,12 @@ export default function ProfileSwitcher({
     const [newName, setNewName] = React.useState('');
     const [saveAsName, setSaveAsName] = React.useState('');
     const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
+    const [showOldList, setShowOldList] = React.useState(true);
+    const [showNewList, setShowNewList] = React.useState(true);
 
     const currentProfile = profiles.find((p) => p.id === currentProfileId);
+    const oldProfiles = profiles.filter((p) => p.source !== 'new');
+    const newProfiles = profiles.filter((p) => p.source === 'new');
 
     const handleRename = () => {
         if (newName.trim()) {
@@ -96,28 +100,98 @@ export default function ProfileSwitcher({
                             <div className="px-3 py-1.5 text-xs font-medium text-gray-500 uppercase tracking-wide">
                                 Switch Profile
                             </div>
-                            {profiles.map((profile) => (
-                                <button
-                                    key={profile.id}
-                                    onClick={() => {
-                                        onSwitch(profile.id);
-                                        setShowMenu(false);
-                                    }}
-                                    className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-700 flex items-center justify-between transition-colors ${profile.id === currentProfileId ? 'bg-gray-700/50 text-blue-400' : 'text-gray-300'
-                                        }`}
+
+                            {/* Old dropdown */}
+                            <button
+                                onClick={() => setShowOldList((prev) => !prev)}
+                                className="w-full flex items-center justify-between px-3 py-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wide hover:bg-gray-700/40"
+                                type="button"
+                            >
+                                <span>Old</span>
+                                <svg
+                                    className={`w-3.5 h-3.5 transition-transform ${showOldList ? 'rotate-90' : ''}`}
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
                                 >
-                                    <span>{profile.name}</span>
-                                    {profile.id === currentProfileId && (
-                                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                fillRule="evenodd"
-                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                clipRule="evenodd"
-                                            />
-                                        </svg>
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                            {showOldList && (
+                                <>
+                                    {oldProfiles.map((profile) => (
+                                        <button
+                                            key={profile.id}
+                                            onClick={() => {
+                                                onSwitch(profile.id);
+                                                setShowMenu(false);
+                                            }}
+                                            className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-700 flex items-center justify-between transition-colors ${profile.id === currentProfileId ? 'bg-gray-700/50 text-blue-400' : 'text-gray-300'
+                                                }`}
+                                        >
+                                            <span>{profile.name}</span>
+                                            {profile.id === currentProfileId && (
+                                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path
+                                                        fillRule="evenodd"
+                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                        clipRule="evenodd"
+                                                    />
+                                                </svg>
+                                            )}
+                                        </button>
+                                    ))}
+                                    {oldProfiles.length === 0 && (
+                                        <div className="px-4 py-2 text-xs text-gray-500">No old profiles</div>
                                     )}
-                                </button>
-                            ))}
+                                </>
+                            )}
+
+                            {/* New dropdown */}
+                            <button
+                                onClick={() => setShowNewList((prev) => !prev)}
+                                className="w-full flex items-center justify-between px-3 py-2 text-[11px] font-semibold text-gray-400 uppercase tracking-wide hover:bg-gray-700/40"
+                                type="button"
+                            >
+                                <span>New (God)</span>
+                                <svg
+                                    className={`w-3.5 h-3.5 transition-transform ${showNewList ? 'rotate-90' : ''}`}
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                            {showNewList && (
+                                <>
+                                    {newProfiles.map((profile) => (
+                                        <button
+                                            key={profile.id}
+                                            onClick={() => {
+                                                onSwitch(profile.id);
+                                                setShowMenu(false);
+                                            }}
+                                            className={`w-full text-left px-4 py-2.5 text-sm hover:bg-gray-700 flex items-center justify-between transition-colors ${profile.id === currentProfileId ? 'bg-gray-700/50 text-blue-400' : 'text-gray-300'
+                                                }`}
+                                        >
+                                            <span>{profile.name}</span>
+                                            {profile.id === currentProfileId && (
+                                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path
+                                                        fillRule="evenodd"
+                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                        clipRule="evenodd"
+                                                    />
+                                                </svg>
+                                            )}
+                                        </button>
+                                    ))}
+                                    {newProfiles.length === 0 && (
+                                        <div className="px-4 py-2 text-xs text-gray-500">No new profiles</div>
+                                    )}
+                                </>
+                            )}
                         </div>
 
                         {/* Save As Section - NEW */}

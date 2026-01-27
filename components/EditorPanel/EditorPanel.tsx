@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { ResumeJSON, SkillGroup, Experience, Project, Education, Link, LanguageEntry } from '@/types/resume';
+import { ResumeJSON, SkillGroup, Experience, Project, Education, Link, LanguageEntry, SectionKey } from '@/types/resume';
 import ConfirmDialog from '@/components/ConfirmDialog/ConfirmDialog';
+import { normalizeSectionOrder } from '@/lib/utils/sectionOrder';
 
 interface EditorPanelProps {
     data: ResumeJSON;
@@ -147,10 +148,28 @@ const SECTIONS = [
     { id: 'education', label: 'Education', icon: 'education' },
 ];
 
+const SECTION_LABELS: Record<SectionKey, string> = {
+    skills: 'Skills',
+    experience: 'Experience',
+    projects: 'Projects',
+    education: 'Education',
+    languages: 'Languages',
+};
+
+const SECTION_ABBR: Record<SectionKey, string> = {
+    skills: 'Sk',
+    experience: 'Ex',
+    projects: 'Pr',
+    education: 'Ed',
+    languages: 'Ln',
+};
+
 export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarget }: EditorPanelProps) {
     const [activeSection, setActiveSection] = React.useState('basics');
     const [deleteConfirm, setDeleteConfirm] = React.useState<{ type: string; index: number; name: string } | null>(null);
     const containerRef = React.useRef<HTMLDivElement>(null);
+    const orderMenuRef = React.useRef<HTMLDivElement>(null);
+    const [isOrderMenuOpen, setIsOrderMenuOpen] = React.useState(false);
 
     // Track which sections are expanded (all expanded by default)
     const [expandedSections, setExpandedSections] = React.useState<Record<string, boolean>>({
@@ -190,6 +209,17 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
         container.addEventListener('scroll', handleScroll);
         return () => container.removeEventListener('scroll', handleScroll);
     }, []);
+
+    React.useEffect(() => {
+        if (!isOrderMenuOpen) return;
+        const handleClickOutside = (event: MouseEvent) => {
+            if (orderMenuRef.current && !orderMenuRef.current.contains(event.target as Node)) {
+                setIsOrderMenuOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [isOrderMenuOpen]);
 
     // Handle scroll target changes from parent
     React.useEffect(() => {
@@ -429,6 +459,20 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
         });
     };
 
+    const moveProject = (index: number, direction: 'up' | 'down') => {
+        const newProjects = [...data.sections.projects];
+        if (direction === 'up' && index > 0) {
+            [newProjects[index], newProjects[index - 1]] = [newProjects[index - 1], newProjects[index]];
+        } else if (direction === 'down' && index < newProjects.length - 1) {
+            [newProjects[index], newProjects[index + 1]] = [newProjects[index + 1], newProjects[index]];
+        }
+        onChange({
+            ...data,
+            sections: { ...data.sections, projects: newProjects },
+            profileMeta: { ...data.profileMeta, updatedAt: new Date().toISOString() },
+        });
+    };
+
     const updateSummary = (field: 'content' | 'heading' | 'visible', value: any) => {
         onChange({
             ...data,
@@ -466,26 +510,130 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
     });
 
     const summaries = getSummaries();
+    const hasLanguages = data.rendering.format?.startsWith('german') && (data.sections.languages?.length ?? 0) > 0;
+    const sectionOrder = normalizeSectionOrder(data.rendering.sectionOrder, data.rendering.format, hasLanguages);
+    const orderLabel = sectionOrder.map((key) => SECTION_ABBR[key]).join(' ');
+
+    const updateSectionOrder = (nextOrder: SectionKey[]) => {
+        onChange({
+            ...data,
+            rendering: { ...data.rendering, sectionOrder: nextOrder },
+        });
+    };
+
+    const moveSection = (key: SectionKey, direction: -1 | 1) => {
+        const currentOrder = normalizeSectionOrder(data.rendering.sectionOrder, data.rendering.format, hasLanguages);
+        const index = currentOrder.indexOf(key);
+        const nextIndex = index + direction;
+        if (index === -1 || nextIndex < 0 || nextIndex >= currentOrder.length) return;
+        const nextOrder = [...currentOrder];
+        [nextOrder[index], nextOrder[nextIndex]] = [nextOrder[nextIndex], nextOrder[index]];
+        updateSectionOrder(nextOrder);
+    };
+
+    const toggleBoldText = (text: string, selectionStart: number, selectionEnd: number) => {
+        if (selectionStart === selectionEnd) {
+            const insert = '****';
+            const nextText = text.slice(0, selectionStart) + insert + text.slice(selectionEnd);
+            const cursor = selectionStart + 2;
+            return { text: nextText, selectionStart: cursor, selectionEnd: cursor };
+        }
+
+        const canUnwrap = selectionStart >= 2 && selectionEnd + 2 <= text.length;
+        if (canUnwrap && text.slice(selectionStart - 2, selectionStart) === '**' && text.slice(selectionEnd, selectionEnd + 2) === '**') {
+            const nextText = text.slice(0, selectionStart - 2) + text.slice(selectionStart, selectionEnd) + text.slice(selectionEnd + 2);
+            return { text: nextText, selectionStart: selectionStart - 2, selectionEnd: selectionEnd - 2 };
+        }
+
+        const nextText = text.slice(0, selectionStart) + '**' + text.slice(selectionStart, selectionEnd) + '**' + text.slice(selectionEnd);
+        return { text: nextText, selectionStart: selectionStart + 2, selectionEnd: selectionEnd + 2 };
+    };
+
+    const handleBoldShortcut = (
+        e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+        currentValue: string,
+        onUpdate: (next: string) => void
+    ) => {
+        if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== 'b') return;
+        e.preventDefault();
+        const target = e.currentTarget;
+        const start = target.selectionStart ?? currentValue.length;
+        const end = target.selectionEnd ?? currentValue.length;
+        const result = toggleBoldText(currentValue, start, end);
+        onUpdate(result.text);
+        requestAnimationFrame(() => {
+            target.focus();
+            target.selectionStart = result.selectionStart;
+            target.selectionEnd = result.selectionEnd;
+        });
+    };
 
     return (
         <>
             <div className="h-full flex flex-col bg-gray-900 text-gray-100">
                 {/* P1-1: Sticky Section Navigation */}
                 <div className="sticky top-0 z-10 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 px-2 py-2">
-                    <div className="flex gap-1">
-                        {SECTIONS.map((section) => (
+                    <div className="flex items-center gap-2">
+                        <div className="flex gap-1">
+                            {SECTIONS.map((section) => (
+                                <button
+                                    key={section.id}
+                                    onClick={() => scrollToSection(section.id)}
+                                    className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg transition-all border ${activeSection === section.id
+                                        ? 'bg-gray-800 text-blue-400 border-gray-700/80 shadow-sm'
+                                        : 'bg-transparent text-gray-500 border-transparent hover:text-gray-300 hover:bg-gray-800/40'
+                                        }`}
+                                >
+                                    <span>{SectionIcons[section.icon as keyof typeof SectionIcons]}</span>
+                                    <span>{section.label}</span>
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="ml-auto relative" ref={orderMenuRef}>
                             <button
-                                key={section.id}
-                                onClick={() => scrollToSection(section.id)}
-                                className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg transition-all border ${activeSection === section.id
-                                    ? 'bg-gray-800 text-blue-400 border-gray-700/80 shadow-sm'
-                                    : 'bg-transparent text-gray-500 border-transparent hover:text-gray-300 hover:bg-gray-800/40'
-                                    }`}
+                                onClick={() => setIsOrderMenuOpen((open) => !open)}
+                                className="flex items-center gap-2 rounded-lg border border-gray-600 bg-gray-800 px-2 py-1.5 text-xs font-semibold text-gray-100 hover:bg-gray-700"
+                                title="Reorder sections"
                             >
-                                <span>{SectionIcons[section.icon as keyof typeof SectionIcons]}</span>
-                                <span>{section.label}</span>
+                                <span>{orderLabel || 'Order'}</span>
+                                <svg className="h-3 w-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
                             </button>
-                        ))}
+
+                            {isOrderMenuOpen && (
+                                <div className="absolute right-0 mt-2 w-52 rounded-lg border border-gray-700 bg-gray-900 p-2 shadow-lg">
+                                    <div className="px-2 pb-1 text-[11px] uppercase tracking-wide text-gray-400">Section Order</div>
+                                    <div className="space-y-1">
+                                        {sectionOrder.map((key, index) => (
+                                            <div key={key} className="flex items-center justify-between rounded-md px-2 py-1 text-xs text-gray-200 hover:bg-gray-800">
+                                                <span>{SECTION_LABELS[key]}</span>
+                                                <div className="flex items-center gap-1">
+                                                    <button
+                                                        onClick={() => moveSection(key, -1)}
+                                                        disabled={index === 0}
+                                                        className="rounded border border-gray-700 px-1 text-[10px] text-gray-300 hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-40"
+                                                        title="Move up"
+                                                    >
+                                                        ↑
+                                                    </button>
+                                                    <button
+                                                        onClick={() => moveSection(key, 1)}
+                                                        disabled={index === sectionOrder.length - 1}
+                                                        className="rounded border border-gray-700 px-1 text-[10px] text-gray-300 hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-40"
+                                                        title="Move down"
+                                                    >
+                                                        ↓
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="px-2 pt-2 text-[11px] text-gray-500">Summary stays on top.</div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
@@ -609,6 +757,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
                                         <textarea
                                             value={data.sections.summary?.content || ''}
                                             onChange={(e) => updateSummary('content', e.target.value)}
+                                            onKeyDown={(e) => handleBoldShortcut(e, data.sections.summary?.content || '', (next) => updateSummary('content', next))}
                                             onFocus={() => onSectionFocus?.('summary')}
                                             placeholder="Write a brief professional summary..."
                                             rows={4}
@@ -636,14 +785,14 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
                         {data.sections.skills.groups.map((group, idx) => (
                             <div key={idx} className="group/card bg-gray-700/50 rounded p-3 relative">
                                 <div className="flex items-center gap-2 mb-2">
-                                    <input
-                                        id={`input-skills-${idx}-label`}
-                                        type="text"
-                                        value={group.label}
-                                        onChange={(e) => updateSkillGroup(idx, 'label', e.target.value)}
-                                        onFocus={() => onSectionFocus?.('skills')}
-                                        className="flex-1 bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
-                                    />
+                                <input
+                                    id={`input-skills-${idx}-label`}
+                                    type="text"
+                                    value={group.label}
+                                    onChange={(e) => updateSkillGroup(idx, 'label', e.target.value)}
+                                    onFocus={() => onSectionFocus?.('skills')}
+                                    className="flex-1 bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-200 placeholder-gray-600 transition-colors"
+                                />
                                     <button
                                         onClick={() => removeSkillGroup(idx)}
                                         className="opacity-0 group-hover/card:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10"
@@ -659,6 +808,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
                                     type="text"
                                     value={group.items.join(', ')}
                                     onChange={(e) => updateSkillGroup(idx, 'items', e.target.value)}
+                                    onKeyDown={(e) => handleBoldShortcut(e, group.items.join(', '), (next) => updateSkillGroup(idx, 'items', next))}
                                     onFocus={() => onSectionFocus?.('skills')}
                                     placeholder="Skills (comma-separated)"
                                     className="w-full bg-gray-900/50 border border-gray-700 rounded-md px-2.5 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20 text-gray-300 placeholder-gray-600 transition-colors"
@@ -772,6 +922,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
                                                 id={`input-experience-${expIdx}-bullets-${bulletIdx}`}
                                                 value={bullet}
                                                 onChange={(e) => updateBullet(expIdx, bulletIdx, e.target.value)}
+                                                onKeyDown={(e) => handleBoldShortcut(e, bullet, (next) => updateBullet(expIdx, bulletIdx, next))}
                                                 onFocus={() => onSectionFocus?.('experience')}
                                                 placeholder="Bullet point..."
                                                 rows={2}
@@ -788,6 +939,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
                                             </button>
                                         </div>
                                     ))}
+                                    <p className="text-xs text-gray-500">Use **text** to bold inside bullets</p>
                                 </div>
                             </div>
                         ))}
@@ -810,20 +962,45 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
                     >
                         {data.sections.projects.map((proj, projIdx) => (
                             <div key={projIdx} className="group/proj bg-gray-800/40 rounded-lg p-4 border border-gray-800 hover:border-gray-700 transition-colors">
+
                                 <div className="flex items-center justify-between mb-3">
                                     <span className="text-sm font-medium text-gray-300 flex items-center gap-2">
                                         <span className="w-1.5 h-1.5 rounded-full bg-blue-500/50"></span>
                                         {proj.name}
                                     </span>
-                                    <button
-                                        onClick={() => setDeleteConfirm({ type: 'project', index: projIdx, name: proj.name })}
-                                        className="opacity-0 group-hover/proj:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10"
-                                        title="Remove project"
-                                    >
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                    </button>
+                                    <div className="flex items-center gap-1">
+                                        {/* Reorder Buttons */}
+                                        <button
+                                            onClick={() => moveProject(projIdx, 'up')}
+                                            disabled={projIdx === 0}
+                                            className="p-1.5 rounded-md hover:bg-gray-700 text-gray-400 hover:text-blue-400 disabled:text-gray-700 disabled:hover:bg-transparent transition-colors"
+                                            title="Move Up"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                                            </svg>
+                                        </button>
+                                        <button
+                                            onClick={() => moveProject(projIdx, 'down')}
+                                            disabled={projIdx === data.sections.projects.length - 1}
+                                            className="p-1.5 rounded-md hover:bg-gray-700 text-gray-400 hover:text-blue-400 disabled:text-gray-700 disabled:hover:bg-transparent transition-colors"
+                                            title="Move Down"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </button>
+                                        {/* Delete Button */}
+                                        <button
+                                            onClick={() => setDeleteConfirm({ type: 'project', index: projIdx, name: proj.name })}
+                                            className="opacity-0 group-hover/proj:opacity-100 transition-opacity text-gray-500 hover:text-red-400 p-1 rounded hover:bg-red-500/10 ml-1"
+                                            title="Remove project"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-2 mb-2">
                                     <input
@@ -861,6 +1038,7 @@ export default function EditorPanel({ data, onChange, onSectionFocus, scrollTarg
                                                 id={`input-projects-${projIdx}-bullets-${bulletIdx}`}
                                                 value={bullet}
                                                 onChange={(e) => updateProjectBullet(projIdx, bulletIdx, e.target.value)}
+                                                onKeyDown={(e) => handleBoldShortcut(e, bullet, (next) => updateProjectBullet(projIdx, bulletIdx, next))}
                                                 onFocus={() => onSectionFocus?.('projects')}
                                                 placeholder="Bullet point..."
                                                 rows={2}

@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
         const page = await browser.newPage();
 
         // Set viewport based on page size - A4 for German, Letter for others
-        const isGerman = data.rendering.format === 'german';
+        const isGerman = data.rendering.format?.startsWith('german');
         // A4 at 96 DPI: 794 × 1123 pixels, Letter at 96 DPI: 816 × 1056 pixels
         const viewportWidth = isGerman ? 794 : 816;
         const viewportHeight = isGerman ? 1123 : 1056;
@@ -48,11 +48,23 @@ export async function POST(request: NextRequest) {
 
         if (format === 'pdf') {
             // Use A4 for German format, Letter for others
-            const isGerman = data.rendering.format === 'german';
+            const isGerman = data.rendering.format?.startsWith('german');
+            const isTwoPage = data.rendering.format?.includes('2page');
+
+            // For 2-page formats, set proper page margins so content flows correctly across pages
+            // For 1-page formats, use 0 margins (content handles its own padding)
+            const pdfMargins = isTwoPage
+                ? isGerman
+                    ? { top: '7mm', right: '8mm', bottom: '7mm', left: '8mm' }
+                    : data.rendering.format?.startsWith('russell')
+                        ? { top: '0.35in', right: '0.4in', bottom: '0.35in', left: '0.4in' }
+                        : { top: '0.5in', right: '0.6in', bottom: '0.5in', left: '0.6in' }
+                : { top: 0, right: 0, bottom: 0, left: 0 };
+
             output = await page.pdf({
                 format: isGerman ? 'A4' : 'Letter',
                 printBackground: true,
-                margin: { top: 0, right: 0, bottom: 0, left: 0 },
+                margin: pdfMargins,
             });
             contentType = 'application/pdf';
             filename = `${data.profileMeta.resumeName || 'resume'}.pdf`;
@@ -79,8 +91,8 @@ export async function POST(request: NextRequest) {
 
 function generateFullHTML(data: ResumeJSON): string {
     const { rendering } = data;
-    const isRussell = rendering.format === 'russell';
-    const isGerman = rendering.format === 'german';
+    const isRussell = rendering.format?.startsWith('russell');
+    const isGerman = rendering.format?.startsWith('german');
 
     // Select CSS/HTML generators based on format
     const css = isGerman

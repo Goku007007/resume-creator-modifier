@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local data / artifacts
+/God/
+/exports/
+/requirements.txt
+/scripts/import-all-profiles.js

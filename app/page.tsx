@@ -15,6 +15,7 @@ import { lintResume, LintResult } from '@/lib/linter';
 interface Profile {
   id: string;
   name: string;
+  source?: 'old' | 'new';
 }
 
 export default function Home() {
@@ -361,13 +362,16 @@ export default function Home() {
               value={resumeData.rendering.format || 'russell'}
               onChange={(e) => setResumeData(prev => ({
                 ...prev,
-                rendering: { ...prev.rendering, format: e.target.value as 'classic' | 'russell' | 'german' }
+                rendering: { ...prev.rendering, format: e.target.value as any }
               }))}
               className="bg-gray-800 border border-gray-600 rounded-lg px-2 py-1.5 text-sm text-white focus:border-blue-500 focus:outline-none cursor-pointer"
             >
               <option value="classic">Classic</option>
+              <option value="classic-2page">Classic (2 Page)</option>
               <option value="russell">Russell</option>
+              <option value="russell-2page">Russell (2 Page)</option>
               <option value="german">German (A4)</option>
+              <option value="german-2page">German (A4 - 2 Page)</option>
             </select>
           </div>
 
@@ -479,26 +483,28 @@ export default function Home() {
             <span>{isExporting ? 'Generating...' : 'Download PDF'}</span>
           </button>
         </div>
-      </header>
+      </header >
 
       {/* Lint warnings bar */}
-      {lintResults.length > 0 && (
-        <div className="bg-yellow-900/50 border-b border-yellow-700 px-4 py-2">
-          <div className="flex items-center gap-4 overflow-x-auto">
-            {lintResults.slice(0, 3).map((result, idx) => (
-              <div key={idx} className={`flex items-center gap-2 text-sm whitespace-nowrap ${result.severity === 'error' ? 'text-red-400' :
-                result.severity === 'warning' ? 'text-yellow-400' : 'text-blue-400'
-                }`}>
-                <span>{result.severity === 'error' ? '⚠' : result.severity === 'warning' ? '!' : 'ℹ'}</span>
-                <span>{result.message}</span>
-              </div>
-            ))}
-            {lintResults.length > 3 && (
-              <span className="text-sm text-gray-400">+{lintResults.length - 3} more</span>
-            )}
+      {
+        lintResults.length > 0 && (
+          <div className="bg-yellow-900/50 border-b border-yellow-700 px-4 py-2">
+            <div className="flex items-center gap-4 overflow-x-auto">
+              {lintResults.slice(0, 3).map((result, idx) => (
+                <div key={idx} className={`flex items-center gap-2 text-sm whitespace-nowrap ${result.severity === 'error' ? 'text-red-400' :
+                  result.severity === 'warning' ? 'text-yellow-400' : 'text-blue-400'
+                  }`}>
+                  <span>{result.severity === 'error' ? '⚠' : result.severity === 'warning' ? '!' : 'ℹ'}</span>
+                  <span>{result.message}</span>
+                </div>
+              ))}
+              {lintResults.length > 3 && (
+                <span className="text-sm text-gray-400">+{lintResults.length - 3} more</span>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Main Content - Two Column Layout */}
       <main className="flex-1 flex overflow-hidden">
@@ -559,37 +565,39 @@ export default function Home() {
       />
 
       {/* Save Confirmation Dialog */}
-      {showSaveConfirm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-gray-800 rounded-xl p-6 max-w-md mx-4 shadow-2xl border border-gray-700">
-            <h3 className="text-lg font-semibold text-white mb-3">Save Changes?</h3>
-            <p className="text-gray-300 mb-4">
-              This will <span className="text-orange-400 font-medium">overwrite</span> the current profile
-              "<span className="text-white font-medium">{profiles.find(p => p.id === currentProfileId)?.name}</span>".
-            </p>
-            <p className="text-gray-400 text-sm mb-6">
-              💡 Use <strong>"Save As"</strong> in the profile menu to keep the original and create a new profile instead.
-            </p>
-            <div className="flex gap-3 justify-end">
-              <button
-                onClick={() => setShowSaveConfirm(false)}
-                className="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  setShowSaveConfirm(false);
-                  if (currentProfileId) saveProfile(currentProfileId, resumeData);
-                }}
-                className="px-4 py-2 text-sm bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
-              >
-                Yes, Overwrite
-              </button>
+      {
+        showSaveConfirm && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-gray-800 rounded-xl p-6 max-w-md mx-4 shadow-2xl border border-gray-700">
+              <h3 className="text-lg font-semibold text-white mb-3">Save Changes?</h3>
+              <p className="text-gray-300 mb-4">
+                This will <span className="text-orange-400 font-medium">overwrite</span> the current profile
+                "<span className="text-white font-medium">{profiles.find(p => p.id === currentProfileId)?.name}</span>".
+              </p>
+              <p className="text-gray-400 text-sm mb-6">
+                💡 Use <strong>"Save As"</strong> in the profile menu to keep the original and create a new profile instead.
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => setShowSaveConfirm(false)}
+                  className="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    setShowSaveConfirm(false);
+                    if (currentProfileId) saveProfile(currentProfileId, resumeData);
+                  }}
+                  className="px-4 py-2 text-sm bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
+                >
+                  Yes, Overwrite
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )
+      }
+    </div >
   );
 }

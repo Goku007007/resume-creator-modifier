@@ -49,29 +49,56 @@ function initDb(database: Database.Database) {
     );
   `);
 
-    // Seed default profiles if none exist
-    const count = database.prepare('SELECT COUNT(*) as count FROM profiles').get() as { count: number };
-    if (count.count === 0) {
-        seedDefaultProfiles(database);
+    // Seed missing profiles (built-ins + parsed-resumes.json) without overwriting existing ones
+    seedMissingProfiles(database);
+}
+
+function loadParsedProfiles(): { name: string; data: ResumeJSON }[] {
+    const parsedPath = path.join(process.cwd(), 'scripts', 'parsed-resumes.json');
+    if (!fs.existsSync(parsedPath)) {
+        return [];
+    }
+
+    try {
+        const raw = fs.readFileSync(parsedPath, 'utf-8');
+        const parsed = JSON.parse(raw) as ResumeJSON[];
+        return parsed
+            .filter((profile) => profile?.profileMeta?.profileName)
+            .map((profile) => ({
+                name: profile.profileMeta.profileName,
+                data: profile,
+            }));
+    } catch {
+        return [];
     }
 }
 
-function seedDefaultProfiles(database: Database.Database) {
-    const profiles = [
+function seedMissingProfiles(database: Database.Database) {
+    const builtinProfiles = [
         { name: 'Full-Stack', data: DEFAULT_RESUME },
         { name: 'Data Engineering', data: createDataEngineeringProfile() },
         { name: 'Cloud Engineering', data: createCloudEngineeringProfile() },
         { name: 'Automation/Integration', data: createAutomationProfile() },
     ];
 
+    const parsedProfiles = loadParsedProfiles();
+    const allProfiles = [...builtinProfiles, ...parsedProfiles];
+
+    const existing = database.prepare('SELECT name FROM profiles').all() as { name: string }[];
+    const existingNames = new Set(existing.map((row) => row.name));
+
     const insert = database.prepare(`
     INSERT INTO profiles (id, name, content, created_at, updated_at)
     VALUES (?, ?, ?, ?, ?)
   `);
 
-    for (const profile of profiles) {
+    for (const profile of allProfiles) {
+        if (existingNames.has(profile.name)) {
+            continue;
+        }
         const now = new Date().toISOString();
         insert.run(uuidv4(), profile.name, JSON.stringify(profile.data), now, now);
+        existingNames.add(profile.name);
     }
 }
 
@@ -159,10 +186,19 @@ export interface ProfileRecord {
     updated_at: string;
 }
 
-export function getAllProfiles(): { id: string; name: string }[] {
+export function getAllProfiles(): { id: string; name: string; source?: 'old' | 'new' }[] {
     const db = getDb();
-    const rows = db.prepare('SELECT id, name FROM profiles ORDER BY created_at').all() as { id: string; name: string }[];
-    return rows;
+    const rows = db.prepare('SELECT id, name, content FROM profiles ORDER BY created_at').all() as { id: string; name: string; content: string }[];
+    return rows.map((row) => {
+        let source: 'old' | 'new' | undefined;
+        try {
+            const parsed = JSON.parse(row.content);
+            source = parsed?.profileMeta?.source;
+        } catch {
+            source = undefined;
+        }
+        return { id: row.id, name: row.name, source };
+    });
 }
 
 export function getProfile(id: string): ProfileRecord | null {

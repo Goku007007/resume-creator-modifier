@@ -1,11 +1,12 @@
 // Russell Format HTML Generator
 // Exact match to the LaTeX Russell CV class template
-// Section Order: Summary → Experience → Education → Skills → Projects
+// Section order is user-configurable (default: Skills → Experience → Projects → Education)
 
-import { ResumeJSON } from '@/types/resume';
+import { ResumeJSON, SectionKey } from '@/types/resume';
 import { preventWidows } from '@/lib/utils/text';
 import { parseBoldMarkdown } from '@/lib/utils/formatBoldText';
 import { formatUrlForDisplay } from '@/lib/utils/url';
+import { normalizeSectionOrder } from '@/lib/utils/sectionOrder';
 
 function formatDateRange(start: string, end: string | null): string {
   return `${start} - ${end || 'Present'}`;
@@ -37,14 +38,14 @@ export function generateResumeHTMLRussell(data: ResumeJSON): string {
   }
   const contactHtml = contactItems.join('<span class="separator">|</span>');
 
-  // Experience with Company, Position | Location format (matching LaTeX)
+  // Experience with Position, Company | Location format (per user request)
   const experienceHtml = sections.experience
     .map(exp => `
       <div class="experience-item">
         <div class="experience-header">
           <span class="experience-title-line">
-            <span class="experience-company">${escapeHtml(exp.company)}</span><span class="comma">,</span>
-            <span class="experience-position">${escapeHtml(exp.title)}</span>
+            <span class="experience-position">${escapeHtml(exp.title)}</span><span class="comma">,</span>
+            <span class="experience-company">${escapeHtml(exp.company)}</span>
             <span class="location-separator">|</span>
             <span class="experience-location">${escapeHtml(exp.location)}</span>
           </span>
@@ -52,19 +53,19 @@ export function generateResumeHTMLRussell(data: ResumeJSON): string {
         </div>
         ${exp.description ? `<div class="experience-description">${escapeHtml(exp.description)}</div>` : ''}
         <ul class="bullet-list">
-          ${exp.bullets.map(bullet => `<li>${escapeHtml(preventWidows(bullet))}</li>`).join('')}
+          ${exp.bullets.map(bullet => `<li>${parseBoldMarkdown(preventWidows(bullet))}</li>`).join('')}
         </ul>
       </div>
     `)
     .join('');
 
-  // Education with School, Degree | Location and Date (matching LaTeX cvhonor format)
+  // Education with Degree, School | Location and Date (per user request)
   const educationHtml = sections.education
     .map(edu => `
       <div class="education-row">
         <span class="education-content">
-          <span class="education-school">${escapeHtml(edu.school)}</span><span class="comma">,</span>
-          <span class="education-degree">${escapeHtml(edu.degree)}</span>
+          <span class="education-degree">${escapeHtml(edu.degree)}</span><span class="comma">,</span>
+          <span class="education-school">${escapeHtml(edu.school)}</span>
         </span>
         ${edu.dates ? `<span class="education-date">${escapeHtml(edu.dates)}</span>` : ''}
       </div>
@@ -76,7 +77,7 @@ export function generateResumeHTMLRussell(data: ResumeJSON): string {
     .map(group =>
       `<div class="skills-row">
                 <span class="skill-label">${escapeHtml(group.label)}</span>
-                <span class="skill-items">${escapeHtml(group.items.join(', '))}</span>
+                <span class="skill-items">${group.items.map((item) => parseBoldMarkdown(item)).join(', ')}</span>
             </div>`
     )
     .join('');
@@ -90,13 +91,46 @@ export function generateResumeHTMLRussell(data: ResumeJSON): string {
           ${proj.link ? `<a href="${escapeHtml(proj.link)}" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>` : ''}
         </div>
         <ul class="bullet-list">
-          ${proj.bullets.map(bullet => `<li>${escapeHtml(preventWidows(bullet))}</li>`).join('')}
+          ${proj.bullets.map(bullet => `<li>${parseBoldMarkdown(preventWidows(bullet))}</li>`).join('')}
         </ul>
       </div>
     `)
     .join('');
 
-  // Russell format section order: Summary → Experience → Education → Skills → Projects
+  const sectionOrder = normalizeSectionOrder(data.rendering.sectionOrder, data.rendering.format, false);
+  const sectionBlocks: Record<SectionKey, string> = {
+    skills: `
+      <section class="resume-section">
+        <h2 class="section-header">SKILLS</h2>
+        <div class="skills-table">
+          ${skillsHtml}
+        </div>
+      </section>
+    `,
+    experience: `
+      <section class="resume-section">
+        <h2 class="section-header">EXPERIENCE</h2>
+        ${experienceHtml}
+      </section>
+    `,
+    projects: `
+      <section class="resume-section">
+        <h2 class="section-header">PROJECTS</h2>
+        ${projectsHtml}
+      </section>
+    `,
+    education: `
+      <section class="resume-section">
+        <h2 class="section-header">EDUCATION</h2>
+        <div class="education-table">
+          ${educationHtml}
+        </div>
+      </section>
+    `,
+    languages: '',
+  };
+  const orderedSectionsHtml = sectionOrder.map((key) => sectionBlocks[key] || '').join('');
+
   return `
     <div class="resume-page format-russell">
       <!-- Header -->
@@ -118,34 +152,8 @@ export function generateResumeHTMLRussell(data: ResumeJSON): string {
         <div class="summary-content">${parseBoldMarkdown(sections.summary.content)}</div>
       </div>
       ` : ''}
-      
-      <!-- Skills Section -->
-      <section class="resume-section">
-        <h2 class="section-header">SKILLS</h2>
-        <div class="skills-table">
-          ${skillsHtml}
-        </div>
-      </section>
-      
-      <!-- Experience Section -->
-      <section class="resume-section">
-        <h2 class="section-header">EXPERIENCE</h2>
-        ${experienceHtml}
-      </section>
-      
-      <!-- Projects Section -->
-      <section class="resume-section">
-        <h2 class="section-header">PROJECTS</h2>
-        ${projectsHtml}
-      </section>
-      
-      <!-- Education Section -->
-      <section class="resume-section">
-        <h2 class="section-header">EDUCATION</h2>
-        <div class="education-table">
-          ${educationHtml}
-        </div>
-      </section>
+
+      ${orderedSectionsHtml}
     </div>
   `;
 }

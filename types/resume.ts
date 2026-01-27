@@ -4,6 +4,7 @@ export interface ProfileMeta {
   profileName: string;
   resumeName: string;
   updatedAt: string;
+  source?: 'old' | 'new';
 }
 
 export interface Link {
@@ -77,6 +78,8 @@ export interface Sections {
   languages?: LanguageEntry[];  // German format: optional languages section
 }
 
+export type SectionKey = 'skills' | 'experience' | 'projects' | 'education' | 'languages';
+
 export interface RenderingConfig {
   fontFamily: string;
   fontSize: number;
@@ -84,7 +87,8 @@ export interface RenderingConfig {
   monoFontFamily: string;
   pageSize: 'LETTER' | 'A4';
   density: 'COMPACT' | 'NORMAL' | 'SPACIOUS';
-  format?: 'classic' | 'russell' | 'german';
+  format?: 'classic' | 'russell' | 'german' | 'classic-2page' | 'russell-2page' | 'german-2page';
+  sectionOrder?: SectionKey[];
 }
 
 export interface ResumeJSON {
